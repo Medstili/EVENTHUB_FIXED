@@ -1,0 +1,120 @@
+<mat-toolbar  class="app-toolbar">
+    <button mat-icon-button (click)="sidenav.toggle()" class="mobile-toggle">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span class="title">Admin Dashboard</span>
+    <span class="spacer"></span>
+
+    <!-- Theme Toggle Button -->
+    <button 
+      mat-icon-button 
+      class="theme-toggle-btn"
+      (click)="toggleTheme()"
+      [matTooltip]="isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+      matTooltipPosition="below">
+      <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
+</mat-toolbar>
+
+<mat-sidenav-container class="dashboard-container">
+      <mat-sidenav mode="side" #sidenav [opened]="(isHandset$ | async) ? 'false' : 'true'" [mode]="(isHandset$ | async) ? 'over' : 'side'" >
+        <mat-nav-list>
+          <a mat-list-item routerLink="home" routerLinkActive="active" class="sidenav-links">
+            <div  class="icon-text-container">
+              <div class="icon" style=" width: 50%;">
+                <mat-icon  color="primary">home</mat-icon>
+              </div>
+              <div class="text" style=" width: 50%;">
+                <p class="sidenav-link" >home</p>
+              </div>
+            </div>
+          </a>
+          <a mat-list-item routerLink="admin-dashboard" routerLinkActive="active" class="sidenav-links">
+            <div  class="icon-text-container">
+              <div class="icon" style=" width: 50%;">
+                <mat-icon  color="primary">dashboard</mat-icon>
+              </div>
+              <div class="text" style=" width: 50%;">
+                <p class="sidenav-link" >dashboard</p>
+              </div>
+            </div>
+          </a>
+        
+          <a mat-list-item routerLink="admin-events" routerLinkActive="active" class="sidenav-links">
+              <div class="icon-text-container">
+                <div class="icon" style=" width: 50%;">
+                  <mat-icon color="primary">event</mat-icon>
+                </div>
+                <div class="text" style=" width: 50%;">
+                  <p class="sidenav-link" >Events</p>
+                </div>
+              </div>
+          </a>
+          <a mat-list-item routerLink="admin-my-events" routerLinkActive="active" class="sidenav-links">
+              <div class="icon-text-container">
+                <div class="icon" style=" width: 50%;">
+                  <mat-icon color="primary">person_add</mat-icon>
+                </div>
+                <div class="text" style=" width: 50%;">
+                  <p class="sidenav-link" >My Events</p>
+                </div>
+              </div>
+          </a>
+          <a mat-list-item routerLink="admin-tickets" routerLinkActive="active" class="sidenav-links">
+              <div class="icon-text-container">
+                <div class="icon" style=" width: 50%;">
+                  <mat-icon color="primary">stars</mat-icon>
+                </div>
+                <div class="text" style=" width: 50%;">
+                  <p class="sidenav-link" >Tickets</p>
+                </div>
+              </div>
+          </a>
+          <a mat-list-item routerLink="admin-my-tickets" routerLinkActive="active" class="sidenav-links">
+              <div class="icon-text-container">
+                <div class="icon" style=" width: 50%;">
+                  <mat-icon color="primary">person_add</mat-icon>
+                </div>
+                <div class="text" style=" width: 50%;">
+                  <p class="sidenav-link" >My Tickets</p>
+                </div>
+              </div>
+          </a>
+
+          <a mat-list-item routerLink="admin-users" routerLinkActive="active" class="sidenav-links">
+              <div class="icon-text-container">
+                <div class="icon" style=" width: 50%;">
+                  <mat-icon color="primary">people</mat-icon>
+                </div>
+                <div class="text" style=" width: 50%;">
+                  <p class="sidenav-link" >Users</p>
+                </div>
+              </div>
+          </a>
+          <a mat-list-item routerLink="admin-account" routerLinkActive="active" class="sidenav-links">
+            <div class="icon-text-container">
+              <div class="icon" style=" width: 50%;">
+                <mat-icon  color="primary" >person</mat-icon>
+              </div>
+              <div class="text" style=" width: 50%;">
+                <p class="sidenav-link" >My Account</p>
+              </div>
+            </div>
+          </a>
+
+        </mat-nav-list>
+
+        <div class="logout">
+          <button mat-button (click)="logout()" color="primary" >
+            <mat-icon  color="primary">exit_to_app</mat-icon>
+            Log out
+          </button>
+        </div>
+      </mat-sidenav>
+
+      <mat-sidenav-content class="dashboard-content">
+        <div class="content-area">
+          <router-outlet></router-outlet>
+        </div>
+      </mat-sidenav-content>
+</mat-sidenav-container>

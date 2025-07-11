@@ -1,0 +1,121 @@
+<!-- Modern Login Page -->
+<div class="login-container" [@fadeInUp]>
+  <div class="login-background">
+    <div class="background-overlay"></div>
+  </div>
+  
+  <div class="login-content">
+    <div class="login-card" [@slideInRight]>
+      <!-- Header -->
+      <div class="login-header">
+        <div class="logo-section">
+          <div class="logo-icon">
+            <mat-icon>event</mat-icon>
+          </div>
+          <h1 class="logo-text">EventHub</h1>
+        </div>
+        <h2 class="login-title">Welcome Back</h2>
+        <p class="login-subtitle">Sign in to your account to continue</p>
+      </div>
+
+      <!-- Login Form -->
+      <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <!-- Email Field -->
+        <div class="form-group">
+          <label for="email" class="form-label">
+            <mat-icon>email</mat-icon>
+            Email Address
+          </label>
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            class="form-input"
+            placeholder="Enter your email"
+            [class.error]="isFieldInvalid('email')"
+            autocomplete="email">
+          <div class="form-error" *ngIf="isFieldInvalid('email')">
+            <mat-icon>error</mat-icon>
+            <span>{{ getFieldError('email') }}</span>
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="form-group">
+          <label for="password" class="form-label">
+            <mat-icon>lock</mat-icon>
+            Password
+          </label>
+          <div class="password-input-container">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              id="password"
+              formControlName="password"
+              class="form-input"
+              placeholder="Enter your password"
+              [class.error]="isFieldInvalid('password')"
+              autocomplete="current-password">
+            <button
+              type="button"
+              class="password-toggle"
+              (click)="togglePassword()"
+              [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+              <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+          </div>
+          <div class="form-error" *ngIf="isFieldInvalid('password')">
+            <mat-icon>error</mat-icon>
+            <span>{{ getFieldError('password') }}</span>
+          </div>
+        </div>
+
+        <!-- Remember Me & Forgot Password -->
+        <div class="form-options">
+          <label class="checkbox-container">
+            <input
+              type="checkbox"
+              formControlName="rememberMe"
+              class="checkbox-input">
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-label">Remember me</span>
+          </label>
+          <a routerLink="/forgot-password" class="forgot-password">
+            Forgot password?
+          </a>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="btn btn-primary btn-lg login-submit"
+          [disabled]="loginForm.invalid || isLoading">
+          <div class="btn-content" *ngIf="!isLoading">
+            <mat-icon>login</mat-icon>
+            <span>Sign In</span>
+          </div>
+          <div class="loading-spinner" *ngIf="isLoading">
+            <div class="spinner"></div>
+            <span>Signing in...</span>
+          </div>
+        </button>
+
+        <!-- Error Message -->
+        <div class="error-message" *ngIf="errorMessage">
+          <mat-icon>error</mat-icon>
+          <span>{{ errorMessage }}</span>
+        </div>
+      </form>
+
+      <!-- Divider -->
+
+
+      <!-- Sign Up Link -->
+      <div class="signup-section">
+        <p class="signup-text">
+          Don't have an account?
+          <a routerLink="/register" class="signup-link">Sign up for free</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

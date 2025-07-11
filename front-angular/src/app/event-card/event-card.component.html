@@ -1,0 +1,106 @@
+<!-- Modern Event Card -->
+<div class="event-card" 
+     [@fadeInUp]
+     [@cardHover]="getCardHoverState(isHovered)"
+     (mouseenter)="isHovered = true"
+     (mouseleave)="isHovered = false"
+     (click)="onViewDetails()">
+     <!-- [class]="(cardLayout$ | async)" -->
+  
+  <!-- Event Image Container -->
+  <div class="event-image-container">
+    <img [src]="getImageUrl()" [alt]="event.title" class="event-image" />
+    
+    <!-- Event Status Badge -->
+    <div class="event-status-badge" 
+         [style.color]="getEventStatusColor()">
+      {{ getEventStatusText() }}
+    </div>
+    
+    <!-- Availability Indicator -->
+    <div class="availability-indicator">
+      <div class="availability-fill" 
+           [style.width.%]="getAvailabilityPercentage()"
+           [style.background-color]="getAvailabilityColor()">
+      </div>
+    </div>
+  </div>
+
+  <!-- Event Content -->
+  <div class="event-content">
+    <!-- Event Header -->
+    <div class="event-header">
+      <h3 class="event-title">{{ event.title }}</h3>
+      <div class="event-category">
+        Category {{ event.category_id }}
+      </div>
+    </div>
+
+    <!-- Event Description -->
+    <p class="event-description">
+      {{ event.description | slice:0:100 }}{{ event.description.length > 100 ? '...' : '' }}
+    </p>
+
+    <!-- Event Meta Information -->
+    <div class="event-meta">
+      <span>
+        <mat-icon>event</mat-icon>
+        {{ formatDate(event.date) }}
+      </span>
+      
+      <span>
+        <mat-icon>schedule</mat-icon>
+        {{ formatTime(event.time) }}
+      </span>
+      
+      <span>
+        <mat-icon>location_on</mat-icon>
+        {{ event.location }}
+      </span>
+    </div>
+
+    <!-- Event Stats -->
+    <div class="event-stats">
+      <div class="stat-item">
+        <span class="stat-value">{{ formatPrice(event.price) }}</span>
+        <span class="stat-label">Price</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">{{ event.capacity }}</span>
+        <span class="stat-label">Capacity</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">{{ getAvailabilityPercentage() }}%</span>
+        <span class="stat-label">Filled</span>
+      </div>
+    </div>
+
+    <!-- Event Organizer -->
+    <div class="event-organizer" *ngIf="event.user">
+      <div class="organizer-avatar">
+        <mat-icon>account_circle</mat-icon>
+      </div>
+      <div class="organizer-info">
+        <div class="organizer-name">{{ event.user.name || 'Organizer' }}</div>
+        <div class="organizer-verified">
+          <mat-icon>verified</mat-icon>
+          <span>Verified</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Event Actions -->
+    <div class="event-actions">
+      <button 
+        class="btn btn-primary view-details-btn"
+        [@buttonPress]="getButtonPressState(isPressed)"
+        (mousedown)="onButtonPress(true)"
+        (mouseup)="onButtonPress(false)"
+        (mouseleave)="onButtonPress(false)"
+        (click)="$event.stopPropagation(); onViewDetails()">
+        <mat-icon>visibility</mat-icon>
+        <span>View Details</span>
+      </button>
+    </div>
+  </div>
+</div>

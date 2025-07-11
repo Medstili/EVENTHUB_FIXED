@@ -1,0 +1,22 @@
+// mat-card-title{
+//   color: var(--text-primary);
+// }
+
+:host ::ng-deep /* target only inside this component */ {
+  /* Pie chart labels */
+  .ngx-charts .pie-label {
+    fill: var(--text-primary) !important;
+  }
+  /* Legend text */
+  .ngx-charts .legend .legend-label {
+    color: var(--text-primary) !important;
+  }
+  /* Legend title */
+  .ngx-charts .legend .legend-title {
+    color: var(--text-primary) !important;
+  }
+  /* Tooltip text */
+  .ngx-charts .tooltip {
+    color: var(--text-primary) !important;
+  }
+}

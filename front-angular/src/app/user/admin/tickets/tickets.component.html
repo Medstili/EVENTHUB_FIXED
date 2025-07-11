@@ -1,0 +1,287 @@
+<div class="tickets-container" 
+     [class.mobile-layout]="isMobile$ | async"
+     [class.tablet-layout]="isTablet$ | async"
+     [class.small-screen-layout]="isSmallScreen$ | async"
+     [style.padding]="containerPadding$ | async"
+     [@pageTransition]>
+  <!-- Header Section -->
+  <div class="header-section" [@fadeInUp]>
+    <div class="header-content" [style.flex-direction]="headerLayout$ | async">
+      <div class="title-section">
+        <h1 class="page-title">
+          <mat-icon class="title-icon">confirmation_number</mat-icon>
+          Tickets Management
+        </h1>
+        <p class="page-subtitle">Manage and monitor all tickets in the system</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters Section -->
+  <div class="filters-section" [@fadeInUp]>
+    <div class="filters-card" [@cardHover]="'normal'">
+      <!-- Desktop Filters -->
+      <ng-container *ngIf="!(isHandset$ | async); else mobileFilters">
+        <div class="filters-grid" [style.grid-template-columns]="filterGridColumns$ | async">
+          <div class="filter-group" [@fadeInUp]>
+            <mat-form-field appearance="outline" class="search-field">
+              <mat-label>Search Events</mat-label>
+              <input matInput placeholder="Search by event title..." (input)="titleSearch($event)" #input>
+              <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="filter-group" [@fadeInUp]>
+            <mat-form-field appearance="outline">
+              <mat-label>Status</mat-label>
+              <mat-select [(value)]="selectedStatus" placeholder="All Statuses">
+                <mat-option *ngFor="let option of statusOptions" [value]="option.value">
+                  {{ option.label }}
+                </mat-option>
+              </mat-select>
+              <mat-icon matSuffix>filter_list</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="filter-group" [@fadeInUp]>
+            <mat-form-field appearance="outline">
+              <mat-label>Purchase Date</mat-label>
+              <input matInput [matDatepicker]="picker" (dateChange)="dateSelected($event)" placeholder="Select date">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-hint class="date-hint">
+                <span>MM/DD/YYYY</span>
+                <button mat-button color="accent" *ngIf="date() != null" (click)="picker.select(null); dateSelected(null);">
+                  Clear
+                </button>
+              </mat-hint>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="filter-actions-center" *ngIf="filterActionsVisible$ | async" [@fadeInUp]>
+          <button mat-raised-button color="primary" [disabled]="isFilterLoading" (click)="applyFilter()" 
+                  class="apply-btn" [@buttonPress]="'normal'">
+            <mat-spinner *ngIf="isFilterLoading" diameter="20"></mat-spinner>
+            <mat-icon *ngIf="!isFilterLoading">filter_list</mat-icon>
+            <span *ngIf="!isFilterLoading">Apply Filters</span>
+          </button>
+          <button mat-stroked-button [disabled]="isFilterLoading" (click)="clearFilters()" 
+                  class="clear-btn" [@buttonPress]="'normal'"
+                  *ngIf="appliedTitle || appliedDate || appliedStatus">
+            <mat-icon>clear_all</mat-icon>
+            <span>Clear</span>
+          </button>
+        </div>
+      </ng-container>
+
+      <!-- Mobile Filters -->
+      <ng-template #mobileFilters>
+        <div class="mobile-filters" [@fadeInUp]>
+          <div class="mobile-search-row">
+            <mat-form-field appearance="outline" class="mobile-search" [@fadeInUp]>
+              <mat-label>Search Events</mat-label>
+              <input matInput placeholder="Search by event title..." (input)="titleSearch($event)" #input>
+              <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline" class="mobile-date" [@fadeInUp]>
+              <mat-label>Date</mat-label>
+              <input matInput [matDatepicker]="mobilePicker" (dateChange)="dateSelected($event)" placeholder="Select date">
+              <mat-datepicker-toggle matSuffix [for]="mobilePicker"></mat-datepicker-toggle>
+              <mat-datepicker #mobilePicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          <div class="mobile-filter-buttons">
+            <button mat-stroked-button [matMenuTriggerFor]="statusMenu" class="filter-menu-btn" [@buttonPress]="'normal'">
+              <mat-icon>filter_list</mat-icon>
+              <span>Status</span>
+              <mat-icon>keyboard_arrow_down</mat-icon>
+            </button>
+            <mat-menu #statusMenu="matMenu">
+              <mat-selection-list [multiple]="false" (selectionChange)="onStatusChange($event)">
+                <mat-list-option *ngFor="let option of statusOptions" [value]="option.value">
+                  {{ option.label }}
+                </mat-list-option>
+              </mat-selection-list>
+            </mat-menu>
+
+            <button mat-raised-button color="primary" [disabled]="isFilterLoading" (click)="applyFilter()" 
+                    class="mobile-apply-btn" [@buttonPress]="'normal'">
+              <mat-spinner *ngIf="isFilterLoading" diameter="20"></mat-spinner>
+              <mat-icon *ngIf="!isFilterLoading">filter_list</mat-icon>
+              <span *ngIf="!isFilterLoading">Apply</span>
+            </button>
+            <button mat-stroked-button [disabled]="isFilterLoading" (click)="clearFilters()" 
+                    class="mobile-clear-btn" [@buttonPress]="'normal'"
+                    *ngIf="appliedTitle || appliedDate || appliedStatus">
+              <mat-icon>clear_all</mat-icon>
+              <span>Clear</span>
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Tickets Table Section -->
+  <div class="table-section" [@fadeInUp]>
+    <div class="table-card" [@cardHover]="'normal'">
+      <div class="table-header">
+        <div class="table-info">
+          <h3 class="table-title">Tickets List</h3>
+          <p class="table-subtitle">{{ dataSource.data.length }} tickets found</p>
+        </div>
+  
+      </div>
+
+      <div class="table-container mat-elevation-z2">
+        <table mat-table matSort [dataSource]="dataSource" (matSortChange)="announceSortChange($event)" 
+               class="tickets-table" [style.min-width]="tableMinWidth$ | async">
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="id-column">
+              <div class="column-header">
+                <mat-icon>tag</mat-icon>
+                <span>ID</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let element" class="id-cell">
+              <span class="ticket-id">#{{ element.id }}</span>
+            </td>
+          </ng-container>
+
+          <!-- Event Column -->
+          <ng-container matColumnDef="event">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="event-column">
+              <div class="column-header">
+                <mat-icon>event</mat-icon>
+                <span>Event</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let element" class="event-cell">
+              <div class="event-info">
+                <h4>{{ element.event.title }}</h4>
+                <p class="event-date">{{ element.event.date | date:'MMM dd, yyyy' }}</p>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Participant Column -->
+          <ng-container matColumnDef="participant">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="participant-column">
+              <div class="column-header">
+                <mat-icon>person</mat-icon>
+                <span>Participant</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let element" class="participant-cell">
+              <div class="participant-info">
+                <div class="participant-name">{{ element.user?.name || 'Unknown' }}</div>
+                <div class="participant-email">{{ element.user?.email || '' }}</div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="status-column">
+              <div class="column-header">
+                <mat-icon>info</mat-icon>
+                <span>Status</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let element" class="status-cell">
+              <div class="status-badge" [class]="getStatusBadgeClass(element.status)">
+                <mat-icon>{{ getStatusIcon(element.status) }}</mat-icon>
+                <span>{{ element.status }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Price Column -->
+          <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="price-column">
+              <div class="column-header">
+                <mat-icon>attach_money</mat-icon>
+                <span>Price</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let element" class="price-cell">
+              <div class="price-info">
+                <span class="price-amount">{{ element.price }} MAD</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Created At Column -->
+          <ng-container matColumnDef="created_at">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="created-at-column">
+              <div class="column-header">
+                <mat-icon>schedule</mat-icon>
+                <span>Purchase Date</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let element" class="created-at-cell">
+              <div class="datetime-info">
+                <div class="date">{{ element.created_at | date:'MMM dd, yyyy' }}</div>
+                <div class="time">{{ element.created_at | date:'HH:mm' }}</div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="actions-column">
+              <div class="column-header">
+                <mat-icon>settings</mat-icon>
+                <span>Actions</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let element" class="actions-cell">
+              <div class="action-buttons">
+                <button mat-icon-button color="primary" (click)="goTicketDetails(element.id)" 
+                        matTooltip="View Details" class="action-btn view-btn" [@buttonPress]="'normal'">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="cancelTicket(element.id)" 
+                        matTooltip="Cancel Ticket" class="action-btn cancel-btn" [@buttonPress]="'normal'">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="table-header-row"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row" [@staggerFadeIn]></tr>
+        </table>
+
+        <!-- Loading State -->
+        <div class="loading-overlay" *ngIf="loading" [@fadeInUp]>
+          <mat-spinner diameter="50"></mat-spinner>
+          <p>Loading tickets...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" *ngIf="!loading && dataSource.data.length === 0" [@fadeInUp]>
+          <mat-icon class="empty-icon">confirmation_number</mat-icon>
+          <h3>No Tickets Found</h3>
+          <p>No tickets match your current filters. Try adjusting your search criteria.</p>
+          <button mat-raised-button color="primary" (click)="clearFilters()" [@buttonPress]="'normal'">
+            <mat-icon>clear_all</mat-icon>
+            Clear Filters
+          </button>
+        </div>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]" 
+                      showFirstLastButtons 
+                      aria-label="Select page of tickets"
+                      class="tickets-paginator">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

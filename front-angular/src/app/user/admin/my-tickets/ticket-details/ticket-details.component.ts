@@ -1,0 +1,99 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { RouterModule } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Location } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
+import { Ticket, TicketService } from '../../../../services/ticketService/tickets.service';
+import { ResponsiveService } from '../../../../services/responsive.service';
+import { AnimationService } from '../../../../services/animation.service';
+import { QRCodeComponent } from 'angularx-qrcode';
+
+@Component({
+  selector: 'app-ticket-details',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatIconModule,
+    MatButtonModule,
+    MatProgressSpinnerModule,
+    RouterModule,
+    QRCodeComponent
+  ],
+  templateUrl: './ticket-details.component.html',
+  styleUrl: './ticket-details.component.scss',
+  animations: [
+    AnimationService.fadeInUp,
+    AnimationService.slideInLeft,
+    AnimationService.staggerFadeIn,
+    AnimationService.scaleIn
+  ]
+})
+export class TicketDetailsComponent implements OnInit {
+  ticket!: Ticket;
+  isHandset$: Observable<boolean>;
+  isTablet$: Observable<boolean>;
+  isDesktop$: Observable<boolean>;
+  isLoading = false;
+
+  constructor(
+    private route: ActivatedRoute,
+    private ticketService: TicketService,
+    private location: Location,
+    private snackBar: MatSnackBar,
+    public responsiveService: ResponsiveService
+  ) {
+    this.isHandset$ = this.responsiveService.isHandset$;
+    this.isTablet$ = this.responsiveService.isTablet$;
+    this.isDesktop$ = this.responsiveService.isDesktop$;
+  }
+
+  ngOnInit(): void {
+    const ticketId = Number(this.route.snapshot.paramMap.get('id'));
+    this.ticketService.getById(ticketId).subscribe({
+      next: (ticket: any) => {
+        this.ticket = ticket;
+      },
+      error: (err: any) => {
+        console.error('Error loading ticket details:', err);
+        this.openSnackBar('Error loading ticket details');
+      }
+    });
+  }
+
+  downloadTicket(): void {
+    this.isLoading = true;
+    this.ticketService.downloadPdf(this.ticket.id).subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `ticket-${this.ticket.id}.pdf`;
+        link.click();
+        window.URL.revokeObjectURL(url);
+        this.isLoading = false;
+        this.openSnackBar('Ticket downloaded successfully');
+      },
+      error: (err: any) => {
+        this.isLoading = false;
+        this.openSnackBar('Failed to download ticket');
+      }
+    });
+  }
+
+  goBack(): void {
+    this.location.back();
+  }
+
+  openSnackBar(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+    });
+  }
+}

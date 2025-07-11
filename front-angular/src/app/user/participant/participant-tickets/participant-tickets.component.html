@@ -1,0 +1,122 @@
+<section class="participant-tickets-container" 
+         [class.mobile-layout]="isMobile$ | async"
+         [class.tablet-layout]="isTablet$ | async"
+         [class.small-screen-layout]="isSmallScreen$ | async"
+         [style.padding]="containerPadding$ | async"
+         @pageTransition>
+
+  <!-- Header Section -->
+  <div class="header-section" @fadeInUp>
+    <div class="header-content">
+      <div class="title-section">
+        <h1 class="page-title" [style.font-size]="responsiveFontSize$ | async">
+          <mat-icon class="title-icon">confirmation_number</mat-icon>
+          My Tickets
+        </h1>
+        <p class="page-subtitle">View and manage your event tickets</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <div class="content-section" [style.gap]="responsiveSpacing$ | async">
+    <ng-container *ngIf="reservations?.length; else noTickets">
+      <div class="tickets-grid" 
+           [ngClass]="cardLayout$ | async"
+           [style.grid-template-columns]="gridColumns$ | async"
+           @staggerFadeIn>
+        
+        <mat-card class="ticket-card mat-elevation-z2" 
+                  *ngFor="let ticket of reservations; trackBy: trackByTicketId"
+                  [ngClass]="cardLayout$ | async"
+                  @cardHover
+                  (mouseenter)="onCardHover($event, true)"
+                  (mouseleave)="onCardHover($event, false)">
+          
+          <!-- Card Header -->
+          <div class="card-header" @fadeInUp>
+            <img mat-card-avatar 
+                 [src]="ticket.event.image_url" 
+                 [alt]="ticket.event.title"
+                 class="event-image" />
+            <div class="header-text">
+              <h3 class="event-title" [style.font-size]="responsiveFontSize$ | async">
+                {{ ticket.event.title }}
+              </h3>
+            </div>
+            <span class="status-badge" 
+                  [ngClass]="ticket.status"
+                  [style.font-size]="(isMobile$ | async) ? '0.7rem' : '0.8rem'">
+              {{ ticket.status | titlecase }}
+            </span>
+          </div>
+
+          <!-- Card Content -->
+          <mat-card-content class="card-content" @fadeInUp>
+            <div class="info-row">
+              <mat-icon class="info-icon">location_city</mat-icon>
+              <p class="info-text">{{ ticket.event.city }}</p>
+            </div>
+            <div class="info-row">
+              <mat-icon class="info-icon">schedule</mat-icon>
+              <p class="info-text">
+                {{ ticket.event.date | date:'mediumDate' }}
+              </p>
+            </div>
+            <div class="info-row">
+              <mat-icon class="info-icon">attach_money</mat-icon>
+              <p class="info-text">{{ ticket.price }} MAD</p>
+            </div>
+          </mat-card-content>
+
+          <!-- Card Actions -->
+          <mat-card-actions class="card-actions" @fadeInUp>
+            <button mat-flat-button
+                    color="primary"
+                    [routerLink]="['../ticket-details', ticket.id]"
+                    class="view-details-btn"
+                    @buttonPress
+                    (mousedown)="onButtonPress($event, true)"
+                    (mouseup)="onButtonPress($event, false)"
+                    (mouseleave)="onButtonPress($event, false)">
+              <mat-icon>visibility</mat-icon>
+              <span>View Details</span>
+            </button>
+          </mat-card-actions>
+
+        </mat-card>
+      </div>
+    </ng-container>
+
+    <!-- No Tickets Template -->
+    <ng-template #noTickets>
+      <div class="no-tickets-section" @fadeInUp>
+        <div class="no-tickets-content">
+          <mat-icon class="no-tickets-icon">event_busy</mat-icon>
+          <h2 class="no-tickets-title" [style.font-size]="responsiveFontSize$ | async">
+            No Tickets Yet
+          </h2>
+          <p class="no-tickets-subtitle">
+            You haven't purchased any event tickets yet.
+          </p>
+          <button mat-raised-button 
+                  color="primary" 
+                  routerLink="/home"
+                  class="browse-events-btn"
+                  @buttonPress
+                  (mousedown)="onButtonPress($event, true)"
+                  (mouseup)="onButtonPress($event, false)"
+                  (mouseleave)="onButtonPress($event, false)">
+            <mat-icon>search</mat-icon>
+            Browse Events
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+
+</section>
+
+
+
+

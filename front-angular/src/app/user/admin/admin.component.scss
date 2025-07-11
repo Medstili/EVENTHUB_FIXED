@@ -1,0 +1,40 @@
+
+
+.dashboard-container {
+  height: calc(100vh - 70px);
+  background-color: transparent;
+}
+
+
+.logout {
+  position: absolute;
+  bottom: 16px;
+  width: 100%;
+  text-align: center;
+}
+
+.dashboard-content {
+  padding-top: 20px;
+
+}
+
+.content-area {
+  height: 100%;
+}
+.sidebar-menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2); /* Or use margin on icon as above */
+  padding: var(--space-3) var(--space-4);
+  color: var(--text-primary);
+  font-size: var(--text-base);
+  cursor: pointer;
+  border-radius: var(--radius-lg);
+  transition: background 0.2s;
+}
+
+.sidebar-menu-item:hover {
+  background: var(--surface-hover);
+}
+
+

@@ -1,0 +1,109 @@
+<!-- Modern Ticket Details Page -->
+<div class="ticket-details-container" 
+     [@fadeInUp]
+     [ngClass]="{
+       'handset': (isHandset$ | async),
+       'tablet': (isTablet$ | async),
+       'desktop': (isDesktop$ | async)
+     }">
+  
+  <!-- Header Section -->
+  <div class="header-section" [@slideInLeft]>
+    <div class="header-content">
+      <div class="header-text">
+        <h1 class="page-title">Ticket Details</h1>
+        <p class="page-subtitle">View your ticket information and QR code</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-ghost" (click)="goBack()">
+          <mat-icon>arrow_back</mat-icon>
+          <span>Back</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ticket Card Section -->
+  <div class="ticket-section" [@staggerFadeIn]="2">
+    <div class="ticket-card" [@scaleIn]>
+      <div class="card-header">
+        <div class="ticket-info">
+          <h2 class="ticket-title">Ticket #{{ ticket.id }}</h2>
+          <div class="event-link">
+            <a [routerLink]="['/admin-profile/admin-events/admin-event-details', ticket.event.id]" class="event-title-link">
+              <mat-icon>event</mat-icon>
+              <span>{{ ticket.event.title }}</span>
+            </a>
+          </div>
+        </div>
+        <div class="status-badge" [ngClass]="ticket.status">
+          {{ ticket.status | titlecase }}
+        </div>
+      </div>
+
+      <div class="card-content">
+        <div class="ticket-details">
+          <div class="details-grid">
+            <div class="detail-item">
+              <div class="detail-label">
+                <mat-icon>schedule</mat-icon>
+                <span>Status</span>
+              </div>
+              <div class="detail-value">{{ ticket.status | titlecase }}</div>
+            </div>
+
+            <div class="detail-item">
+              <div class="detail-label">
+                <mat-icon>attach_money</mat-icon>
+                <span>Price</span>
+              </div>
+              <div class="detail-value">{{ ticket.price | number:'1.2-2' }} MAD</div>
+            </div>
+
+            <div class="detail-item">
+              <div class="detail-label">
+                <mat-icon>calendar_today</mat-icon>
+                <span>Purchased On</span>
+              </div>
+              <div class="detail-value">{{ ticket.created_at | date:'medium' }}</div>
+            </div>
+
+            <div class="detail-item">
+              <div class="detail-label">
+                <mat-icon>location_city</mat-icon>
+                <span>Location</span>
+              </div>
+              <div class="detail-value">{{ ticket.event.city }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="qr-section-fixed">
+          <div class="qr-container">
+            <h3 class="qr-title">Your QR Code</h3>
+            <p class="qr-subtitle">Present this code at the event entrance</p>
+            <div class="qr-code-wrapper">
+              <qrcode 
+                [qrdata]="ticket.QR_code"
+                [width]="200"
+                [errorCorrectionLevel]="'M'">
+              </qrcode>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-actions">
+        <button mat-flat-button 
+                color="primary" 
+                class="btn-primary"
+                (click)="downloadTicket()"
+                [disabled]="isLoading">
+          <mat-icon *ngIf="!isLoading">download</mat-icon>
+          <mat-spinner *ngIf="isLoading" diameter="20" color="primary"></mat-spinner>
+          <span>{{ isLoading ? 'Downloading...' : 'Download Ticket' }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

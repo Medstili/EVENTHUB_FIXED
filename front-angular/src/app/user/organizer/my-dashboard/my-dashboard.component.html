@@ -1,0 +1,231 @@
+<!-- Modern Organizer Dashboard -->
+<div class="dashboard-container" [@fadeInUp]>
+  <!-- Dashboard Header -->
+  <div class="dashboard-header" [@slideInLeft]>
+    <div class="header-content">
+      <div class="header-text">
+        <h1 class="dashboard-title">Organizer Dashboard</h1>
+        <p class="dashboard-subtitle">Welcome back! Here's what's happening with your events.</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-primary" routerLink="/organizer-profile/add-event">
+          <mat-icon>add</mat-icon>
+          <span>Create Event</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Stats -->
+  <div class="stats-grid" [@staggerFadeIn]="4">
+    <div class="stat-card" [@cardHover]="'normal'">
+      <div class="stat-icon total-events">
+        <mat-icon>event</mat-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ eventsCount?.total || 0 }}</div>
+        <div class="stat-label">Total Events</div>
+      </div>
+    </div>
+
+    <div class="stat-card" [@cardHover]="'normal'">
+      <div class="stat-icon active-events">
+        <mat-icon>event_available</mat-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ eventsCount?.public || 0 }}</div>
+        <div class="stat-label">Public Events</div>
+      </div>
+    </div>
+
+    <div class="stat-card" [@cardHover]="'normal'">
+      <div class="stat-icon total-participants">
+        <mat-icon>people</mat-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ totalTicketsSold || 0 }}</div>
+        <div class="stat-label">Tickets Sold</div>
+      </div>
+    </div>
+
+    <div class="stat-card" [@cardHover]="'normal'">
+      <div class="stat-icon total-revenue">
+        <mat-icon>attach_money</mat-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ totalRevenue | currency:'USD' }}</div>
+        <div class="stat-label">Total Revenue</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="dashboard-grid" [@staggerFadeIn]="2">
+    <!-- Recent Events -->
+    <div class="dashboard-card recent-events" [@scaleIn]>
+      <div class="card-header">
+        <h2 class="card-title">Recent Events</h2>
+        <a routerLink="/organizer-profile/user-events" class="view-all-link">
+          View All
+          <mat-icon>arrow_forward</mat-icon>
+        </a>
+      </div>
+      <div class="card-content">
+        <div class="events-list" *ngIf="!isLoadingRecentEvents && recentEvents && recentEvents.length > 0; else noEvents">
+          <div class="event-item" *ngFor="let event of recentEvents; trackBy: trackByEventId" [@fadeInUp]>
+            <div class="event-image">
+              <img [src]="event.image_url || 'assets/disco-1081484_1920.jpg'" [alt]="event.title" />
+            </div>
+            <div class="event-info">
+              <h3 class="event-title">{{ event.title }}</h3>
+              <p class="event-date">{{ event.date | date:'MMM dd, yyyy' }}</p>
+              <div class="event-status" [class]="event.date >= today ? 'active' : 'past'">
+                <span class="status-dot"></span>
+                <span>{{ event.date >= today ? 'Active' : 'Past' }}</span>
+              </div>
+            </div>
+            <div class="event-actions">
+              <button class="btn btn-ghost btn-sm" [routerLink]="['../../events', event.id]">
+                <mat-icon>visibility</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        <ng-template #noEvents>
+          <div class="empty-state" *ngIf="!isLoadingRecentEvents; else loadingRecentEvents" [@fadeInUp]>
+            <mat-icon>event_busy</mat-icon>
+            <p>No events found</p>
+            <button class="btn btn-primary btn-sm" routerLink="/organizer-profile/add-event">
+              Create Your First Event
+            </button>
+          </div>
+          <ng-template #loadingRecentEvents>
+            <div class="loading-state" [@fadeInUp]>
+              <mat-spinner diameter="40"></mat-spinner>
+              <p>Loading events...</p>
+            </div>
+          </ng-template>
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- Revenue Chart -->
+    <div class="dashboard-card revenue-chart" [@scaleIn]>
+      <div class="card-header">
+        <h2 class="card-title">Revenue Overview</h2>
+      </div>
+      <div class="card-content">
+        <app-revenue-chart-component
+          [dataSource]="revenueData"
+          [chartView]="revenueChartView">
+        </app-revenue-chart-component>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Section -->
+  <div class="charts-section" [@slideInLeft]>
+    <h2 class="section-title">Analytics</h2>
+    <div class="charts-grid">
+      <!-- Top Sales Chart -->
+      <div class="chart-card full-width-chart" [@scaleIn]>
+        <div class="chart-header">
+          <h3 class="chart-title">Top Performing Events</h3>
+        </div>
+        <div class="chart-content">
+          <app-top-sales-chart 
+            [chartView]="topSalesChartView"
+            [dataSource]="mostTicketSales">
+          </app-top-sales-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Events Lists Section -->
+  <div class="events-section" [@slideInLeft]>
+    <div class="events-grid" [@staggerFadeIn]="2">
+      <!-- Upcoming Events -->
+      <div class="dashboard-card upcoming-events" [@scaleIn]>
+        <div class="card-header">
+          <h2 class="card-title">Upcoming Events</h2>
+          <a routerLink="/organizer-profile/user-events" class="view-all-link">
+            View All
+            <mat-icon>arrow_forward</mat-icon>
+          </a>
+        </div>
+        <div class="card-content">
+          <div class="events-list" *ngIf="!isLoadingUpcomingEvents && upcomingEvents?.events?.length; else noUpcomingEvents">
+            <div class="event-item" *ngFor="let event of upcomingEvents.events; trackBy: trackByEventId" [@fadeInUp]>
+              <div class="event-info">
+                <h3 class="event-title">{{ event.title }}</h3>
+                <p class="event-date">{{ event.date | date:'MMM dd, yyyy' }}</p>
+              </div>
+              <div class="event-actions">
+                <button class="btn btn-ghost btn-sm" [routerLink]="['/organizer-profile/user-events', event.id]">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          <ng-template #noUpcomingEvents>
+            <div class="empty-state" *ngIf="!isLoadingUpcomingEvents; else loadingUpcomingEvents" [@fadeInUp]>
+              <mat-icon>event_busy</mat-icon>
+              <p>No upcoming events</p>
+              <button class="btn btn-primary btn-sm" routerLink="/organizer-profile/add-event">
+                Create Your First Event
+              </button>
+            </div>
+            <ng-template #loadingUpcomingEvents>
+              <div class="loading-state" [@fadeInUp]>
+                <mat-spinner diameter="40"></mat-spinner>
+                <p>Loading upcoming events...</p>
+              </div>
+            </ng-template>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- Past Events -->
+      <div class="dashboard-card past-events" [@scaleIn]>
+        <div class="card-header">
+          <h2 class="card-title">Past Events</h2>
+          <a routerLink="/organizer-profile/user-events" class="view-all-link">
+            View All
+            <mat-icon>arrow_forward</mat-icon>
+          </a>
+        </div>
+        <div class="card-content">
+          <div class="events-list" *ngIf="!isLoadingPastEvents && pastEvents?.events?.length; else noPastEvents">
+            <div class="event-item" *ngFor="let event of pastEvents.events; trackBy: trackByEventId" [@fadeInUp]>
+              <div class="event-info">
+                <h3 class="event-title">{{ event.title }}</h3>
+                <p class="event-date">{{ event.date | date:'MMM dd, yyyy' }}</p>
+              </div>
+              <div class="event-actions">
+                <button class="btn btn-ghost btn-sm" [routerLink]="['/organizer-profile/user-events', event.id]">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          <ng-template #noPastEvents>
+            <div class="empty-state" *ngIf="!isLoadingPastEvents; else loadingPastEvents" [@fadeInUp]>
+              <mat-icon>event_busy</mat-icon>
+              <p>No past events</p>
+              <button class="btn btn-primary btn-sm" routerLink="/organizer-profile/add-event">
+                Create Your First Event
+              </button>
+            </div>
+            <ng-template #loadingPastEvents>
+              <div class="loading-state" [@fadeInUp]>
+                <mat-spinner diameter="40"></mat-spinner>
+                <p>Loading past events...</p>
+              </div>
+            </ng-template>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

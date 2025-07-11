@@ -1,0 +1,210 @@
+<!-- Modern Registration Page -->
+<div class="register-container" [@fadeInUp]>
+  <div class="register-content">
+    <!-- Left Side - Welcome Section -->
+    <div class="welcome-section" [@slideInLeft]>
+      <div class="welcome-content">
+        <div class="welcome-header">
+          <div class="logo">
+            <mat-icon>event</mat-icon>
+            <span>EventHub</span>
+          </div>
+          <h1 class="welcome-title">Join EventHub Today</h1>
+          <p class="welcome-subtitle">Create your account and start discovering amazing events</p>
+        </div>
+
+        <div class="features-list" [@staggerFadeIn]="4">
+          <div class="feature-item">
+            <div class="feature-icon">
+              <mat-icon>event_available</mat-icon>
+            </div>
+            <div class="feature-content">
+              <h3>Discover Events</h3>
+              <p>Find exciting events happening near you</p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon">
+              <mat-icon>confirmation_number</mat-icon>
+            </div>
+            <div class="feature-content">
+              <h3>Easy Booking</h3>
+              <p>Book tickets seamlessly with secure payments</p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon">
+              <mat-icon>notifications_active</mat-icon>
+            </div>
+            <div class="feature-content">
+              <h3>Stay Updated</h3>
+              <p>Get notified about new events and updates</p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon">
+              <mat-icon>group_add</mat-icon>
+            </div>
+            <div class="feature-content">
+              <h3>Connect & Share</h3>
+              <p>Connect with event organizers and attendees</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="welcome-footer">
+          <p>&copy; 2024 EventHub. Your adventure starts here!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Side - Registration Form -->
+    <div class="form-section" [@slideInLeft]>
+      <div class="form-container">
+        <div class="form-header">
+          <h2 class="form-title">Create Account</h2>
+          <p class="form-subtitle">Fill in your details to get started</p>
+        </div>
+
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+          <!-- Full Name Field -->
+          <div class="form-group">
+            <label for="fullName" class="form-label">
+              <mat-icon>person</mat-icon>
+              Full Name
+            </label>
+            <input
+              type="text"
+              id="fullName"
+              formControlName="full_name"
+              class="form-input"
+              placeholder="Enter your full name"
+              [class.error]="fullName.invalid && fullName.touched"
+              autocomplete="name">
+            <div class="form-error" *ngIf="fullName.invalid && fullName.touched">
+              <mat-icon>error</mat-icon>
+              <span>Full name is required</span>
+            </div>
+          </div>
+
+          <!-- Email Field -->
+          <div class="form-group">
+            <label for="email" class="form-label">
+              <mat-icon>email</mat-icon>
+              Email Address
+            </label>
+            <input
+              type="email"
+              id="email"
+              formControlName="email"
+              class="form-input"
+              placeholder="Enter your email address"
+              [class.error]="email.invalid && email.touched"
+              autocomplete="email">
+            <div class="form-error" *ngIf="email.invalid && email.touched">
+              <mat-icon>error</mat-icon>
+              <span *ngIf="email.hasError('required')">Email is required</span>
+              <span *ngIf="email.hasError('email')">Please enter a valid email</span>
+              <span *ngIf="email.hasError('serverError')">{{ email.getError('serverError') }}</span>
+            </div>
+          </div>
+
+          <!-- Password Field -->
+          <div class="form-group">
+            <label for="password" class="form-label">
+              <mat-icon>lock</mat-icon>
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              formControlName="password"
+              class="form-input"
+              placeholder="Create a strong password"
+              [class.error]="password.invalid && password.touched"
+              autocomplete="new-password">
+            <div class="form-error" *ngIf="password.invalid && password.touched">
+              <mat-icon>error</mat-icon>
+              <span *ngIf="password.hasError('required')">Password is required</span>
+              <span *ngIf="password.hasError('minlength')">Password must be at least 8 characters</span>
+            </div>
+          </div>
+
+          <!-- Confirm Password Field -->
+          <div class="form-group">
+            <label for="confirmPassword" class="form-label">
+              <mat-icon>lock_outline</mat-icon>
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              id="confirmPassword"
+              formControlName="confirmPassword"
+              class="form-input"
+              placeholder="Confirm your password"
+              [class.error]="registerForm.hasError('passwordsMismatch') && confirm.touched"
+              autocomplete="new-password">
+            <div class="form-error" *ngIf="registerForm.hasError('passwordsMismatch') && confirm.touched">
+              <mat-icon>error</mat-icon>
+              <span>Passwords do not match</span>
+            </div>
+          </div>
+
+          <!-- Role Field -->
+          <div class="form-group">
+            <label for="role" class="form-label">
+              <mat-icon>badge</mat-icon>
+              Account Type
+            </label>
+            <select
+              id="role"
+              formControlName="role"
+              class="form-select"
+              [class.error]="role.invalid && role.touched">
+              <option value="">Select your account type</option>
+              <option value="participant">Participant - I want to attend events</option>
+              <option value="organizer">Organizer - I want to create events</option>
+            </select>
+            <div class="form-error" *ngIf="role.invalid && role.touched">
+              <mat-icon>error</mat-icon>
+              <span>Please select an account type</span>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button
+            type="submit"
+            class="btn btn-primary btn-lg register-submit"
+            [disabled]="registerForm.invalid || isLoading">
+            
+            <div class="btn-content" *ngIf="!isLoading">
+              <mat-icon>person_add</mat-icon>
+              <span>Create Account</span>
+            </div>
+            <div class="loading-spinner" *ngIf="isLoading">
+              <div class="spinner"></div>
+              <span>Creating account...</span>
+            </div>
+          </button>
+
+          <!-- Error Message -->
+          <div class="error-message" *ngIf="errorMessage">
+            <mat-icon>error</mat-icon>
+            <span>{{ errorMessage }}</span>
+          </div>
+        </form>
+
+        <!-- Login Link -->
+        <div class="login-section">
+          <p class="login-text">
+            Already have an account?
+            <a routerLink="/login" class="login-link">Sign in here</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

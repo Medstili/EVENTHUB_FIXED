@@ -1,0 +1,334 @@
+<div class="events-container" 
+     [class.mobile-layout]="isMobile$ | async"
+     [class.tablet-layout]="isTablet$ | async"
+     [class.small-screen-layout]="isSmallScreen$ | async"
+     [style.padding]="containerPadding$ | async">
+  <!-- Header Section -->
+  <div class="header-section">
+    <div class="header-content" [style.flex-direction]="headerLayout$ | async">
+      <div class="title-section">
+        <h1 class="page-title">
+          <mat-icon class="title-icon">event</mat-icon>
+          Events Management
+        </h1>
+        <p class="page-subtitle">Manage and monitor all events in the system</p>
+      </div>
+      <button class="add-event-btn" mat-raised-button color="primary" (click)="addEvent()">
+        <mat-icon>add</mat-icon>
+        Add New Event
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters Section -->
+  <div class="filters-section">
+    <div class="filters-card">
+      <!-- Desktop Filters -->
+      <ng-container *ngIf="!(isHandset$ | async); else mobileFilters">
+        <div class="filters-grid" [style.grid-template-columns]="filterGridColumns$ | async">
+          <div class="filter-group">
+            <mat-form-field appearance="outline" class="search-field">
+              <mat-label>Search Events</mat-label>
+              <input matInput placeholder="Search by title..." (input)="titleSearch($event)" #input>
+              <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="filter-group">
+            <mat-form-field appearance="outline">
+              <mat-label>Category</mat-label>
+              <mat-select [(value)]="selectedCategory" placeholder="All Categories">
+                <mat-option [value]="null">All Categories</mat-option>
+                <mat-option *ngFor="let category of categories" [value]="category.id">
+                  {{ category.name }}
+                </mat-option>
+              </mat-select>
+              <mat-icon matSuffix>category</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="filter-group">
+            <mat-form-field appearance="outline">
+              <mat-label>Privacy</mat-label>
+              <mat-select [(value)]="publicOnly" placeholder="All Events">
+                <mat-option *ngFor="let option of isPublicOptions" [value]="option.value">
+                  {{ option.label }}
+                </mat-option>
+              </mat-select>
+              <mat-icon matSuffix>visibility</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="filter-group">
+            <mat-form-field appearance="outline">
+              <mat-label>Event Date</mat-label>
+              <input matInput [matDatepicker]="picker" (dateChange)="dateSelected($event)" placeholder="Select date">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-hint class="date-hint">
+                <span>MM/DD/YYYY</span>
+                <button mat-button color="accent" *ngIf="date() != null" (click)="picker.select(null); dateSelected(null);">
+                  Clear
+                </button>
+              </mat-hint>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="filter-actions-center" *ngIf="filterActionsVisible$ | async">
+          <button mat-raised-button color="primary" [disabled]="isFilterLoading" (click)="applyFilter()" class="apply-btn">
+            <mat-spinner *ngIf="isFilterLoading" diameter="20"></mat-spinner>
+            <mat-icon *ngIf="!isFilterLoading">filter_list</mat-icon>
+            <span *ngIf="!isFilterLoading">Apply Filters</span>
+          </button>
+        </div>
+      </ng-container>
+
+      <!-- Mobile Filters -->
+      <ng-template #mobileFilters>
+        <div class="mobile-filters">
+          <div class="mobile-search-row">
+            <mat-form-field appearance="outline" class="mobile-search">
+              <mat-label>Search Events</mat-label>
+              <input matInput placeholder="Search by title..." (input)="titleSearch($event)" #input>
+              <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline" class="mobile-date">
+              <mat-label>Date</mat-label>
+              <input matInput [matDatepicker]="mobilePicker" (dateChange)="dateSelected($event)" placeholder="Select date">
+              <mat-datepicker-toggle matSuffix [for]="mobilePicker"></mat-datepicker-toggle>
+              <mat-datepicker #mobilePicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          <div class="mobile-filter-buttons">
+            <button mat-stroked-button [matMenuTriggerFor]="categoryMenu" class="filter-menu-btn">
+              <mat-icon>category</mat-icon>
+              <span>Category</span>
+              <mat-icon>keyboard_arrow_down</mat-icon>
+            </button>
+            <mat-menu #categoryMenu="matMenu">
+              <mat-selection-list [multiple]="false" (selectionChange)="onCategoryChange($event)">
+                <mat-list-option [value]="null" selected>All Categories</mat-list-option>
+                <mat-list-option *ngFor="let category of categories" [value]="category.id">
+                  {{ category.name }}
+                </mat-list-option>
+              </mat-selection-list>
+            </mat-menu>
+
+            <button mat-stroked-button [matMenuTriggerFor]="privacyMenu" class="filter-menu-btn">
+              <mat-icon>visibility</mat-icon>
+              <span>Privacy</span>
+              <mat-icon>keyboard_arrow_down</mat-icon>
+            </button>
+            <mat-menu #privacyMenu="matMenu">
+              <mat-selection-list [multiple]="false" (selectionChange)="onPrivacyChange($event)">
+                <mat-list-option *ngFor="let option of isPublicOptions" [value]="option.value">
+                  {{ option.label }}
+                </mat-list-option>
+              </mat-selection-list>
+            </mat-menu>
+
+            <button mat-raised-button color="primary" [disabled]="isFilterLoading" (click)="applyFilter()" class="mobile-apply-btn">
+              <mat-spinner *ngIf="isFilterLoading" diameter="20"></mat-spinner>
+              <mat-icon *ngIf="!isFilterLoading">filter_list</mat-icon>
+              <span *ngIf="!isFilterLoading">Apply</span>
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Events Table Section -->
+  <div class="table-section">
+    <div class="table-card">
+      <div class="table-header">
+        <div class="table-info">
+          <h3 class="table-title">Events List</h3>
+          <p class="table-subtitle">{{ dataSource.data.length }} events found</p>
+        </div>
+        <div class="table-actions">
+          <button mat-icon-button [matMenuTriggerFor]="viewMenu" class="view-toggle-btn">
+            <mat-icon>view_list</mat-icon>
+          </button>
+          <mat-menu #viewMenu="matMenu">
+            <button mat-menu-item>
+              <mat-icon>view_list</mat-icon>
+              <span>List View</span>
+            </button>
+            <button mat-menu-item>
+              <mat-icon>grid_view</mat-icon>
+              <span>Grid View</span>
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+
+      <div class="table-container mat-elevation-z2">
+        <table mat-table matSort [dataSource]="dataSource" (matSortChange)="announceSortChange($event)" 
+               class="events-table" [style.min-width]="tableMinWidth$ | async">
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="id-column">
+              <div class="column-header">
+                <mat-icon>tag</mat-icon>
+                <span>ID</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let element" class="id-cell">
+              <span class="event-id">#{{ element.id }}</span>
+            </td>
+          </ng-container>
+
+          <!-- Title Column -->
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="title-column">
+              <div class="column-header">
+                <mat-icon>event</mat-icon>
+                <span>Event Title</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let element" class="title-cell">
+              <div class="event-title">
+                <h4>{{ element.title }}</h4>
+                <p class="event-subtitle">{{ element.category.name }}</p>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Location Column -->
+          <ng-container matColumnDef="location">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="location-column">
+              <div class="column-header">
+                <mat-icon>location_on</mat-icon>
+                <span>Location</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let element" class="location-cell">
+              <div class="location-info">
+                <div class="city">{{ element.city }}</div>
+                <div class="address">{{ element.location }}</div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Date Column -->
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="date-column">
+              <div class="column-header">
+                <mat-icon>schedule</mat-icon>
+                <span>Date & Time</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let element" class="date-cell">
+              <div class="datetime-info">
+                <div class="date">{{ element.date | date:'MMM dd, yyyy' }}</div>
+                <div class="time">{{ element.time }}</div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Capacity Column -->
+          <ng-container matColumnDef="capacity">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="capacity-column">
+              <div class="column-header">
+                <mat-icon>people</mat-icon>
+                <span>Capacity</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let element" class="capacity-cell">
+              <div class="capacity-info">
+                <span class="capacity-number">{{ element.capacity }}</span>
+                <span class="capacity-label">seats</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Public Column -->
+          <ng-container matColumnDef="public">
+            <th mat-header-cell *matHeaderCellDef class="public-column">
+              <div class="column-header">
+                <mat-icon>visibility</mat-icon>
+                <span>Public</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let element" class="public-cell">
+              <div class="public-badge" [class.public]="element.is_public" [class.private]="!element.is_public">
+                <mat-icon>{{ element.is_public ? 'public' : 'lock' }}</mat-icon>
+                <span>{{ element.is_public ? 'Public' : 'Private' }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Price Column -->
+          <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="price-column">
+              <div class="column-header">
+                <mat-icon>attach_money</mat-icon>
+                <span>Price</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let element" class="price-cell">
+              <div class="price-info">
+                <span class="price-amount">${{ element.price }}</span>
+                <span class="price-label">per ticket</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="actions-column">
+              <div class="column-header">
+                <mat-icon>settings</mat-icon>
+                <span>Actions</span>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let element" class="actions-cell">
+              <div class="action-buttons">
+                <button mat-icon-button color="primary" (click)="goEventDetails(element.id)" 
+                        matTooltip="View Details" class="action-btn view-btn">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="deleteEvent(element.id)" 
+                        matTooltip="Delete Event" class="action-btn delete-btn">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="table-header-row"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+        </table>
+
+        <!-- Loading State -->
+        <div class="loading-overlay" *ngIf="loading">
+          <mat-spinner diameter="50"></mat-spinner>
+          <p>Loading events...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" *ngIf="!loading && dataSource.data.length === 0">
+          <mat-icon class="empty-icon">event_busy</mat-icon>
+          <h3>No Events Found</h3>
+          <p>No events match your current filters. Try adjusting your search criteria.</p>
+          <button mat-raised-button color="primary" (click)="clearFilters()">
+            <mat-icon>clear_all</mat-icon>
+            Clear Filters
+          </button>
+        </div>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]" 
+                      showFirstLastButtons 
+                      aria-label="Select page of events"
+                      class="events-paginator">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

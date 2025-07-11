@@ -1,0 +1,26 @@
+:host ::ng-deep /* target only inside this component */ {
+  /* X-axis tick labels */
+  .ngx-charts .x.axis .tick text {
+    fill: var(--text-primary) !important;
+  }
+  /* Y-axis tick labels */
+  .ngx-charts .y.axis .tick text {
+    fill: var(--text-primary) !important;
+  }
+  /* Axis titles (if you're using showXAxisLabel/showYAxisLabel) */
+  .ngx-charts .x.axis-label,
+  .ngx-charts .y.axis-label {
+    fill: var(--text-primary) !important;
+  }
+  /* Grid lines */
+  .ngx-charts .x.axis .tick line,
+  .ngx-charts .y.axis .tick line {
+    stroke: var(--border) !important;
+  }
+  /* Axis lines */
+  .ngx-charts .x.axis .domain,
+  .ngx-charts .y.axis .domain {
+    stroke: var(--border) !important;
+  }
+}
+

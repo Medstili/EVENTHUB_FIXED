@@ -1,0 +1,174 @@
+<!-- Modern My Events Page -->
+<div class="my-events-container" 
+     [@fadeInUp]
+     [ngClass]="{
+       'handset': (isHandset$ | async),
+       'tablet': (isTablet$ | async),
+       'mobile': (isMobile$ | async),
+       'desktop': (isDesktop$ | async)
+     }">
+  <!-- Header Section -->
+  <div class="header-section" [@slideInLeft]>
+    <div class="header-content">
+      <div class="header-text">
+        <h1 class="page-title">My Events</h1>
+        <p class="page-subtitle">Manage and track all your created events</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-primary" routerLink="../add-event">
+          <mat-icon>add</mat-icon>
+          <span>Create New Event</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Section -->
+  <div class="stats-section" [@staggerFadeIn]="3">
+    <div class="stat-card" [@cardHover]="'normal'">
+      <div class="stat-icon total-events">
+        <mat-icon>event</mat-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ events.length }}</div>
+        <div class="stat-label">Total Events</div>
+      </div>
+    </div>
+
+    <div class="stat-card" [@cardHover]="'normal'">
+      <div class="stat-icon active-events">
+        <mat-icon>event_available</mat-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ activeEventsCount }}</div>
+        <div class="stat-label">Active Events</div>
+      </div>
+    </div>
+
+    <div class="stat-card" [@cardHover]="'normal'">
+      <div class="stat-icon total-tickets">
+        <mat-icon>confirmation_number</mat-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ totalTicketsSold }}</div>
+        <div class="stat-label">Tickets Sold</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Events Grid -->
+  <div class="events-section" [@staggerFadeIn]="2">
+    <div class="section-header">
+      <h2 class="section-title">All Events</h2>
+      <div class="section-actions">
+        <span class="event-count">{{ events.length }} event{{ events.length !== 1 ? 's' : '' }}</span>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-state" [@fadeInUp]>
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Loading your events...</p>
+    </div>
+
+    <!-- Events Grid -->
+    <div *ngIf="!isLoading && events.length > 0" class="events-grid" [@staggerFadeIn]="events.length">
+      <div 
+        *ngFor="let event of events; trackBy: trackByEventId" 
+        class="event-card" 
+        [@cardHover]="'normal'"
+      >
+        <!-- Event Image -->
+        <div class="event-image">
+          <img [src]="event.image_url || 'assets/disco-1081484_1920.jpg'" [alt]="event.title" />
+          <div class="event-overlay">
+            <div class="event-status" [class]="getEventStatus(event).class">
+              <span class="status-dot"></span>
+              <span>{{ getEventStatus(event).status }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Event Content -->
+        <div class="event-content">
+          <div class="event-header">
+            <h3 class="event-title">{{ event.title }}</h3>
+            <div class="event-type" [class]="event.is_public ? 'public' : 'private'">
+              <mat-icon>{{ event.is_public ? 'public' : 'lock' }}</mat-icon>
+              <span>{{ event.is_public ? 'Public' : 'Private' }}</span>
+            </div>
+          </div>
+
+          <!-- Event Details -->
+          <div class="event-details">
+            <div class="detail-item">
+              <mat-icon>event</mat-icon>
+              <span>{{ event.date | date:'MMM dd, yyyy' }}</span>
+            </div>
+            
+            <div class="detail-item">
+              <mat-icon>schedule</mat-icon>
+              <span>{{ event.time }}</span>
+            </div>
+
+            <div class="detail-item">
+              <mat-icon>location_on</mat-icon>
+              <span>{{ event.location }}, {{ event.city }}</span>
+            </div>
+
+            <div class="detail-item">
+              <mat-icon>people</mat-icon>
+              <span>Capacity: {{ event.capacity }}</span>
+            </div>
+
+            <div *ngIf="!event.is_public" class="detail-item">
+              <mat-icon>attach_money</mat-icon>
+              <span>{{ event.price }} MAD</span>
+            </div>
+
+            <div class="detail-item">
+              <mat-icon>confirmation_number</mat-icon>
+              <span>{{ event.totalTicketsSold || 0 }} tickets sold</span>
+            </div>
+          </div>
+
+          <!-- Event Description -->
+          <div class="event-description">
+            <p>{{ event.description }}</p>
+          </div>
+        </div>
+
+        <!-- Event Actions -->
+        <div class="event-actions">
+          <button class="btn btn-ghost btn-sm" [routerLink]="['../../events', event.id]">
+            <mat-icon>visibility</mat-icon>
+            <span>View</span>
+          </button>
+          
+          <button class="btn btn-ghost btn-sm" [routerLink]="['../update-event', event.id]">
+            <mat-icon>edit</mat-icon>
+            <span>Edit</span>
+          </button>
+          
+          <button class="btn btn-danger btn-sm" (click)="onDelete(event.id)">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && events.length === 0" class="empty-state" [@fadeInUp]>
+      <div class="empty-content">
+        <mat-icon>event_busy</mat-icon>
+        <h3>No Events Yet</h3>
+        <p>You haven't created any events yet. Start by creating your first event!</p>
+        <button class="btn btn-primary" routerLink="../add-event">
+          <mat-icon>add</mat-icon>
+          <span>Create Your First Event</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

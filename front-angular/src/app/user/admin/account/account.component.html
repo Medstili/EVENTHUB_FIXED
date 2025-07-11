@@ -1,0 +1,117 @@
+<div class="account-container" 
+     [class.mobile-layout]="isMobile$ | async"
+     [class.tablet-layout]="isTablet$ | async"
+     [class.small-screen-layout]="isSmallScreen$ | async"
+     [style.padding]="containerPadding$ | async"
+     @pageTransition>
+
+  <!-- Header Section -->
+  <div class="header-section" @fadeInUp>
+    <div class="header-content" [style.flex-direction]="headerLayout$ | async">
+      <div class="title-section">
+        <h1 class="page-title" [style.font-size]="responsiveFontSize$ | async">
+          <mat-icon class="title-icon">account_circle</mat-icon>
+          My Account
+        </h1>
+        <p class="page-subtitle">Manage your profile and account settings</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Card Section -->
+  <div class="profile-section">
+    <div class="profile-card mat-elevation-z4" 
+         @fadeInUp
+         [@cardHover]="'normal'"
+         (mouseenter)="onCardHover($event, 'hovered')"
+         (mouseleave)="onCardHover($event, 'normal')"
+         [style.gap]="responsiveSpacing$ | async">
+      
+      <!-- Profile Header -->
+      <div class="profile-header">
+        <div class="avatar-container">
+          <div class="avatar" @fadeInUp>
+            <mat-icon>person</mat-icon>
+          </div>
+        </div>
+        <div class="profile-info">
+          <h2 class="profile-name">{{ user.name || 'Loading...' }}</h2>
+          <p class="profile-role">{{ (user.role | titlecase) || 'Loading...' }}</p>
+          <div class="profile-meta">
+            <span class="member-since">
+              <mat-icon>calendar_today</mat-icon>
+              Member since {{ (user.created_at | date:'MMM yyyy') || 'Loading...' }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Details -->
+      <div class="profile-details">
+        <div class="details-grid" [ngClass]="cardLayout$ | async">
+          
+          <!-- Email Section -->
+          <div class="detail-item" @fadeInUp>
+            <div class="detail-header">
+              <mat-icon class="detail-icon">email</mat-icon>
+              <h3 class="detail-title">Email Address</h3>
+            </div>
+            <div class="detail-content">
+              <p class="detail-value">{{ user.email || 'Loading...' }}</p>
+              <span class="detail-label">Primary contact email</span>
+            </div>
+          </div>
+
+          <!-- Role Section -->
+          <div class="detail-item" @fadeInUp>
+            <div class="detail-header">
+              <mat-icon class="detail-icon">admin_panel_settings</mat-icon>
+              <h3 class="detail-title">Account Role</h3>
+            </div>
+            <div class="detail-content">
+              <div class="role-badge" [class.role-admin]="user.role === 'admin'" [class.role-organizer]="user.role === 'organizer'" [class.role-participant]="user.role === 'participant'">
+                <mat-icon>{{ user.role === 'admin' ? 'admin_panel_settings' : user.role === 'organizer' ? 'event' : 'person' }}</mat-icon>
+                <span>{{ (user.role | titlecase) || 'Loading...' }}</span>
+              </div>
+              <span class="detail-label">Your account permissions</span>
+            </div>
+          </div>
+
+          <!-- Member Since Section -->
+          <div class="detail-item" @fadeInUp>
+            <div class="detail-header">
+              <mat-icon class="detail-icon">schedule</mat-icon>
+              <h3 class="detail-title">Member Since</h3>
+            </div>
+            <div class="detail-content">
+              <p class="detail-value">{{ (user.created_at | date:'longDate') || 'Loading...' }}</p>
+              <span class="detail-label">Account creation date</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Actions -->
+      <div class="profile-actions">
+        <button mat-raised-button 
+                color="primary" 
+                routerLink="/admin-profile/admin-edit-account" 
+                class="edit-btn"
+                @buttonPress>
+          <mat-icon>edit</mat-icon>
+          Edit Profile
+        </button>
+        <button mat-stroked-button 
+                color="warn" 
+                class="delete-btn" 
+                (click)="onDeleteAccount()"
+                @buttonPress>
+          <mat-icon>delete</mat-icon>
+          Delete Account
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>

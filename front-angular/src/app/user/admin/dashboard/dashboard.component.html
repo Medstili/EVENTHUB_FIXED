@@ -1,0 +1,433 @@
+<!-- Modern Admin Dashboard -->
+<div class="dashboard-container" [style.padding]="dashboardPadding$ | async" @pageTransition>
+  <!-- Dashboard Header -->
+  <div class="dashboard-header" @fadeInUp>
+    <div class="header-content" 
+         [class.responsive-header-stack]="isMobile$ | async"
+         [class.responsive-header-flex]="!(isMobile$ | async)">
+      <div class="header-text">
+        <h1 class="dashboard-title" 
+            [class.responsive-text-large]="!(isMobile$ | async)" 
+            [class.responsive-text-medium]="isMobile$ | async">Admin Dashboard</h1>
+        <p class="dashboard-subtitle">Welcome back! Here's what's happening with your events.</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-primary" routerLink="../admin-events/admin-add-event" @buttonPress>
+          <mat-icon>add</mat-icon>
+          <span>Create Event</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Stats -->
+  <div class="stats-grid" 
+       [class.responsive-grid-auto-fit-small]="isMobile$ | async"
+       [class.responsive-grid-auto-fit-medium]="!(isMobile$ | async)"
+       [style.gap]="responsiveSpacing$ | async"
+       @staggerFadeIn>
+    <div class="stat-card" 
+         [class.responsive-card-stack]="isMobile$ | async"
+         [class.responsive-card-flex]="!(isMobile$ | async)"
+         @cardHover>
+      <div class="stat-icon total-events">
+        <mat-icon>event</mat-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number" *ngIf="!isLoadingStats; else statsLoading">{{ totalEvents }}</div>
+        <ng-template #statsLoading>
+          <div class="loading-spinner">
+            <mat-spinner diameter="20"></mat-spinner>
+          </div>
+        </ng-template>
+        <div class="stat-label">Total Events</div>
+      </div>
+    </div>
+
+    <div class="stat-card" 
+         [class.responsive-card-stack]="isMobile$ | async"
+         [class.responsive-card-flex]="!(isMobile$ | async)"
+         @cardHover>
+      <div class="stat-icon active-events">
+        <mat-icon>event_available</mat-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number" *ngIf="!isLoadingStats; else statsLoading2">{{ activeEvents }}</div>
+        <ng-template #statsLoading2>
+          <div class="loading-spinner">
+            <mat-spinner diameter="20"></mat-spinner>
+          </div>
+        </ng-template>
+        <div class="stat-label">Active Events</div>
+      </div>
+    </div>
+
+    <div class="stat-card" 
+         [class.responsive-card-stack]="isMobile$ | async"
+         [class.responsive-card-flex]="!(isMobile$ | async)"
+         @cardHover>
+      <div class="stat-icon total-participants">
+        <mat-icon>people</mat-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number" *ngIf="!isLoadingStats; else statsLoading3">{{ totalParticipants }}</div>
+        <ng-template #statsLoading3>
+          <div class="loading-spinner">
+            <mat-spinner diameter="20"></mat-spinner>
+          </div>
+        </ng-template>
+        <div class="stat-label">Total Participants</div>
+      </div>
+    </div>
+
+    <div class="stat-card" 
+         [class.responsive-card-stack]="isMobile$ | async"
+         [class.responsive-card-flex]="!(isMobile$ | async)"
+         @cardHover>
+      <div class="stat-icon total-revenue">
+        <mat-icon>attach_money</mat-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number" *ngIf="!isLoadingStats; else statsLoading4">{{ totalRevenue | currency:'USD' }}</div>
+        <ng-template #statsLoading4>
+          <div class="loading-spinner">
+            <mat-spinner diameter="20"></mat-spinner>
+          </div>
+        </ng-template>
+        <div class="stat-label">Total Revenue</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="dashboard-grid" 
+       [class.responsive-grid-1]="isMobile$ | async"
+       [class.responsive-grid-2]="!(isMobile$ | async)"
+       [style.gap]="responsiveSpacing$ | async">
+    <!-- Recent Events -->
+    <div class="dashboard-card recent-events" @scaleIn>
+      <div class="card-header">
+        <h2 class="card-title">Recent Events</h2>
+        <a routerLink="../admin-events" class="view-all-link">
+          View All
+          <mat-icon>arrow_forward</mat-icon>
+        </a>
+      </div>
+      <div class="card-content">
+        <div *ngIf="isLoadingRecentEvents" class="loading-state">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Loading recent events...</p>
+        </div>
+        <div class="events-list" *ngIf="!isLoadingRecentEvents && recentEvents.length > 0" @staggerFadeIn>
+          <div class="event-item" 
+               [class.responsive-card-stack]="isMobile$ | async"
+               [class.responsive-card-flex]="!(isMobile$ | async)"
+               *ngFor="let event of recentEvents" @listItemEnter>
+            <div class="event-image">
+              <img [src]="event.imageUrl || 'assets/disco-1081484_1920.jpg'" [alt]="event.title" />
+            </div>
+            <div class="event-info">
+              <h3 class="event-title">{{ event.title }}</h3>
+              <p class="event-date">{{ event.date | date:'MMM dd, yyyy' }}</p>
+              <div class="event-status" [class]="event.status">
+                <span class="status-dot"></span>
+                <span>{{ event.status | titlecase }}</span>
+              </div>
+            </div>
+            <div class="event-actions">
+              <button class="btn btn-ghost btn-sm" [routerLink]="['../admin-events/admin-event-details/', event.id]" @buttonPress>
+                <mat-icon>visibility</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!isLoadingRecentEvents && recentEvents.length === 0" class="empty-state" @fadeInUp>
+          <mat-icon>event_busy</mat-icon>
+          <p>No events found</p>
+          <button class="btn btn-primary btn-sm" routerLink="../admin-events/admin-add-event" @buttonPress>
+            Create Your First Event
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="dashboard-card recent-activity" @scaleIn>
+      <div class="card-header">
+        <h2 class="card-title">Recent Activity</h2>
+      </div>
+      <div class="card-content">
+        <div *ngIf="isLoadingRecentActivity" class="loading-state">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Loading recent activity...</p>
+        </div>
+        <div class="activity-list" *ngIf="!isLoadingRecentActivity && recentActivity.length > 0" @staggerFadeIn>
+          <div class="activity-item" *ngFor="let activity of recentActivity" @listItemEnter>
+            <div class="activity-icon" [class]="activity.type">
+              <mat-icon>{{ activity.icon }}</mat-icon>
+            </div>
+            <div class="activity-content">
+              <div class="activity-text">{{ activity.text }}</div>
+              <div class="activity-time">{{ activity.time | date:'short' }}</div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!isLoadingRecentActivity && recentActivity.length === 0" class="empty-state" @fadeInUp>
+          <mat-icon>notifications_none</mat-icon>
+          <p>No recent activity</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Categories -->
+    <div class="dashboard-card top-categories" @scaleIn>
+      <div class="card-header">
+        <h2 class="card-title">Top Categories</h2>
+      </div>
+      <div class="card-content">
+        <div *ngIf="isLoadingTopCategories" class="loading-state">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Loading categories...</p>
+        </div>
+        <div class="categories-list" *ngIf="!isLoadingTopCategories && topCategories.length > 0" @staggerFadeIn>
+          <div class="category-item" *ngFor="let category of topCategories; let i = index" @listItemEnter>
+            <div class="category-rank">{{ i + 1 }}</div>
+            <div class="category-info">
+              <div class="category-name">{{ category.name }}</div>
+              <div class="category-count">{{ category.count }} events</div>
+            </div>
+            <div class="category-percentage">
+              {{ category.percentage }}%
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!isLoadingTopCategories && topCategories.length === 0" class="empty-state" @fadeInUp>
+          <mat-icon>category</mat-icon>
+          <p>No categories found</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ticket Sales by Category -->
+    <div class="dashboard-card ticket-sales-category" @scaleIn>
+      <div class="card-header">
+        <h2 class="card-title">Ticket Sales by Category</h2>
+      </div>
+      <div class="card-content">
+        <div *ngIf="isLoadingTicketSales" class="loading-state">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Loading ticket sales...</p>
+        </div>
+        <div class="category-sales-list" *ngIf="!isLoadingTicketSales && ticketSalesByCategory.length > 0" @staggerFadeIn>
+          <div class="category-sales-item" *ngFor="let category of ticketSalesByCategory" @listItemEnter>
+            <div class="category-name">{{ category.name }}</div>
+            <div class="category-stats">
+              <span class="ticket-count">{{ category.tickets }} tickets</span>
+              <span class="revenue">{{ category.revenue | currency:'USD' }}</span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!isLoadingTicketSales && ticketSalesByCategory.length === 0" class="empty-state" @fadeInUp>
+          <mat-icon>confirmation_number</mat-icon>
+          <p>No ticket sales data</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Section -->
+  <div class="charts-section" @fadeInUp>
+    <h2 class="section-title">Analytics & Insights</h2>
+    <div class="charts-grid" 
+         [class.responsive-chart-small]="isMobile$ | async"
+         [class.responsive-chart-medium]="isTablet$ | async"
+         [class.responsive-chart-large]="isDesktop$ | async"
+         [style.gap]="responsiveSpacing$ | async">
+
+      <div class="dashboard-card revenue-chart" @scaleIn>
+        <div class="card-header">
+          <h2 class="card-title">Revenue Overview</h2>
+          <div class="chart-controls">
+            <button class="btn btn-ghost btn-sm" [class.active]="chartPeriod === 'month'" @buttonPress>
+              Month
+            </button>
+          </div>
+        </div>
+        <div class="card-content">
+          <div *ngIf="isLoadingRevenueData" class="loading-state">
+            <mat-spinner diameter="40"></mat-spinner>
+            <p>Loading revenue data...</p>
+          </div>
+          <app-revenue-chart-component
+            *ngIf="!isLoadingRevenueData && revenueOverviewData.length > 0"
+            [dataSource]="revenueOverviewData"
+            [chartView]="[chartWidth, chartHeight]">
+          </app-revenue-chart-component>
+          <div *ngIf="!isLoadingRevenueData && revenueOverviewData.length === 0" class="empty-state">
+            <mat-icon>trending_up</mat-icon>
+            <p>No revenue data available</p>
+          </div>
+        </div>
+      </div>
+  
+      <div class="dashboard-card user-growth-chart" @scaleIn>
+        <div class="card-header">
+          <h2 class="card-title">User Growth Over Time</h2>
+        </div>
+        <div class="card-content">
+          <div *ngIf="isLoadingUserGrowth" class="loading-state">
+            <mat-spinner diameter="40"></mat-spinner>
+            <p>Loading user growth data...</p>
+          </div>
+          <app-user-growth-chart 
+            *ngIf="!isLoadingUserGrowth && userGrowthData.length > 0"
+            [dataSource]="userGrowthData"
+            [chartView]="[chartWidth, chartHeight]">
+          </app-user-growth-chart>
+          <div *ngIf="!isLoadingUserGrowth && userGrowthData.length === 0" class="empty-state">
+            <mat-icon>people</mat-icon>
+            <p>No user growth data available</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- User Distribution Pie Chart -->
+      <div class="dashboard-card user-growth-chart" @scaleIn>
+        <div class="card-header">
+          <h2 class="card-title">Participants vs Organizers</h2>
+        </div>
+        <div class="card-content">
+          <div *ngIf="isLoadingPieData" class="loading-state">
+            <mat-spinner diameter="40"></mat-spinner>
+            <p>Loading user distribution...</p>
+          </div>
+          <app-pie-chart 
+            *ngIf="!isLoadingPieData && pieData.length > 0"
+            [data]="pieData"
+            [pieView]="[chartWidth, chartHeight]">
+          </app-pie-chart>
+          <div *ngIf="!isLoadingPieData && pieData.length === 0" class="empty-state">
+            <mat-icon>pie_chart</mat-icon>
+            <p>No user distribution data</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Event Visibility Doughnut Chart -->
+      <div class="dashboard-card user-growth-chart" @scaleIn>
+        <div class="card-header">
+          <h2 class="card-title">Public vs Private</h2>
+        </div>
+        <div class="card-content">
+          <div *ngIf="isLoadingDoughnutData" class="loading-state">
+            <mat-spinner diameter="40"></mat-spinner>
+            <p>Loading event visibility data...</p>
+          </div>
+          <app-doughnut-chart 
+            *ngIf="!isLoadingDoughnutData && doughnutData.length > 0"
+            [data]="doughnutData"
+            [doughView]="[chartWidth, chartHeight]">
+          </app-doughnut-chart>
+          <div *ngIf="!isLoadingDoughnutData && doughnutData.length === 0" class="empty-state">
+            <mat-icon>donut_large</mat-icon>
+            <p>No event visibility data</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Events Bar Chart -->
+      <div class="dashboard-card user-growth-chart" @scaleIn>
+        <div class="card-header">
+          <h2 class="card-title">Top 10 Events by Tickets Sold</h2>
+        </div>
+        <div class="card-content">
+          <div *ngIf="isLoadingTopEvents" class="loading-state">
+            <mat-spinner diameter="40"></mat-spinner>
+            <p>Loading top events data...</p>
+          </div>
+          <app-top-sales-chart 
+            *ngIf="!isLoadingTopEvents && topEvents.length > 0"
+            [dataSource]="topEvents"
+            [chartView]="[chartWidth, chartHeight]">
+          </app-top-sales-chart>
+          <div *ngIf="!isLoadingTopEvents && topEvents.length === 0" class="empty-state">
+            <mat-icon>bar_chart</mat-icon>
+            <p>No top events data available</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monthly Ticket Sales Line Chart -->
+      <div class="dashboard-card user-growth-chart" @scaleIn>
+        <div class="card-header">
+          <h2 class="card-title">Tickets Sold Each Month (current year)</h2>
+        </div>
+        <div class="card-content">
+          <div *ngIf="isLoadingLineData" class="loading-state">
+            <mat-spinner diameter="40"></mat-spinner>
+            <p>Loading monthly ticket data...</p>
+          </div>
+          <app-line-chart 
+            *ngIf="!isLoadingLineData && lineChartData.length > 0"
+            [data]="lineChartData"
+            [chartView]="[chartWidth, chartHeight]">
+          </app-line-chart>
+          <div *ngIf="!isLoadingLineData && lineChartData.length === 0" class="empty-state">
+            <mat-icon>show_chart</mat-icon>
+            <p>No monthly ticket data available</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="quick-actions" @fadeInUp>
+    <h2 class="section-title">Quick Actions</h2>
+    <div class="actions-grid" 
+         [class.responsive-grid-1]="isMobile$ | async"
+         [class.responsive-grid-auto-fit-medium]="!(isMobile$ | async)"
+         [style.gap]="responsiveSpacing$ | async">
+      <button class="action-card" 
+              [class.responsive-card-stack]="isMobile$ | async"
+              [class.responsive-card-flex]="!(isMobile$ | async)"
+              routerLink="../admin-events/admin-add-event" @cardHover>
+        <div class="action-icon">
+          <mat-icon>add_circle</mat-icon>
+        </div>
+        <div class="action-content">
+          <h3>Create Event</h3>
+          <p>Start organizing a new event</p>
+        </div>
+      </button>
+
+      <button class="action-card" 
+              [class.responsive-card-stack]="isMobile$ | async"
+              [class.responsive-card-flex]="!(isMobile$ | async)"
+              routerLink="../admin-users" @cardHover>
+        <div class="action-icon">
+          <mat-icon>people</mat-icon>
+        </div>
+        <div class="action-content">
+          <h3>Manage Users</h3>
+          <p>View and manage user accounts</p>
+        </div>
+      </button>
+
+      <button class="action-card" 
+              [class.responsive-card-stack]="isMobile$ | async"
+              [class.responsive-card-flex]="!(isMobile$ | async)"
+              routerLink="../admin-tickets" @cardHover>
+        <div class="action-icon">
+          <mat-icon>confirmation_number</mat-icon>
+        </div>
+        <div class="action-content">
+          <h3>View Tickets</h3>
+          <p>Check ticket sales and status</p>
+        </div>
+      </button>
+
+    </div>
+  </div>
+</div>

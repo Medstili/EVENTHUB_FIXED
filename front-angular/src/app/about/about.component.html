@@ -1,0 +1,124 @@
+<div class="about-container" [style.padding]="containerPadding$ | async">
+  <div class="about-content">
+    <mat-card class="about-card" [@fadeInUp]>
+      <mat-card-header class="card-header">
+        <mat-card-title class="card-title">
+          About My Event Manager
+        </mat-card-title>
+        <mat-card-subtitle class="card-subtitle">
+          Your one-stop platform for events & ticketing
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content class="card-content">
+        <section class="intro-section" [@fadeInUp]>
+          <p class="intro-text">
+            My Event Manager helps participants discover upcoming events by category, privacy (public/private), date and location—then book tickets instantly.  
+            Organizers can create, update, and manage their events all in one dashboard.
+          </p>
+        </section>
+
+        <section class="features-section" [@fadeInUp]>
+          <h3 class="section-title">Key Features</h3>
+          <div class="features-grid" [@staggerFadeIn]>
+            <div class="feature-item" 
+                 [ngClass]="{'mobile': isMobile$ | async, 'tablet': isTablet$ | async, 'desktop': isDesktop$ | async}">
+              <div class="feature-icon">
+                <mat-icon>event</mat-icon>
+              </div>
+              <div class="feature-content">
+                <h4 class="feature-title">Browse & Filter Events</h4>
+                <p class="feature-description">Discover events by category, date, and location</p>
+              </div>
+            </div>
+            
+            <div class="feature-item" 
+                 [ngClass]="{'mobile': isMobile$ | async, 'tablet': isTablet$ | async, 'desktop': isDesktop$ | async}">
+              <div class="feature-icon">
+                <mat-icon>verified_user</mat-icon>
+              </div>
+              <div class="feature-content">
+                <h4 class="feature-title">Secure Dashboard</h4>
+                <p class="feature-description">Manage your events with confidence</p>
+              </div>
+            </div>
+            
+            <div class="feature-item" 
+                 [ngClass]="{'mobile': isMobile$ | async, 'tablet': isTablet$ | async, 'desktop': isDesktop$ | async}">
+              <div class="feature-icon">
+                <mat-icon>payment</mat-icon>
+              </div>
+              <div class="feature-content">
+                <h4 class="feature-title">Stripe Payments</h4>
+                <p class="feature-description">Secure and seamless payment processing</p>
+              </div>
+            </div>
+            
+            <div class="feature-item" 
+                 [ngClass]="{'mobile': isMobile$ | async, 'tablet': isTablet$ | async, 'desktop': isDesktop$ | async}">
+              <div class="feature-icon">
+                <mat-icon>qr_code</mat-icon>
+              </div>
+              <div class="feature-content">
+                <h4 class="feature-title">Digital Tickets</h4>
+                <p class="feature-description">QR-coded tickets for easy access</p>
+              </div>
+            </div>
+            
+            <div class="feature-item" 
+                 [ngClass]="{'mobile': isMobile$ | async, 'tablet': isTablet$ | async, 'desktop': isDesktop$ | async}">
+              <div class="feature-icon">
+                <mat-icon>insights</mat-icon>
+              </div>
+              <div class="feature-content">
+                <h4 class="feature-title">Analytics & Charts</h4>
+                <p class="feature-description">Track your event performance</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="stats-section" [@fadeInUp]>
+          <h3 class="section-title">Platform Statistics</h3>
+          <div class="stats-grid" 
+               [ngClass]="{
+                 'mobile-grid': isMobile$ | async,
+                 'tablet-grid': isTablet$ | async,
+                 'desktop-grid': isDesktop$ | async
+               }"
+               [@staggerFadeIn]>
+            <div class="stat-card" [@pulse]>
+              <div class="stat-icon">
+                <mat-icon>event</mat-icon>
+              </div>
+              <div class="stat-content">
+                <h3 class="stat-number">{{ totalEvents }}</h3>
+                <p class="stat-label">Events Listed</p>
+              </div>
+            </div>
+            
+            <div class="stat-card" [@pulse]>
+              <div class="stat-icon">
+                <mat-icon>confirmation_number</mat-icon>
+              </div>
+              <div class="stat-content">
+                <h3 class="stat-number">{{ totalTickets }}</h3>
+                <p class="stat-label">Tickets Sold</p>
+              </div>
+            </div>
+            
+            <div class="stat-card" [@pulse]>
+              <div class="stat-icon">
+                <mat-icon>people</mat-icon>
+              </div>
+              <div class="stat-content">
+                <h3 class="stat-number">{{ totalOrganizers }}</h3>
+                <p class="stat-label">Active Organizers</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+
+.dashboard-toolbar {
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+}
+
+.dashboard-container {
+  height: calc(100vh - 64px);
+  background-color: transparent;
+}
+
+
+
+.logout {
+  position: absolute;
+  bottom: 16px;
+  width: 100%;
+  text-align: center;
+}
+
+.dashboard-content {
+  padding-top: 20px;
+}
+
+.content-area {
+  height: 100%;
+}
+
+

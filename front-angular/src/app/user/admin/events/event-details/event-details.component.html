@@ -1,0 +1,115 @@
+<div class="event-details-root" 
+     [ngClass]="{'handset': isHandset$ | async, 'tablet': isTablet$ | async, 'desktop': isDesktop$ | async}"
+     [@pageTransition]>
+  
+  <!-- Hero Section -->
+  <div class="hero-image" 
+       [style.backgroundImage]="event?.image_url ? 'url(' + event?.image_url + ')' : 'none'"
+       [style.minHeight]="heroHeight$ | async"
+       [@fadeInUp]>
+    
+    <button type="button" 
+            mat-icon-button 
+            class="back-btn" 
+            (click)="goBack()"
+            [@buttonPress]="buttonPressState"
+            (mousedown)="onButtonPress()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    
+    <div class="title-block" [@scaleIn]>
+      <h1 class="event-title" [style.fontSize]="titleFontSize$ | async">{{ event?.title }}</h1>
+      <div class="meta">
+        <span><mat-icon>event</mat-icon> {{ event?.date }} at {{ event?.time }}h</span>
+        <span><mat-icon>place</mat-icon> {{ event?.city }}, {{ event?.location }}</span>
+        <span><mat-icon>people</mat-icon> {{ event?.capacity }} seats</span>
+        <span class="privacy-badge" 
+              [ngClass]="{'public': event?.is_public, 'private': !event?.is_public}">
+          <mat-icon>{{ event?.is_public ? 'public' : 'lock' }}</mat-icon>
+          {{ event?.is_public ? 'Public' : 'Private' }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="event; else loading">
+    <div class="content-wrapper" 
+         [ngClass]="{
+           'handset': isHandset$ | async, 
+           'tablet': isTablet$ | async,
+           'desktop': isDesktop$ | async,
+           'layout-column': (contentLayout$ | async) === 'column',
+           'layout-row': (contentLayout$ | async) === 'row'
+         }"
+         [style.padding]="containerPadding$ | async"
+         [@fadeIn]="fadeIn ? 'in' : 'out'">
+      
+      <!-- Description -->
+      <div class="description" [@fadeInLeft]>
+        <h2>Description</h2>
+        <p>{{ event.description }}</p>
+      </div>
+      
+      <!-- Sidebar Info & Actions -->
+      <div class="sidebar" 
+           [@fadeInRight]
+           [@cardHover]="cardHoverState"
+           (mouseenter)="onCardMouseEnter()"
+           (mouseleave)="onCardMouseLeave()">
+        
+        <mat-card class="info-card">
+          <mat-card-content class="info-content">
+            <div class="info">
+              <strong>Date & Time</strong>
+              <p>{{ event.date }} at {{ event.time }}h</p>
+              <strong>Location</strong>
+              <p>{{ event.city }}, {{ event.location }}</p>
+              <strong>Capacity</strong>
+              <p>{{ event.capacity }} seats</p>
+              <strong *ngIf="event.price">Price</strong>
+              <p *ngIf="event.price" class="price">{{ event.price | currency:'MAD':'symbol' }}</p>
+            </div>
+          </mat-card-content>
+          
+          <mat-card-actions>
+            <button mat-raised-button 
+                    color="primary" 
+                    [disabled]="isLoading" 
+                    (click)="getTicket()"
+                    [@buttonPress]="buttonPressState"
+                    (mousedown)="onButtonPress()">
+              <ng-container *ngIf="!isLoading">Register</ng-container>
+              <ng-container *ngIf="isLoading">
+                <mat-spinner diameter="24" color="accent"></mat-spinner>
+              </ng-container>
+            </button>
+            
+            <button mat-stroked-button 
+                    color="primary" 
+                    [disabled]="isLoading" 
+                    [routerLink]="['/admin-profile/admin-events/admin-event-details', event.id, 'admin-edit-event']"
+                    [@buttonPress]="buttonPressState"
+                    (mousedown)="onButtonPress()">
+              <mat-icon>edit</mat-icon> Edit
+            </button>
+            
+            <button mat-stroked-button 
+                    color="warn" 
+                    [disabled]="isLoading" 
+                    (click)="deleteEvent(event.id)"
+                    [@buttonPress]="buttonPressState"
+                    (mousedown)="onButtonPress()">
+              <mat-icon>delete</mat-icon> Delete
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #loading>
+    <div class="loading-indicator-container" [@fadeInUp]>
+      <mat-spinner color="primary"></mat-spinner>
+    </div>
+  </ng-template>
+</div>

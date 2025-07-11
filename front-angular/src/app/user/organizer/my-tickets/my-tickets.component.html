@@ -1,0 +1,102 @@
+<!-- Modern My Tickets Page -->
+<div class="tickets-container" 
+     [@fadeInUp]
+     [ngClass]="{
+       'handset': (isHandset$ | async),
+       'tablet': (isTablet$ | async),
+       'desktop': (isDesktop$ | async)
+     }">
+  
+  <!-- Header Section -->
+  <div class="header-section" [@slideInLeft]>
+    <div class="header-content">
+      <div class="header-text">
+        <h1 class="page-title">My Tickets</h1>
+        <p class="page-subtitle">View and manage your event tickets</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-ghost" (click)="goBack()">
+          <mat-icon>arrow_back</mat-icon>
+          <span>Back</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <div class="content-section" [@staggerFadeIn]="2">
+    <ng-container *ngIf="loading; else contentTemplate">
+      <div class="loading-container" [@fadeInUp]>
+        <mat-spinner color="primary"></mat-spinner>
+        <p>Loading your tickets...</p>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #contentTemplate>
+  <ng-container *ngIf="reservations?.length; else emptyState">
+    <div class="tickets-grid" [@staggerFadeIn]="3">
+      <div *ngFor="let ticket of reservations; trackBy: trackByTicketId" 
+           class="ticket-card" 
+           [@scaleIn]
+           [@cardHover]="hoveredCardId === ticket.id ? 'hovered' : 'normal'"
+           (mouseenter)="onCardHover(ticket.id)"
+           (mouseleave)="onCardHover(null)">
+        
+        <div class="card-header">
+          <div class="event-image">
+            <img [src]="ticket.event.image_url" [alt]="ticket.event.title" />
+            <div class="status-badge" [ngClass]="ticket.status">
+              {{ ticket.status | titlecase }}
+            </div>
+          </div>
+          <div class="header-content">
+            <h3 class="event-title">{{ ticket.event.title }}</h3>
+            <div class="event-meta">
+              <div class="meta-item">
+                <mat-icon>location_city</mat-icon>
+                <span>{{ ticket.event.city }}</span>
+              </div>
+              <div class="meta-item">
+                <mat-icon>schedule</mat-icon>
+                <span>{{ ticket.event.date | date:'mediumDate' }}</span>
+              </div>
+              <div class="meta-item">
+                <mat-icon>attach_money</mat-icon>
+                <span>{{ ticket.price }} MAD</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button mat-flat-button 
+                  color="primary" 
+                  class="btn-primary"
+                  [routerLink]="['../user-ticket-details', ticket.id]">
+            <mat-icon>visibility</mat-icon>
+            <span>View Details</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #emptyState>
+  <div class="empty-state" [@fadeInUp]>
+    <div class="empty-content">
+      <mat-icon class="empty-icon">event_busy</mat-icon>
+      <h2>No Tickets Yet</h2>
+      <p>You haven't purchased any event tickets yet. Start exploring events to get your first ticket!</p>
+      <button mat-flat-button 
+              color="primary" 
+              class="btn-primary"
+              routerLink="/home">
+        <mat-icon>explore</mat-icon>
+        <span>Browse Events</span>
+      </button>
+    </div>
+  </div>
+</ng-template>

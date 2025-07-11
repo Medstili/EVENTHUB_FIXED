@@ -1,0 +1,377 @@
+<!-- Modern Professional Layout -->
+<div class="layout-container" 
+     [class.mobile]="isMobile$ | async"
+     [class.tablet]="isTablet$ | async"
+     [class.desktop]="isDesktop$ | async">
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <!-- Logo -->
+        <div class="logo">
+          <a routerLink="/home" class="logo-link">
+            <div class="logo-icon">
+              <mat-icon>event</mat-icon>
+            </div>
+            <span class="logo-text">EventHub</span>
+          </a>
+        </div>
+
+        <!-- Desktop Navigation -->
+        <nav class="nav desktop-nav" *ngIf="isDesktop$ | async">
+          <ul class="nav-list" [@fadeInUp]>
+            <li class="nav-item">
+              <a routerLink="/home" routerLinkActive="active" class="nav-link">
+                <mat-icon>home</mat-icon>
+                <span>Home</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/about" routerLinkActive="active" class="nav-link">
+                <mat-icon>info</mat-icon>
+                <span>About</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/contact-us" routerLinkActive="active" class="nav-link">
+                <mat-icon>contact_support</mat-icon>
+                <span>Contact</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- Header Actions -->
+        <div class="header-actions">
+          <!-- Theme Toggle -->
+          <button 
+            class="theme-toggle"
+            (click)="toggleTheme()"
+            [attr.aria-label]="isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+            <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+          </button>
+
+          <!-- Auth Buttons -->
+          <div class="auth-buttons" *ngIf="!isLoggedIn">
+            <a routerLink="/login" class="btn btn-outline btn-sm">
+              <mat-icon>login</mat-icon>
+              <span>Login</span>
+            </a>
+            <a routerLink="/register" class="btn btn-primary btn-sm">
+              <mat-icon>person_add</mat-icon>
+              <span>Sign Up</span>
+            </a>
+          </div>
+
+          <!-- User Menu -->
+          <div class="user-menu" *ngIf="isLoggedIn">
+            <button class="user-menu-trigger" (click)="toggleUserMenu()">
+              <div class="user-avatar">
+                <mat-icon>account_circle</mat-icon>
+              </div>
+              <span class="user-name">{{ user?.name || 'User' }}</span>
+              <mat-icon>expand_more</mat-icon>
+            </button>
+            
+            <div class="user-dropdown" [class.open]="isUserMenuOpen" [@fadeInUp]>
+              <div class="user-info">
+                <div class="user-name">{{ user?.name || 'User' }}</div>
+                <div class="user-email">{{ user?.email || 'user@example.com' }}</div>
+                <div class="user-role">{{ user?.role | titlecase }}</div>
+              </div>
+              <div class="dropdown-divider"></div>
+              <a routerLink="/admin-profile/admin-dashboard" class="dropdown-item" *ngIf="user?.role === 'admin'">
+                <mat-icon>dashboard</mat-icon>
+                <span>Admin Dashboard</span>
+              </a>
+              <a routerLink="/organizer-profile/dashboard" class="dropdown-item" *ngIf="user?.role === 'organizer'">
+                <mat-icon>dashboard</mat-icon>
+                <span>Organizer Dashboard</span>
+              </a>
+              <a routerLink="/participant-profile/participant-dashboard" class="dropdown-item" *ngIf="user?.role === 'participant'">
+                <mat-icon>dashboard</mat-icon>
+                <span>Participant Dashboard</span>
+              </a>
+              
+              <a routerLink="/admin-profile/admin-account" class="dropdown-item" *ngIf="user?.role === 'admin'">
+                <mat-icon>person</mat-icon>
+                <span>Profile</span>
+              </a>
+              <a routerLink="/organizer-profile/account" class="dropdown-item" *ngIf="user?.role === 'organizer'">
+                <mat-icon>person</mat-icon>
+                <span>Profile</span>
+              </a>
+              <a routerLink="/participant-profile/participant-account" class="dropdown-item" *ngIf="user?.role === 'participant'">
+                <mat-icon>person</mat-icon>
+                <span>Profile</span>
+              </a>
+   
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item" (click)="logout()">
+                <mat-icon>logout</mat-icon>
+                <span>Logout</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Mobile Menu Toggle -->
+          <button 
+            class="mobile-menu-toggle"
+            (click)="toggleMobileMenu()"
+            [attr.aria-label]="isMobileMenuOpen ? 'Close Menu' : 'Open Menu'"
+            *ngIf="(isMobile$ | async) || (isTablet$ | async)">
+            <mat-icon>{{ isMobileMenuOpen ? 'close' : 'menu' }}</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Navigation Overlay -->
+  <div class="mobile-nav-overlay" 
+       [class.open]="isMobileMenuOpen" 
+       (click)="closeMobileMenu()"
+       *ngIf="isMobile$ | async">
+  </div>
+
+  <!-- Mobile Navigation Menu -->
+  <nav class="mobile-nav" 
+       [class.open]="isMobileMenuOpen" 
+       [@sidebarSlide]="navState"
+       *ngIf="isMobile$ | async">
+    <div class="mobile-nav-header">
+      <div class="mobile-nav-logo">
+        <div class="logo-icon">
+          <mat-icon>event</mat-icon>
+        </div>
+        <span class="logo-text">EventHub</span>
+      </div>
+      <button class="mobile-nav-close" (click)="closeMobileMenu()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    
+    <ul class="mobile-nav-list" [@staggerFadeIn]="3">
+      <li class="mobile-nav-item">
+        <a routerLink="/home" routerLinkActive="active" class="mobile-nav-link" (click)="closeMobileMenu()">
+          <mat-icon>home</mat-icon>
+          <span>Home</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a routerLink="/about" routerLinkActive="active" class="mobile-nav-link" (click)="closeMobileMenu()">
+          <mat-icon>info</mat-icon>
+          <span>About</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a routerLink="/contact-us" routerLinkActive="active" class="mobile-nav-link" (click)="closeMobileMenu()">
+          <mat-icon>contact_support</mat-icon>
+          <span>Contact</span>
+        </a>
+      </li>
+    </ul>
+
+    <!-- Mobile Auth Section -->
+    <div class="mobile-auth-section" *ngIf="!isLoggedIn" [@fadeInUp]>
+      <div class="mobile-auth-buttons">
+        <a routerLink="/login" class="btn btn-outline btn-full" (click)="closeMobileMenu()">
+          <mat-icon>login</mat-icon>
+          <span>Login</span>
+        </a>
+        <a routerLink="/register" class="btn btn-primary btn-full" (click)="closeMobileMenu()">
+          <mat-icon>person_add</mat-icon>
+          <span>Sign Up</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Mobile User Section -->
+    <div class="mobile-user-section" *ngIf="isLoggedIn" [@fadeInUp]>
+      <div class="mobile-user-info">
+        <div class="mobile-user-avatar">
+          <mat-icon>account_circle</mat-icon>
+        </div>
+        <div class="mobile-user-details">
+          <div class="mobile-user-name">{{ user?.name || 'User' }}</div>
+          <div class="mobile-user-email">{{ user?.email || 'user@example.com' }}</div>
+        </div>
+      </div>
+      <div class="mobile-user-actions">
+        <a routerLink="/admin-profile/admin-dashboard" class="mobile-user-action" *ngIf="user?.role === 'admin'" (click)="closeMobileMenu()">
+          <mat-icon>dashboard</mat-icon>
+          <span>Admin Dashboard</span>
+        </a>
+        <a routerLink="/organizer-profile/dashboard" class="mobile-user-action" *ngIf="user?.role === 'organizer'" (click)="closeMobileMenu()">
+          <mat-icon>dashboard</mat-icon>
+          <span>Organizer Dashboard</span>
+        </a>
+        <a routerLink="/participant-profile/participant-dashboard" class="mobile-user-action" *ngIf="user?.role === 'participant'" (click)="closeMobileMenu()">
+          <mat-icon>dashboard</mat-icon>
+          <span>Participant Dashboard</span>
+        </a>
+
+        <mat-divider></mat-divider>
+
+    
+
+        <a routerLink="/admin-profile/admin-account" class="dropdown-item" *ngIf="user?.role === 'admin'">
+          <mat-icon>person</mat-icon>
+          <span>Profile</span>
+        </a>
+        <a routerLink="/organizer-profile/account" class="dropdown-item" *ngIf="user?.role === 'organizer'">
+          <mat-icon>person</mat-icon>
+          <span>Profile</span>
+        </a>
+        <a routerLink="/participant-profile/participant-account" class="dropdown-item" *ngIf="user?.role === 'participant'">
+          <mat-icon>person</mat-icon>
+          <span>Profile</span>
+        </a>
+        <button class="mobile-user-action logout" (click)="logout(); closeMobileMenu()">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Tablet Sidebar Navigation -->
+  <nav class="tablet-nav" 
+       [class.open]="isMobileMenuOpen" 
+       [@sidebarSlide]="navState"
+       *ngIf="isTablet$ | async">
+    <div class="tablet-nav-header">
+      <div class="tablet-nav-logo">
+        <div class="logo-icon">
+          <mat-icon>event</mat-icon>
+        </div>
+        <span class="logo-text">EventHub</span>
+      </div>
+    </div>
+    
+    <ul class="tablet-nav-list" [@staggerFadeIn]="3">
+      <li class="tablet-nav-item">
+        <a routerLink="/home" routerLinkActive="active" class="tablet-nav-link" (click)="closeMobileMenu()">
+          <mat-icon>home</mat-icon>
+          <span>Home</span>
+        </a>
+      </li>
+      <li class="tablet-nav-item">
+        <a routerLink="/about" routerLinkActive="active" class="tablet-nav-link" (click)="closeMobileMenu()">
+          <mat-icon>info</mat-icon>
+          <span>About</span>
+        </a>
+      </li>
+      <li class="tablet-nav-item">
+        <a routerLink="/contact-us" routerLinkActive="active" class="tablet-nav-link" (click)="closeMobileMenu()">
+          <mat-icon>contact_support</mat-icon>
+          <span>Contact</span>
+        </a>
+      </li>
+    </ul>
+
+    <!-- Tablet Auth Section -->
+    <div class="tablet-auth-section" *ngIf="!isLoggedIn" [@fadeInUp]>
+      <div class="tablet-auth-buttons">
+        <a routerLink="/login" class="btn btn-outline btn-full" (click)="closeMobileMenu()">
+          <mat-icon>login</mat-icon>
+          <span>Login</span>
+        </a>
+        <a routerLink="/register" class="btn btn-primary btn-full" (click)="closeMobileMenu()">
+          <mat-icon>person_add</mat-icon>
+          <span>Sign Up</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Tablet User Section -->
+    <div class="tablet-user-section" *ngIf="isLoggedIn" [@fadeInUp]>
+      <div class="tablet-user-info">
+        <div class="tablet-user-avatar">
+          <mat-icon>account_circle</mat-icon>
+        </div>
+        <div class="tablet-user-details">
+          <div class="tablet-user-name">{{ user?.name || 'User' }}</div>
+          <div class="tablet-user-email">{{ user?.email || 'user@example.com' }}</div>
+        </div>
+      </div>
+      <div class="tablet-user-actions">
+        <a routerLink="/admin-profile/admin-dashboard" class="tablet-user-action" *ngIf="user?.role === 'admin'" (click)="closeMobileMenu()">
+          <mat-icon>dashboard</mat-icon>
+          <span>Admin Dashboard</span>
+        </a>
+        <a routerLink="/organizer-profile/dashboard" class="tablet-user-action" *ngIf="user?.role === 'organizer'" (click)="closeMobileMenu()">
+          <mat-icon>dashboard</mat-icon>
+          <span>Organizer Dashboard</span>
+        </a>
+        <a routerLink="/participant-profile/participant-dashboard" class="tablet-user-action" *ngIf="user?.role === 'participant'" (click)="closeMobileMenu()">
+          <mat-icon>dashboard</mat-icon>
+          <span>Participant Dashboard</span>
+        </a>
+        <button class="tablet-user-action logout" (click)="logout(); closeMobileMenu()">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <div class="footer-logo">
+            <div class="logo-icon">
+              <mat-icon>event</mat-icon>
+            </div>
+            <span class="logo-text">EventHub</span>
+          </div>
+          <p class="footer-description">
+            Discover and create amazing events. Connect with people who share your interests.
+          </p>
+        </div>
+
+        <div class="footer-section">
+          <h3 class="footer-title">Quick Links</h3>
+          <ul class="footer-links">
+            <li><a routerLink="/home">Home</a></li>
+            <li><a routerLink="/about">About Us</a></li>
+            <li><a routerLink="/contact-us">Contact</a></li>
+            <li><a routerLink="/events">Events</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h3 class="footer-title">Support</h3>
+          <ul class="footer-links">
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-bottom-content">
+          <p class="copyright">
+            © 2024 EventHub. All rights reserved.
+          </p>
+          <div class="footer-bottom-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Cookies</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<app-organizer *ngIf="!showMainLayout"></app-organizer>

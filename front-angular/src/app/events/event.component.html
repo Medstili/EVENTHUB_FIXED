@@ -1,0 +1,66 @@
+<ng-container *ngIf="event; else loading">
+  <mat-card class="event-landing-card" 
+            [@fadeInUp]
+            [ngClass]="{'handset': (isHandset$ | async), 'tablet': (isTablet$ | async)}">
+    <!-- Hero Image -->
+    <div class="hero-image" 
+         [@scaleIn]
+         [style.backgroundImage]="'url(' + event.image_url + ')'"></div>
+
+    <!-- Title & Meta -->
+    <div class="title-block" [@slideInUp]>
+      <h1 class="event-title">{{ event.title }}</h1>
+      <div class="meta">
+        <span><mat-icon>event</mat-icon> {{ event.date }} at {{ event.time }}h</span>
+        <span><mat-icon>place</mat-icon> {{ event.city }}, {{ event.location }}</span>
+        <span *ngIf="event.price && event.is_public">
+          <mat-icon>attach_money</mat-icon> {{ event.price | currency:'MAD':'symbol' }}
+        </span>
+        <span><mat-icon>people</mat-icon> {{ event.capacity }} seats</span>
+        <div mat-button [style.color]="'white'">
+          {{ event.is_public ? 'Public' : 'Private' }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content-wrapper" [@fadeInUp]>
+      <!-- Left: Description -->
+      <div class="description">
+        <h2>Description</h2>
+        <p>{{ event.description }}</p>
+      </div>
+
+      <!-- Right: Sidebar / CTA -->
+      <div class="sidebar">
+        <mat-card class="info-card" [@scaleIn]>
+          <mat-card-content class="info-content">
+            <div class="info">
+              <strong>Date & Time</strong><br />
+              <p>{{ event.date }} at {{ event.time }}h</p>
+
+              <strong>Location</strong>
+              <p>{{ event.city }}, {{ event.location }}</p>
+
+              <strong>Capacity</strong><br />
+              <p>{{ event.capacity }} seats</p>
+            </div>
+            <div>
+              <p class="price">{{ event.price | currency:'MAD':'symbol' }}</p>
+            </div>
+          </mat-card-content>
+          <mat-card-actions align="end">
+            <button mat-raised-button color="warn" (click)="getTicket()">Register</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+      
+    </div>
+  </mat-card>
+</ng-container>
+
+<ng-template #loading>
+  <div class="loading-indicator-container">
+    <mat-spinner color="warn" class="progress-spinner"></mat-spinner>
+  </div>
+</ng-template>

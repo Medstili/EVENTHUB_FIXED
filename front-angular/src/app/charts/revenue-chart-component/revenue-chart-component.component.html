@@ -1,0 +1,17 @@
+<!-- <div class="chart-container">
+    
+    <mat-card-title>each month revenue of the current year</mat-card-title> -->
+
+    <ngx-charts-line-chart
+          [view]="chartView"
+          [scheme]="orangeScheme"
+          [results]="dataSource"
+          [xAxis]="true"
+          [yAxis]="true"
+          [xAxisLabel]="'Month'"
+          [yAxisLabel]="'Revenue (MAD)'"
+          [legend]="false"
+          [showGridLines]="true"
+          [autoScale]="true">
+        </ngx-charts-line-chart>
+<!-- </div> -->

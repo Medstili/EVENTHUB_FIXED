@@ -1,0 +1,110 @@
+<div class="participant-account-container" 
+     [class.mobile-layout]="isMobile$ | async"
+     [class.tablet-layout]="isTablet$ | async"
+     [class.small-screen-layout]="isSmallScreen$ | async"
+     [style.padding]="containerPadding$ | async"
+     @pageTransition>
+
+  <!-- Header Section -->
+  <div class="header-section" @fadeInUp>
+    <div class="header-content">
+      <div class="title-section">
+        <h1 class="page-title" [style.font-size]="responsiveFontSize$ | async">
+          <mat-icon class="title-icon">account_circle</mat-icon>
+          My Account
+        </h1>
+        <p class="page-subtitle">View and manage your profile information</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Card Section -->
+  <div class="profile-section">
+    <mat-card class="account-card mat-elevation-z4" 
+              @fadeInUp
+              [@cardHover]="'normal'"
+              (mouseenter)="onCardHover($event, 'hovered')"
+              (mouseleave)="onCardHover($event, 'normal')"
+              [style.max-width]="(isMobile$ | async) ? '95%' : '80%'"
+              [style.margin]="(isMobile$ | async) ? '1rem auto' : '2rem auto'">
+      
+      <!-- Profile Header -->
+      <mat-card-header @fadeInUp>
+        <div mat-card-avatar class="avatar">
+          <mat-icon>person</mat-icon>
+        </div>
+        <mat-card-title [style.font-size]="responsiveFontSize$ | async">
+          {{ user()?.name || 'Loading...' }}
+        </mat-card-title>
+        <mat-card-subtitle>Your Profile Details</mat-card-subtitle>
+      </mat-card-header>
+
+      <!-- Profile Content -->
+      <mat-card-content>
+        <mat-list [style.gap]="responsiveSpacing$ | async">
+          
+          <!-- Email Section -->
+          <mat-list-item @fadeInUp>
+            <div class="detail-item">
+              <div class="detail-header">
+                <mat-icon matListIcon>email</mat-icon>
+                <h4 matLine>Email Address</h4>
+              </div>
+              <p matLine>{{ user()?.email || 'Loading...' }}</p>
+            </div>
+          </mat-list-item>
+          
+          <mat-divider></mat-divider>
+
+          <!-- Role Section -->
+          <mat-list-item @fadeInUp>
+            <div class="detail-item">
+              <div class="detail-header">
+                <mat-icon matListIcon>badge</mat-icon>
+                <h4 matLine>Account Role</h4>
+              </div>
+              <div class="role-badge" [class.role-participant]="user()?.role === 'participant'">
+                <mat-icon>person</mat-icon>
+                <span>{{ (user()?.role | titlecase) || 'Loading...' }}</span>
+              </div>
+            </div>
+          </mat-list-item>
+          
+          <mat-divider></mat-divider>
+
+          <!-- Member Since Section -->
+          <mat-list-item @fadeInUp>
+            <div class="detail-item">
+              <div class="detail-header">
+                <mat-icon matListIcon>calendar_today</mat-icon>
+                <h4 matLine>Member Since</h4>
+              </div>
+              <p matLine>{{ (user()?.created_at | date:'longDate') || 'Loading...' }}</p>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+
+      <!-- Profile Actions -->
+      <mat-card-actions align="end" @fadeInUp>
+        <button mat-stroked-button 
+                color="primary" 
+                routerLink="/participant-profile/participant-edit-account"
+                class="edit-btn"
+                @buttonPress>
+          <mat-icon>edit</mat-icon>
+          Edit Profile
+        </button>
+        <button mat-flat-button 
+                color="warn" 
+                (click)="onDeleteAccount()"
+                class="delete-btn"
+                @buttonPress>
+          <mat-icon>delete</mat-icon>
+          Delete Account
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+</div>

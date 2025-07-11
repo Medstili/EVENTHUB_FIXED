@@ -1,0 +1,218 @@
+<!-- Modern Add Event Form -->
+<div class="add-event-container" 
+     [@fadeInUp]
+     [ngClass]="{
+       'handset': (isHandset$ | async),
+       'tablet': (isTablet$ | async),
+       'desktop': (isDesktop$ | async)
+     }">
+  
+  <!-- Header Section -->
+  <div class="header-section" [@slideInLeft]>
+    <div class="header-content">
+      <div class="header-text">
+        <h1 class="page-title">Create New Event</h1>
+        <p class="page-subtitle">Fill in the details below to create your event</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-ghost" (click)="goBack()">
+          <mat-icon>arrow_back</mat-icon>
+          <span>Back</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Section -->
+  <div class="form-section" [@staggerFadeIn]="2">
+    <div class="form-card" [@scaleIn]>
+      <form [formGroup]="eventForm" (ngSubmit)="onSubmit()" class="event-form">
+        
+        <!-- Basic Information -->
+        <div class="form-section-group" [@fadeInUp]>
+          <h3 class="section-title">Basic Information</h3>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Event Title</mat-label>
+              <input matInput formControlName="title" placeholder="Enter event title" />
+              <mat-error *ngIf="eventForm.get('title')?.hasError('required')">
+                Title is required
+              </mat-error>
+              <mat-error *ngIf="eventForm.get('title')?.hasError('minlength')">
+                Title must be at least 3 characters
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Description</mat-label>
+              <textarea matInput formControlName="description" rows="4" 
+                        placeholder="Describe your event..."></textarea>
+              <mat-error *ngIf="eventForm.get('description')?.hasError('required')">
+                Description is required
+              </mat-error>
+              <mat-error *ngIf="eventForm.get('description')?.hasError('minlength')">
+                Description must be at least 10 characters
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Date & Time -->
+        <div class="form-section-group" [@fadeInUp]>
+          <h3 class="section-title">Date & Time</h3>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Date</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="date" />
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-error *ngIf="eventForm.get('date')?.hasError('required')">
+                Date is required
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Time</mat-label>
+              <input matInput type="time" formControlName="time" />
+              <mat-error *ngIf="eventForm.get('time')?.hasError('required')">
+                Time is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="form-section-group" [@fadeInUp]>
+          <h3 class="section-title">Location</h3>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Location</mat-label>
+              <input matInput formControlName="location" placeholder="Enter venue or address" />
+              <mat-error *ngIf="eventForm.get('location')?.hasError('required')">
+                Location is required
+              </mat-error>
+              <mat-error *ngIf="eventForm.get('location')?.hasError('minlength')">
+                Location must be at least 3 characters
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>City</mat-label>
+              <input matInput formControlName="city" placeholder="Enter city" />
+              <mat-error *ngIf="eventForm.get('city')?.hasError('required')">
+                City is required
+              </mat-error>
+              <mat-error *ngIf="eventForm.get('city')?.hasError('minlength')">
+                City must be at least 2 characters
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Capacity</mat-label>
+              <input matInput type="number" formControlName="capacity" min="1" />
+              <mat-error *ngIf="eventForm.get('capacity')?.hasError('required')">
+                Capacity is required
+              </mat-error>
+              <mat-error *ngIf="eventForm.get('capacity')?.hasError('min')">
+                Capacity must be at least 1
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Event Settings -->
+        <div class="form-section-group" [@fadeInUp]>
+          <h3 class="section-title">Event Settings</h3>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Category</mat-label>
+              <mat-select formControlName="category">
+                <mat-option *ngFor="let category of categories" [value]="category.id">
+                  {{ category.name }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="eventForm.get('category')?.hasError('required')">
+                Category is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <div class="privacy-section">
+              <label class="privacy-label">Event Type</label>
+              <mat-radio-group formControlName="isPublic" class="privacy-options">
+                <mat-radio-button [value]="true" class="privacy-option">
+                  <mat-icon>public</mat-icon>
+                  <span>Public Event</span>
+                </mat-radio-button>
+                <mat-radio-button [value]="false" class="privacy-option">
+                  <mat-icon>lock</mat-icon>
+                  <span>Private Event</span>
+                </mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+
+          <div class="form-row" *ngIf="!eventForm.value.isPublic">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Price (MAD)</mat-label>
+              <input matInput type="number" formControlName="price" min="0" />
+              <mat-error *ngIf="eventForm.get('price')?.hasError('required')">
+                Price is required for private events
+              </mat-error>
+              <mat-error *ngIf="eventForm.get('price')?.hasError('min')">
+                Price must be at least 0
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Image Upload -->
+        <div class="form-section-group" [@fadeInUp]>
+          <h3 class="section-title">Event Image</h3>
+          
+          <div class="image-upload-section">
+            <div class="upload-area" (click)="fileInput.click()">
+              <mat-icon>cloud_upload</mat-icon>
+              <p>Click to upload event image</p>
+              <span class="file-info">{{ selectedFile?.name || 'No file chosen' }}</span>
+            </div>
+            <input #fileInput type="file" (change)="onFileSelected($event)" 
+                   accept="image/*" hidden />
+          </div>
+
+          <div *ngIf="imagePreview" class="image-preview" [@scaleIn]>
+            <img [src]="imagePreview" alt="Event preview" />
+            <button type="button" class="remove-image" (click)="removeImage()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions" [@fadeInUp]>
+          <button type="button" class="btn btn-ghost" (click)="onCancel()" 
+                  [disabled]="isSubmitting">
+            <mat-icon>cancel</mat-icon>
+            <span>Cancel</span>
+          </button>
+          
+          <button type="submit" class="btn btn-primary" 
+                  [disabled]="eventForm.invalid || isSubmitting">
+            <mat-spinner *ngIf="isSubmitting" diameter="20"></mat-spinner>
+            <mat-icon *ngIf="!isSubmitting">add</mat-icon>
+            <span>{{ isSubmitting ? 'Creating...' : 'Create Event' }}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

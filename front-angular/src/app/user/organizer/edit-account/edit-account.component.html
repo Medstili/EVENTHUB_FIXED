@@ -1,0 +1,103 @@
+<div class="edit-account-container" [@fadeInUp] [ngClass]="{
+  'handset': (isHandset$ | async),
+  'tablet': (isTablet$ | async),
+  'desktop': (isDesktop$ | async)
+}">
+  <!-- Header Section -->
+  <div class="header-section" [@fadeInUp]>
+    <div class="header-content">
+      <div class="header-text">
+        <h1 class="page-title">Edit Account</h1>
+        <p class="page-subtitle">Update your profile information</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn-ghost" (click)="onCancel()">
+          <mat-icon>arrow_back</mat-icon>
+          Back
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Section -->
+  <div class="form-section" [@scaleIn]>
+    <div class="form-card">
+      <form [formGroup]="accountForm" (ngSubmit)="onSubmit()" class="edit-form">
+        <!-- Personal Information -->
+        <div class="form-section-group">
+          <h2 class="section-title">Personal Information</h2>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Full Name</mat-label>
+              <input matInput formControlName="name" />
+              <mat-error *ngIf="name.hasError('required')">
+                Name is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Email</mat-label>
+              <input matInput formControlName="email" />
+              <mat-error *ngIf="email.hasError('required')">
+                Email is required
+              </mat-error>
+              <mat-error *ngIf="email.hasError('email')">
+                Enter a valid email
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Password Section -->
+        <div class="form-section-group">
+          <h2 class="section-title">Change Password (Optional)</h2>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>New Password</mat-label>
+              <input matInput type="password" formControlName="password" placeholder="••••••••" />
+              <mat-error *ngIf="accountForm.get('password')?.hasError('required')">
+                Password is required
+              </mat-error>
+              <mat-error *ngIf="accountForm.get('password')?.hasError('minlength')">
+                Minimum 8 characters
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Confirm Password</mat-label>
+              <input matInput type="password" formControlName="password_confirmation" placeholder="••••••••">
+              <mat-error *ngIf="accountForm.errors?.['passwordsMismatch']">
+                Passwords do not match
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+          <button mat-button type="button" class="btn btn-ghost" (click)="onCancel()">
+            <mat-icon>cancel</mat-icon>
+            Cancel
+          </button>
+          <button mat-flat-button color="primary" type="submit" class="btn btn-primary" [disabled]="accountForm.invalid || loading">
+            <mat-icon *ngIf="!loading">save</mat-icon>
+            <mat-progress-spinner
+              *ngIf="loading"
+              diameter="20"
+              color="primary"
+              mode="indeterminate">
+            </mat-progress-spinner>
+            <span *ngIf="!loading">Save Changes</span>
+            <span *ngIf="loading">Saving...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
