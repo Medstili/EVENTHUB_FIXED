@@ -159,7 +159,7 @@ class LoginController extends Controller
                 $user = new User();
                 $user->name = $credentials['name'];
                 $user->email = $credentials['email'];
-                $user->password = Hash::make($credentials['password']);
+                $user->password = $credentials['password'];
                 $user->role = $credentials['role'];
                 $user->save();
                 Auth::login($user);
