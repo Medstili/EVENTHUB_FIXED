@@ -7,43 +7,69 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '../../services/authService/login.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
+import { MatIconModule } from '@angular/material/icon';
+import { ResponsiveService } from '../../services/responsive.service';
+import { AnimationService } from '../../services/animation.service';
+import { Observable } from 'rxjs';
 
 @Component({
-
   selector: 'app-change-password',
   standalone: true,
-  imports: [ CommonModule, ReactiveFormsModule, 
-             MatInputModule, MatButtonModule,
-            MatCardModule],
+  imports: [ 
+    CommonModule, 
+    ReactiveFormsModule, 
+    MatInputModule, 
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule
+  ],
   templateUrl: './change-password.component.html',
-  styleUrls: ['./change-password.component.scss']
+  styleUrls: ['./change-password.component.scss'],
+  animations: [
+    AnimationService.pageTransition,
+    AnimationService.fadeInUp,
+    AnimationService.fadeInLeft,
+    AnimationService.fadeInRight,
+    AnimationService.buttonPress,
+    AnimationService.spin
+  ]
 })
 export class ChangePasswordComponent implements OnInit {
-  form: any
+  form: FormGroup = new FormGroup({});
+  isLoading = false;
+  showPassword = false;
+  showConfirmPassword = false;
+  buttonState: 'normal' | 'pressed' = 'normal';
 
+  // Responsive observables
+  isMobile$: Observable<boolean>;
+  isTablet$: Observable<boolean>;
+  isDesktop$: Observable<boolean>;
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private auth: LoginService,
     private router: Router,
-    private snackBar: MatSnackBar
-  ) {}
+    private snackBar: MatSnackBar,
+    private responsiveService: ResponsiveService
+  ) {
+    // Initialize responsive observables
+    this.isMobile$ = this.responsiveService.isMobile$;
+    this.isTablet$ = this.responsiveService.isTablet$;
+    this.isDesktop$ = this.responsiveService.isDesktop$;
+  }
 
   ngOnInit() {
-
     this.form = this.fb.group({
-      token: [''],                  // hidden
-      password: ['password', [Validators.required, Validators.minLength(8)]],
-      confirm:  ['confirm', [Validators.required]],
+      token: [''],                  
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      confirm: ['', [Validators.required]],
     }, { validators: this.matchPasswords });
-
 
     this.route.queryParamMap.subscribe((params: { get: (arg0: string) => any; }) => {
       const tk = params.get('token');
       if (!tk) {
-        // no token → go back
         this.router.navigate(['/login']);
       }
       this.form.get('token')!.setValue(tk);
@@ -55,15 +81,31 @@ export class ChangePasswordComponent implements OnInit {
       ? null : { mismatch: true };
   }
 
+  togglePasswordVisibility(field: 'password' | 'confirm') {
+    if (field === 'password') {
+      this.showPassword = !this.showPassword;
+    } else {
+      this.showConfirmPassword = !this.showConfirmPassword;
+    }
+  }
+
   submit() {
     if (this.form.invalid) return;
+    
+    this.isLoading = true;
     const { token, password, confirm } = this.form.value;
+    
     this.auth.resetPassword(token, password, confirm).subscribe({
-      next: () =>{
-        this.openSnackBar('password changed successfully');
-         this.router.navigate(['/login'])
-        },
-      error: (err: { error: { message: any; }; }) => console.error('Reset failed', err.error?.message)
+      next: () => {
+        this.isLoading = false;
+        this.openSnackBar('Password changed successfully');
+        this.router.navigate(['/login']);
+      },
+      error: (err: { error: { message: any; }; }) => {
+        this.isLoading = false;
+        console.error('Reset failed', err.error?.message);
+        this.openSnackBar('Failed to reset password. Please try again.');
+      }
     });
   }
 
@@ -72,7 +114,7 @@ export class ChangePasswordComponent implements OnInit {
       duration: 5000,
       horizontalPosition: 'center',
       verticalPosition: 'top',
-    })
+    });
   }
 }
 

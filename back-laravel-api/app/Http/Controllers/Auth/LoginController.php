@@ -159,7 +159,7 @@ class LoginController extends Controller
                 $user = new User();
                 $user->name = $credentials['name'];
                 $user->email = $credentials['email'];
-                $user->password = bcrypt($credentials['password']);
+                $user->password = Hash::make($credentials['password']);
                 $user->role = $credentials['role'];
                 $user->save();
                 Auth::login($user);
@@ -202,9 +202,9 @@ class LoginController extends Controller
         );
 
         // send the reset link (Angular front-end & token)
-        $url = config('http://localhost:4200/reset-password') 
-             . '/change-password?token=' 
-             . $resetToken;
+        $url = config('app.frontend_url') . '/change-password?token=' . $resetToken;
+
+
 
              try {
                 Mail::to($request->email)
