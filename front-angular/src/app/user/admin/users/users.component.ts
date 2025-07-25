@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -9,7 +8,7 @@ import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Observable } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import {  MatMenuModule } from '@angular/material/menu';
@@ -19,13 +18,11 @@ import { AdminService } from '../../../services/adminService/admin.service';
 import { ResponsiveService } from '../../../services/responsive.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-users',
   imports: [
     MatFormFieldModule,
-    MatDatepickerModule,
     MatSelectModule,
     CommonModule,
     FormsModule,
@@ -34,11 +31,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatPaginatorModule,
     MatInputModule,
     MatButtonModule,
-    MatProgressSpinner,
+    MatProgressSpinnerModule,
     MatIconModule,
     MatMenuModule,
-    MatListModule,
-    MatTooltipModule
+    MatListModule
   ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss'
@@ -51,7 +47,6 @@ export class UsersComponent implements OnInit{
   displayedColumns: string[] = ['id', 'name', 'email','role'];
   dataSource = new MatTableDataSource<User>([]);
   roles =['participant', 'organizer'];
-  isLoading = false;
   users!: User[];
   page: number = 1;
   lastPage: number = 1;
@@ -66,9 +61,6 @@ export class UsersComponent implements OnInit{
   isTablet$: Observable<boolean>;
   isMobile$: Observable<boolean>;
   isSmallScreen$: Observable<boolean>;
-  filterGridColumns$: Observable<string>;
-  containerPadding$: Observable<string>;
-  tableMinWidth$: Observable<string>;
   headerLayout$: Observable<'row' | 'column'>;
   filterActionsVisible$: Observable<boolean>;
 
@@ -85,9 +77,6 @@ export class UsersComponent implements OnInit{
     this.isTablet$ = this.responsiveService.isTablet$;
     this.isMobile$ = this.responsiveService.isMobile$;
     this.isSmallScreen$ = this.responsiveService.isSmallScreen$;
-    this.filterGridColumns$ = this.responsiveService.getFilterGridColumns();
-    this.containerPadding$ = this.responsiveService.getContainerPadding();
-    this.tableMinWidth$ = this.responsiveService.getTableMinWidth();
     this.headerLayout$ = this.responsiveService.getHeaderLayout();
     this.filterActionsVisible$ = this.responsiveService.getFilterActionsVisible();
   }

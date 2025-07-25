@@ -1,3 +1,5 @@
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
 /* ===== MODERN PROFESSIONAL DESIGN SYSTEM 2024 ===== */
 
 /* CSS Reset and Base Styles */
@@ -231,9 +233,9 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-family-secondary);
   font-weight: var(--font-semibold);
-  line-height: 1.2;
-  color: var(--text-primary);
-  margin-bottom: var(--space-4);
+  // line-height: 1.2;
+  // color: var(--text-primary);
+  // margin-bottom: var(--space-4);
 }
 
 h1 { font-size: var(--text-4xl); }
@@ -293,7 +295,8 @@ a:hover {
 /* Button Variants */
 .btn-primary {
   background-color: var(--primary-color);
-  color: var(--text-inverse);
+  // color: var(--text-inverse);
+  color: var(--text-primary);
   border-color: var(--primary-color);
 }
 
@@ -723,3 +726,4 @@ a:hover {
 .icon-text-container:hover {
   background: var(--surface-hover);
 }
+

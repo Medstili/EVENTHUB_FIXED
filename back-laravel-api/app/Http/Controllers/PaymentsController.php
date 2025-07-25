@@ -169,8 +169,7 @@ class PaymentsController extends Controller
         }
 
         $session = $event->data->object;
- 
-        
+        Log::info('webhook session',[$session]);
         if ($event->type === 'checkout.session.completed') {
             DB::beginTransaction();
             try {

@@ -24,5 +24,6 @@ export class UserService {
   getOrganizersCount(): Observable<number>{
     return this.http.get<number>(`${this.baseUrl}/organizer/total`, {withCredentials:true});
   }
+  
 }
 

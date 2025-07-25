@@ -7,7 +7,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
-  animation: fadeIn 0.5s ease-out;
 }
 
 /* ===== HEADER SECTION ===== */
@@ -96,31 +95,41 @@
 
     .filter-actions-center {
       display: flex;
+      flex-direction: column;
+      align-items: stretch;
       justify-content: center;
-      align-items: center;
-      gap: var(--space-4);
+      width: 100%;
       padding: var(--space-4);
       border-top: 1px solid var(--border);
       background: var(--surface-elevated);
 
       .apply-btn {
-        display: flex;
-        align-items: center;
-        gap: var(--space-2);
-        padding: var(--space-3) var(--space-6);
-        font-weight: var(--font-semibold);
+        margin: var(--space-2);
+        width: 100%;
+        height: 56px;
+        font-size: var(--text-lg);
+        font-weight: var(--font-bold);
         border-radius: var(--radius-lg);
         background: var(--primary-color);
         color: var(--text-inverse);
-        box-shadow: var(--shadow);
-        transition: all 0.2s ease;
-
-        &:hover:not(:disabled) {
-          background: var(--primary-600);
-          transform: translateY(-1px);
-          box-shadow: var(--shadow-hover);
+        box-shadow: 0 2px 8px 0 rgba(59, 130, 246, 0.08);
+        transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        &:hover:not(:disabled), &:focus-visible {
+          background: var(--primary-700);
+          color: var(--text-inverse);
+          box-shadow: 0 4px 16px 0 rgba(59, 130, 246, 0.15);
         }
-
+        &:active {
+          background: var(--primary-800);
+        }
         &:disabled {
           opacity: 0.6;
           cursor: not-allowed;
@@ -307,7 +316,6 @@
         .table-row {
           transition: all 0.2s ease;
           background: var(--surface);
-          animation: slideInUp 0.3s ease-out;
 
           &:hover {
             background: var(--surface-hover);
@@ -633,27 +641,6 @@
   }
 }
 
-/* Menu content styling */
-.menu-content {
-  padding: var(--space-4);
-  min-width: 250px;
-
-  mat-form-field {
-    width: 100%;
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 /* Button press animation */
 button {
   &:active {
@@ -667,16 +654,5 @@ button {
   &:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-elevated);
-  }
-}
-
-@keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }

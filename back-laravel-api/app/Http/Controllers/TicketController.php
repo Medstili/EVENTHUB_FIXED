@@ -342,64 +342,65 @@ class TicketController extends Controller
     /**
      * Get admin ticket statistics
      */
-    public function adminTicketStats()
-    {
-        try {
-            $now = Carbon::now();
+    
+    // public function adminTicketStats()
+    // {
+    //     try {
+    //         $now = Carbon::now();
 
-            // Total tickets sold
-            $totalTicketsSold = Ticket::count();
-            $totalRevenue = Ticket::sum('price');
+    //         // Total tickets sold
+    //         $totalTicketsSold = Ticket::count();
+    //         $totalRevenue = Ticket::sum('price');
 
-            // Tickets sold this month
-            $thisMonthTickets = Ticket::whereMonth('created_at', $now->month)
-                ->whereYear('created_at', $now->year)
-                ->count();
+    //         // Tickets sold this month
+    //         $thisMonthTickets = Ticket::whereMonth('created_at', $now->month)
+    //             ->whereYear('created_at', $now->year)
+    //             ->count();
 
-            // Average ticket price
-            $averageTicketPrice = Ticket::avg('price');
+    //         // Average ticket price
+    //         $averageTicketPrice = Ticket::avg('price');
 
-            // Ticket status distribution
-            $ticketStatusDistribution = Ticket::selectRaw('ticket_status, COUNT(*) as count')
-                ->groupBy('ticket_status')
-                ->get()
-                ->map(function($item) {
-                    return [
-                        'name' => ucfirst($item->ticket_status),
-                        'value' => $item->count
-                    ];
-                });
+    //         // Ticket status distribution
+    //         $ticketStatusDistribution = Ticket::selectRaw('ticket_status, COUNT(*) as count')
+    //             ->groupBy('ticket_status')
+    //             ->get()
+    //             ->map(function($item) {
+    //                 return [
+    //                     'name' => ucfirst($item->ticket_status),
+    //                     'value' => $item->count
+    //                 ];
+    //             });
 
-            // Monthly ticket sales for current year
-            $monthlyTickets = DB::table('tickets')
-                ->whereYear('created_at', $now->year)
-                ->selectRaw('MONTH(created_at) as month, COUNT(*) as count')
-                ->groupBy('month')
-                ->orderBy('month')
-                ->get();
+    //         // Monthly ticket sales for current year
+    //         $monthlyTickets = DB::table('tickets')
+    //             ->whereYear('created_at', $now->year)
+    //             ->selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+    //             ->groupBy('month')
+    //             ->orderBy('month')
+    //             ->get();
 
-            $ticketData = collect(range(1, 12))->map(function($month) use ($monthlyTickets) {
-                $monthData = $monthlyTickets->firstWhere('month', $month);
-                return [
-                    'name' => Carbon::create()->month($month)->format('M'),
-                    'value' => $monthData ? $monthData->count : 0
-                ];
-            });
+    //         $ticketData = collect(range(1, 12))->map(function($month) use ($monthlyTickets) {
+    //             $monthData = $monthlyTickets->firstWhere('month', $month);
+    //             return [
+    //                 'name' => Carbon::create()->month($month)->format('M'),
+    //                 'value' => $monthData ? $monthData->count : 0
+    //             ];
+    //         });
 
-            return response()->json([
-                'totalTicketsSold' => $totalTicketsSold,
-                'totalRevenue' => $totalRevenue,
-                'thisMonthTickets' => $thisMonthTickets,
-                'averageTicketPrice' => round($averageTicketPrice, 2),
-                'ticketStatusDistribution' => $ticketStatusDistribution,
-                'monthlyTickets' => $ticketData
-            ]);
+    //         return response()->json([
+    //             'totalTicketsSold' => $totalTicketsSold,
+    //             'totalRevenue' => $totalRevenue,
+    //             'thisMonthTickets' => $thisMonthTickets,
+    //             'averageTicketPrice' => round($averageTicketPrice, 2),
+    //             'ticketStatusDistribution' => $ticketStatusDistribution,
+    //             'monthlyTickets' => $ticketData
+    //         ]);
 
-        } catch (\Throwable $th) {
-            Log::error('Error getting admin ticket stats: ' . $th->getMessage());
-            return response()->json(['message' => 'Error fetching ticket statistics'], 500);
-        }
-    }
+    //     } catch (\Throwable $th) {
+    //         Log::error('Error getting admin ticket stats: ' . $th->getMessage());
+    //         return response()->json(['message' => 'Error fetching ticket statistics'], 500);
+    //     }
+    // }
 
     /**
      * Get ticket sales by category for admin dashboard

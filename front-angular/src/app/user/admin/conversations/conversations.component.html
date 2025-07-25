@@ -1,0 +1,200 @@
+<div class="messages-container" [ngClass]="class$ | async">
+  <!-- Header Section -->
+  <div class="messages-header" [@fadeInUp]>
+    <div class="header-content">
+      <div class="header-left">
+        <h1 class="page-title">
+          <mat-icon class="title-icon">email</mat-icon>
+          Messages Management
+        </h1>
+        <p class="page-subtitle">Manage and respond to contact form submissions</p>
+      </div>
+      <div class="header-actions">
+        <button mat-raised-button color="primary" (click)="refresh()" [disabled]="loading || statsLoading">
+          <mat-icon>refresh</mat-icon>
+          Refresh
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="stats-section" [@staggerFadeIn]>
+    <mat-card class="stat-card" [@cardHover]="'normal'" *ngIf="!statsLoading">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon class="stat-icon total">email</mat-icon>
+          <div class="stat-details">
+            <h3 class="stat-number">{{ stats?.total || 0 }}</h3>
+            <p class="stat-label">Total Messages</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card" [@cardHover]="'normal'" *ngIf="!statsLoading">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon class="stat-icon unread">mark_email_unread</mat-icon>
+          <div class="stat-details">
+            <h3 class="stat-number">{{ stats?.unread || 0 }}</h3>
+            <p class="stat-label">Unread</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card" [@cardHover]="'normal'" *ngIf="!statsLoading">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon class="stat-icon read">mark_email_read</mat-icon>
+          <div class="stat-details">
+            <h3 class="stat-number">{{ stats?.read || 0 }}</h3>
+            <p class="stat-label">Read</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card" [@cardHover]="'normal'" *ngIf="!statsLoading">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon class="stat-icon solved">task_alt</mat-icon>
+          <div class="stat-details">
+            <h3 class="stat-number">{{ stats?.solved || 0 }}</h3>
+            <p class="stat-label">Solved</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card" [@cardHover]="'normal'" *ngIf="!statsLoading">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon class="stat-icon not-solved">pending</mat-icon>
+          <div class="stat-details">
+            <h3 class="stat-number">{{ stats?.not_solved || 0 }}</h3>
+            <p class="stat-label">Not Solved</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Loading placeholder -->
+    <div class="stats-loading" *ngIf="statsLoading">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading statistics...</p>
+    </div>
+  </div>
+
+  <!-- Filters Section -->
+  <div class="filters-section" [@fadeInUp]>
+    <mat-card class="filters-card">
+      <mat-card-content>
+        <form [formGroup]="filterForm" class="filters-form">
+          <div class="filter-row">
+            <mat-form-field class="search-field">
+              <mat-label>Search messages</mat-label>
+              <input matInput formControlName="search" placeholder="Search by name, email, or message...">
+              <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field class="status-field">
+              <mat-label>Filter by status</mat-label>
+              <mat-select formControlName="status">
+                <mat-option *ngFor="let option of statusOptions" [value]="option.value">
+                  <mat-icon [color]="option.color">{{ getStatusIcon(option.value) }}</mat-icon>
+                  {{ option.label }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </form>
+        <!-- Active filter chips and reset button -->
+        <div class="active-filters" *ngIf="selectedStatus !== 'all' || searchTerm">
+          <span *ngIf="selectedStatus !== 'all'" class="filter-badge filter-status">
+            {{ getStatusLabel(selectedStatus) }}
+            <button type="button" class="filter-close" (click)="clearStatus()" aria-label="Remove status filter">&times;</button>
+          </span>
+          <span *ngIf="searchTerm" class="filter-badge filter-search">
+            {{ searchTerm }}
+            <button type="button" class="filter-close" (click)="clearSearch()" aria-label="Remove search filter">&times;</button>
+          </span>
+          <button mat-button color="warn" (click)="resetFilters()">
+            <mat-icon>clear_all</mat-icon> Reset Filters
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Conversations List -->
+  <div class="messages-list-section" [@fadeInUp]>
+    <mat-card class="messages-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>forum</mat-icon>
+          Conversations ({{ totalItems }})
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <!-- Loading State -->
+        <div class="loading-container" *ngIf="loading">
+          <mat-spinner diameter="50"></mat-spinner>
+          <p>Loading conversations...</p>
+        </div>
+        <!-- Empty State -->
+        <div class="empty-state" *ngIf="!loading && conversations.length === 0">
+          <img src="assets/empty-messages.svg" alt="No messages" style="max-width:120px; margin-bottom:16px;">
+          <h3>No conversations found</h3>
+          <p>Try adjusting your filters or check back later.</p>
+        </div>
+        <!-- Conversations List -->
+        <div class="messages-list" *ngIf="!loading && conversations.length > 0" [@staggerFadeIn]>
+          <div class="message-item"
+               [ngClass]="{'unread': isUnread(conversation)}"
+               *ngFor="let conversation of conversations; trackBy: trackByConversationId"
+               [@cardHover]="'normal'">
+            <div class="message-header">
+              <div class="message-info">
+                <div class="sender-info">
+                  <h4 class="sender-name">{{ conversation.guest_name || 'Guest' }}</h4>
+                  <p class="sender-email">{{ conversation.guest_email }}</p>
+                </div>
+                <div class="message-meta">
+                  <span class="timestamp">{{ formatDate(conversation.last_message_at) }}</span>
+                  <button mat-button [color]="getStatusColor(conversation.status)" >
+                    <mat-icon>{{ getStatusIcon(conversation.status) }}</mat-icon>
+                    {{ conversation.status | titlecase }}
+                  </button>
+                  <mat-icon *ngIf="isUnread(conversation)" color="warn" matTooltip="Unread message">mark_email_unread</mat-icon>
+                </div>
+              </div>
+              <div class="message-actions">
+                <button mat-icon-button matTooltip="View Conversation" (click)="onViewConversation(conversation)">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+              </div>
+            </div>
+            <div class="message-content">
+              <p class="message-text">
+                {{ conversation.messages && conversation.messages.length > 0 ? truncateText(conversation.messages[conversation.messages.length - 1].body, 200) : 'No messages yet.' }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+      <!-- Load More Button -->
+      <mat-card-actions class="pagination-container" *ngIf="!loading && conversations.length > 0">
+                <div class="load-more-container" *ngIf="conversations.length > 0 && hasMore">
+           <button class="btn btn-outline load-more-btn"
+                   (click)="onLoadMore()"
+                   [disabled]="loading || loadingMore">
+             <mat-icon *ngIf="loadingMore">hourglass_empty</mat-icon>
+             <span>{{ loadingMore ? 'Loading…' : (hasMore ? 'Load More Conversations' : 'All Conversations Loaded') }}</span>
+           </button>
+         </div>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

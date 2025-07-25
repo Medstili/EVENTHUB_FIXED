@@ -16,7 +16,6 @@ import { MyAccountComponent }    from './user/organizer/my-account/my-account.co
 import { LoginGuard } from './guards/login.guard';
 import { EditAccountComponent } from './user/organizer/edit-account/edit-account.component';
 import { EditAccountComponent as adminEditAccountComponent } from './user/admin/account/edit-account/edit-account.component';
-// import { ParticipantDashboardComponent } from './user/participant/participant-dashboard/participant-dashboard.component';
 import { ParticipantReservationsComponent } from './user/participant/participant-tickets/participant-tickets.component';
 import { ParticipantAccountComponent } from './user/participant/participant-account/participant-account.component';
 import { ParticipantEditAccountComponent } from './user/participant/participant-edit-account/participant-edit-account.component';
@@ -38,6 +37,9 @@ import { MyTicketsComponent } from './user/admin/my-tickets/my-tickets.component
 import { MyTicketsComponent as OrganizerTicketsComponent } from './user/organizer/my-tickets/my-tickets.component';
 import { TicketDetailsComponent as OrganizerTicketDetailsComponent } from './user/organizer/my-tickets/ticket-details/ticket-details.component';
 import { TicketDetailsComponent as OwnedAdminTicketDetailsComponent } from './user/admin/my-tickets/ticket-details/ticket-details.component';
+import { ContactUsComponent } from './contact-us/contact-us.component';
+import { ConversationsComponent } from './user/admin/conversations/conversations.component';
+import { ChatComponent } from './user/admin/conversations/chat/chat.component';
 
 export const routes: Routes = [
   // the private routes area
@@ -90,6 +92,9 @@ export const routes: Routes = [
       { path: 'admin-users',component: UsersComponent},
       { path: 'admin-account',     component: AccountComponent },      
       { path: 'admin-edit-account', component: adminEditAccountComponent },
+      { path: 'admin-conversations', component: ConversationsComponent },
+      { path: 'admin-conversations/chat/:id', component: ChatComponent },
+
     ]
   },
   // ───────────────────────────────────────
@@ -108,6 +113,7 @@ export const routes: Routes = [
       { path: 'forgot-password',     component: ForgotPasswordComponent },
       { path: 'change-password',     component: ChangePasswordComponent },
       { path: 'events/:id',          component: EventComponent },
+      { path: 'contact-us', component: ContactUsComponent },
     ]
   },
 

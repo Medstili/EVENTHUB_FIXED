@@ -2,7 +2,7 @@
      [class.mobile-layout]="isMobile$ | async"
      [class.tablet-layout]="isTablet$ | async"
      [class.small-screen-layout]="isSmallScreen$ | async"
-     [style.padding]="containerPadding$ | async">
+    >
   <!-- Header Section -->
   <div class="header-section">
     <div class="header-content" [style.flex-direction]="headerLayout$ | async">
@@ -21,7 +21,7 @@
     <div class="filters-card">
       <!-- Desktop Filters -->
       <ng-container *ngIf="!(isHandset$ | async); else mobileFilters">
-        <div class="filters-grid" [style.grid-template-columns]="filterGridColumns$ | async">
+        <div class="filters-grid">
           <div class="filter-group">
             <mat-form-field appearance="outline">
               <mat-label>Search by Name</mat-label>
@@ -51,6 +51,7 @@
             </mat-form-field>
           </div>
         </div>
+        
         <div class="filter-actions-center" *ngIf="filterActionsVisible$ | async">
           <button mat-raised-button color="primary" [disabled]="isFilterLoading" (click)="applyFilter()" class="apply-btn">
             <mat-spinner *ngIf="isFilterLoading" diameter="20"></mat-spinner>
@@ -116,7 +117,7 @@
 
       <div class="table-container mat-elevation-z2">
         <table mat-table matSort [dataSource]="dataSource" (matSortChange)="announceSortChange($event)" 
-               class="users-table" [style.min-width]="tableMinWidth$ | async">
+               class="users-table" >
           <!-- ID Column -->
           <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef mat-sort-header class="id-column">

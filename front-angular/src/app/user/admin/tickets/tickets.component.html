@@ -2,11 +2,10 @@
      [class.mobile-layout]="isMobile$ | async"
      [class.tablet-layout]="isTablet$ | async"
      [class.small-screen-layout]="isSmallScreen$ | async"
-     [style.padding]="containerPadding$ | async"
      [@pageTransition]>
   <!-- Header Section -->
   <div class="header-section" [@fadeInUp]>
-    <div class="header-content" [style.flex-direction]="headerLayout$ | async">
+    <div class="header-content" >
       <div class="title-section">
         <h1 class="page-title">
           <mat-icon class="title-icon">confirmation_number</mat-icon>
@@ -22,11 +21,11 @@
     <div class="filters-card" [@cardHover]="'normal'">
       <!-- Desktop Filters -->
       <ng-container *ngIf="!(isHandset$ | async); else mobileFilters">
-        <div class="filters-grid" [style.grid-template-columns]="filterGridColumns$ | async">
+        <div class="filters-grid" >
           <div class="filter-group" [@fadeInUp]>
             <mat-form-field appearance="outline" class="search-field">
               <mat-label>Search Events</mat-label>
-              <input matInput placeholder="Search by event title..." (input)="titleSearch($event)" #input>
+              <input matInput placeholder="Search by event title..." (input)="titleSearch($event)" #titleInput>
               <mat-icon matSuffix>search</mat-icon>
             </mat-form-field>
           </div>
@@ -46,7 +45,7 @@
           <div class="filter-group" [@fadeInUp]>
             <mat-form-field appearance="outline">
               <mat-label>Purchase Date</mat-label>
-              <input matInput [matDatepicker]="picker" (dateChange)="dateSelected($event)" placeholder="Select date">
+              <input matInput [matDatepicker]="picker" (dateChange)="dateSelected($event)" placeholder="Select date" #dateInput>
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
               <mat-hint class="date-hint">
@@ -59,8 +58,7 @@
           </div>
         </div>
         <div class="filter-actions-center" *ngIf="filterActionsVisible$ | async" [@fadeInUp]>
-          <button mat-raised-button color="primary" [disabled]="isFilterLoading" (click)="applyFilter()" 
-                  class="apply-btn" [@buttonPress]="'normal'">
+          <button mat-raised-button color="primary" [disabled]="isFilterLoading" (click)="applyFilter()" class="apply-btn">
             <mat-spinner *ngIf="isFilterLoading" diameter="20"></mat-spinner>
             <mat-icon *ngIf="!isFilterLoading">filter_list</mat-icon>
             <span *ngIf="!isFilterLoading">Apply Filters</span>
@@ -137,7 +135,7 @@
 
       <div class="table-container mat-elevation-z2">
         <table mat-table matSort [dataSource]="dataSource" (matSortChange)="announceSortChange($event)" 
-               class="tickets-table" [style.min-width]="tableMinWidth$ | async">
+               class="tickets-table" >
           <!-- ID Column -->
           <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef mat-sort-header class="id-column">
@@ -253,7 +251,7 @@
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="table-header-row"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row" [@staggerFadeIn]></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row" [@slideInUp]></tr>
         </table>
 
         <!-- Loading State -->

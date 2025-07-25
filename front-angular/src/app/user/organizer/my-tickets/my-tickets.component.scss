@@ -73,14 +73,11 @@
 
         &:hover {
           background: var(--primary-color);
-          color: var(--text-inverse);
+          color: var(--text-primary);
           transform: translateY(-2px);
           box-shadow: var(--shadow-hover);
         }
 
-        mat-icon {
-          font-size: var(--text-lg);
-        }
       }
     }
   }
@@ -259,20 +256,20 @@
     justify-content: center;
 
     .btn-primary {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-      padding: var(--space-3) var(--space-6);
-      border-radius: var(--radius-xl);
-      font-weight: var(--font-semibold);
-      transition: all 0.3s ease;
-      min-width: 140px;
-      justify-content: center;
+      // display: flex;
+      // align-items: center;
+      // gap: var(--space-2);
+      // padding: var(--space-3) var(--space-6);
+      // border-radius: var(--radius-xl);
+      // font-weight: var(--font-semibold);
+      // transition: all 0.3s ease;
+      // min-width: 140px;
+      // justify-content: center;
 
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-hover);
-      }
+      // &:hover {
+      //   transform: translateY(-2px);
+      //   box-shadow: var(--shadow-hover);
+      // }
 
       mat-icon {
         font-size: var(--text-lg);
@@ -342,11 +339,11 @@
     }
     .card-actions {
       width: 100%;
-      .btn-primary {
-        width: 100%;
-        min-width: 0;
-        font-size: var(--text-base);
-      }
+      // .btn-primary {
+      //   width: 100%;
+      //   min-width: 0;
+      //   font-size: var(--text-base);
+      // }
     }
   }
 }
@@ -365,9 +362,11 @@
     padding: var(--space-8);
 
     .empty-icon {
-      font-size: var(--text-6xl);
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
       color: var(--text-tertiary);
-      margin-bottom: var(--space-6);
+      // margin-bottom: var(--space-6);
     }
 
     h2 {
@@ -384,24 +383,9 @@
       line-height: 1.6;
     }
 
+
     .btn-primary {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-      padding: var(--space-4) var(--space-8);
-      border-radius: var(--radius-xl);
-      font-weight: var(--font-semibold);
-      transition: all 0.3s ease;
-      margin: 0 auto;
-
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-hover);
-      }
-
-      mat-icon {
-        font-size: var(--text-lg);
-      }
+      color: var(--text-primary);
     }
   }
 

@@ -1,0 +1,62 @@
+<div class="chat-center-wrapper" [ngClass]="{'mobile': isMobile}">
+  <div class="chat-container">
+    <div class="chat-header" [ngClass]="{'mobile-header': isMobile}">
+      <div class="header-left">
+        <button class="back-btn" (click)="goBack()" aria-label="Go back">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <div>
+          <h3>{{guest_name}}</h3>
+          <small style="font-size: 12px;">{{ guest_email || '' }}</small>
+        </div>
+      </div>
+      <div class="status-buttons" [ngClass]="{'mobile-status': isMobile}">
+        <button class="status-btn solved-btn" (click)="markAsSolved()">
+          <mat-icon>check_circle</mat-icon>
+          Solved
+        </button>
+        <button class="status-btn unsolved-btn" (click)="markAsUnsolved()">
+          <mat-icon>cancel</mat-icon>
+          Unsolved
+        </button>
+      </div>
+    </div>
+    <div class="chat-history" id="chat-history">
+      <div *ngFor="let message of messages" class="message-row" [ngClass]="{'sent': message.sender === 'User', 'received': message.sender !== 'User'}" [@fadeIn]>
+        <ng-container *ngIf="message.sender !== 'User'">
+          <img class="avatar" [src]="message.avatar" [alt]="message.sender + ' avatar'" />
+          <div class="bubble received-bubble" [ngStyle]="{'font-size': responsiveFontSize, 'max-width': responsiveBubbleWidth}" [ngClass]="{'mobile-bubble': isMobile}">
+            <div class="sender-name">{{ message.sender }}</div>
+            <div class="message-text">{{ message.text }}</div>
+            <div class="message-time">{{ message.time }}</div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="message.sender === 'User'">
+          <div class="bubble sent-bubble" [ngStyle]="{'font-size': responsiveFontSize, 'max-width': responsiveBubbleWidth}" [ngClass]="{'mobile-bubble': isMobile}">
+            <div class="message-text">{{ message.text }}</div>
+            <div class="message-time">{{ message.time }}</div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="error-message" *ngIf="errorMessage" [@fadeInUp]>
+      <mat-icon>error</mat-icon>
+      <span>{{ errorMessage }}</span>
+    </div>
+    <div class="chat-input-area" [@fadeInUp] [ngClass]="{'mobile-input': isMobile}">
+      <input 
+        type="text" 
+        [(ngModel)]="newMessage" 
+        (keyup.enter)="sendMessage()" 
+        placeholder="Type your message..." 
+        [disabled]="isSending" />
+      <button 
+        (click)="sendMessage()" 
+        [disabled]="!newMessage.trim() || isSending" 
+        aria-label="Send message">
+        <mat-icon *ngIf="!isSending">send</mat-icon>
+        <mat-icon *ngIf="isSending" class="spinner">hourglass_empty</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

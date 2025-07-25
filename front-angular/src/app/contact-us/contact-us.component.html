@@ -1,0 +1,53 @@
+<section class="contact-section" [ngClass]="class$ | async">
+  <div class="contact-header" [@fadeInUp]>
+    <h2 class="contact-title">Contact Us</h2>
+    <p class="contact-subtitle">We'd love to hear from you! Fill out the form and our team will get back to you soon.</p>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="contact-form" [@staggerFadeIn]>
+    <!-- Honeypot field (hidden from users) -->
+    <input type="text"
+    formControlName="honeypot"
+    autocomplete="off"
+    class="honeypot-field" />
+
+    <!-- existing fields... -->
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="name" class="form-label">Name</label>
+        <input id="name" type="text" class="form-input" formControlName="name" [class.error]="submitted && f['name'].errors" placeholder="Your Name" [disabled]="loading">
+        <div *ngIf="submitted && f['name'].errors" class="form-error">
+          <span *ngIf="f['name'].errors['required']">Name is required.</span>
+          <span *ngIf="f['name'].errors['maxLength']">Name is too long.</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email" class="form-label">Email</label>
+        <input id="email" type="email" class="form-input" formControlName="email" [class.error]="submitted && f['email'].errors" placeholder="you@email.com" [disabled]="loading">
+        <div *ngIf="submitted && f['email'].errors" class="form-error">
+          <span *ngIf="f['email'].errors['required']">Email is required.</span>
+          <span *ngIf="f['email'].errors['email']">Enter a valid email.</span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="message" class="form-label">Message</label>
+      <textarea id="message" rows="5" class="form-input" formControlName="message" [class.error]="submitted && f['message'].errors" placeholder="Type your message..." [disabled]="loading"></textarea>
+      <div *ngIf="submitted && f['message'].errors" class="form-error">
+        <span *ngIf="f['message'].errors['required']">Message is required.</span>
+        <span *ngIf="f['message'].errors['maxLength']">Message is too long.</span>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary btn-lg btn-full mt-4" [@buttonPress]="loading ? 'pressed' : 'normal'" [disabled]="loading">
+      <span *ngIf="!loading">Send Message</span>
+      <span *ngIf="loading"><span class="spinner" [@spin]></span> Sending...</span>
+    </button>
+    <div *ngIf="success" class="form-success mt-4" [@fadeInUp]>
+      <span>Thank you! Your message has been sent.</span>
+    </div>
+    <div *ngIf="error" class="form-error mt-4" [@fadeInUp]>
+      <span>{{ error }}</span>
+    </div>
+    
+  </form>
+</section>

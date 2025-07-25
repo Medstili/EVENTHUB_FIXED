@@ -1,8 +1,8 @@
-import { Component, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, OnInit, signal, ViewChild, ElementRef } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatTableDataSource, MatTableModule} from '@angular/material/table';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
@@ -10,13 +10,13 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Observable } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatListModule, MatSelectionListChange } from '@angular/material/list';
-import { TicketService, Ticket } from '../../../services/ticketService/tickets.service';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Ticket } from '../../../services/ticketService/tickets.service';
+import { Router, RouterModule } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminService } from '../../../services/adminService/admin.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -36,7 +36,7 @@ import { AnimationService } from '../../../services/animation.service';
     MatPaginatorModule,
     MatInputModule,
     MatButtonModule,
-    MatProgressSpinner,
+    MatProgressSpinnerModule,
     MatIconModule,
     MatMenuModule,
     MatListModule,
@@ -47,15 +47,17 @@ import { AnimationService } from '../../../services/animation.service';
   styleUrl: './tickets.component.scss',
   animations: [
     AnimationService.fadeInUp,
-    AnimationService.staggerFadeIn,
     AnimationService.cardHover,
     AnimationService.buttonPress,
-    AnimationService.pageTransition
+    AnimationService.pageTransition,
+    AnimationService.slideInUp
   ]
 })
 export class TicketsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('titleInput') titleInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('dateInput') dateInput!: ElementRef<HTMLInputElement>;
   
   displayedColumns: string[] = ['id', 'event', 'participant', 'status', 'price', 'created_at', 'actions'];
   dataSource = new MatTableDataSource<Ticket>([]);
@@ -86,15 +88,9 @@ export class TicketsComponent implements OnInit {
   isTablet$: Observable<boolean>;
   isMobile$: Observable<boolean>;
   isSmallScreen$: Observable<boolean>;
-  filterGridColumns$: Observable<string>;
-  containerPadding$: Observable<string>;
-  tableMinWidth$: Observable<string>;
-  headerLayout$: Observable<'row' | 'column'>;
+
   filterActionsVisible$: Observable<boolean>;
-  responsiveSpacing$: Observable<string>;
-  responsiveMargin$: Observable<string>;
-  cardLayout$: Observable<'compact' | 'comfortable'>;
-  buttonSize$: Observable<'small' | 'medium' | 'large'>;
+
 
   constructor(
     private adminService: AdminService,
@@ -102,24 +98,15 @@ export class TicketsComponent implements OnInit {
     private responsiveService: ResponsiveService,
     private route: Router,
     private snackBar: MatSnackBar,
-    private activatedRoute: ActivatedRoute
   ) {
     this.dataSource = new MatTableDataSource<Ticket>([]);
-    
+  
     // Initialize responsive observables
     this.isHandset$ = this.responsiveService.isHandset$;
     this.isTablet$ = this.responsiveService.isTablet$;
     this.isMobile$ = this.responsiveService.isMobile$;
     this.isSmallScreen$ = this.responsiveService.isSmallScreen$;
-    this.filterGridColumns$ = this.responsiveService.getFilterGridColumns();
-    this.containerPadding$ = this.responsiveService.getContainerPadding();
-    this.tableMinWidth$ = this.responsiveService.getTableMinWidth();
-    this.headerLayout$ = this.responsiveService.getHeaderLayout();
     this.filterActionsVisible$ = this.responsiveService.getFilterActionsVisible();
-    this.responsiveSpacing$ = this.responsiveService.getResponsiveSpacing();
-    this.responsiveMargin$ = this.responsiveService.getResponsiveMargin();
-    this.cardLayout$ = this.responsiveService.getCardLayout();
-    this.buttonSize$ = this.responsiveService.getButtonSize();
   }
 
   ngOnInit(): void {
@@ -254,6 +241,13 @@ export class TicketsComponent implements OnInit {
     this.appliedDate = null;
     this.appliedStatus = null;
     
+    // Clear the input fields
+    if (this.titleInput) {
+      this.titleInput.nativeElement.value = '';
+    }
+    if (this.dateInput) {
+      this.dateInput.nativeElement.value = '';
+    }
     this.loadTickets();
     this.openSnackBar('Filters cleared');
   }

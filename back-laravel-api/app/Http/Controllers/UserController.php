@@ -11,6 +11,7 @@ use Illuminate\Validation\Rule;
 
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -66,7 +67,7 @@ class UserController extends Controller
 
             return response()->json(['message'=>'User created successfully'], 201);
             
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             return response()->json(['message'=>'Error creating user'], 500);
         }
     
@@ -82,7 +83,7 @@ class UserController extends Controller
         try {
             $user = User::findOrFail($id);
             return response()->json(['user'=>$user]);
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             return response()->json(['message'=>'User not found'], 404);
         }
     }
@@ -110,11 +111,6 @@ class UserController extends Controller
             $user->email = $request->email;
             if ($request->password && $request->password === $request->password_confirmation) {   
                 $user->password = Hash::make($request->password);
-                // $request->session()->invalidate();
-                // $request->session()->regenerateToken();
-                // $cookieName = session()->getName();
-                // $response = response()->json(['message'=>'User updated successfully', 'user'=>$user])
-                //             ->withCookie(cookie()->forget($cookieName));
             }
 
             $user->save();
@@ -124,13 +120,13 @@ class UserController extends Controller
 
                 Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password]);
 
-                Log::info('user logged in successfully',[Auth::user()]);
+                // Log::info('user logged in successfully',[Auth::user()]);
             }
 
             Log::info('user updated successfully ', [$user]);
             $response = response()->json(['message'=>'User updated successfully', 'user'=>$user]);
             return  $response;
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             Log::error('Error updating user: '.$th->getMessage());
             Log::error($th->getTraceAsString());
             
@@ -152,7 +148,7 @@ class UserController extends Controller
      */
     public function destroy(string $id, Request $request)
     {
-        log::info('delete method called', [$id]);
+        // log::info('delete method called', [$id]);
         try {
             $userToDelete = User::findOrFail($id);
             $authenticatedUser = Auth::user();
@@ -162,7 +158,7 @@ class UserController extends Controller
 
             if ($isDeletingSelf) {
                 // If the user is deleting their own account, perform a full logout
-                Log::info('User deleting self. ID: ' . $userToDelete->id . '. Logging out.');
+                // Log::info('User deleting self. ID: ' . $userToDelete->id . '. Logging out.');
                 Auth::guard('web')->logout();
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
@@ -171,10 +167,10 @@ class UserController extends Controller
                     ->withCookie(cookie()->forget($cookieName));
             } else {
                 // If an admin (or another authorized user) is deleting someone else
-                Log::info('User ID: ' . ($authenticatedUser ? $authenticatedUser->id : 'N/A') . ' deleted user ID: ' . $userToDelete->id);
+                // Log::info('User ID: ' . ($authenticatedUser ? $authenticatedUser->id : 'N/A') . ' deleted user ID: ' . $userToDelete->id);
                 return response()->json(['message' => 'User deleted successfully']);
             }
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             Log::error('Error deleting user: '.$th->getMessage(), ['exception_trace' => $th->getTraceAsString()]);
             
             // In debug mode, return the exception message so you can see it in Postman/Angular
@@ -194,7 +190,7 @@ class UserController extends Controller
             $totalOrganizers = User::where('role', 'organizer')->count();
             return $totalOrganizers;
         }
-        catch (\Throwable $th) {
+        catch (Throwable $th) {
             Log::error('Error getting organizers '.$th->getMessage());
             Log::error($th->getTraceAsString());
             
@@ -211,53 +207,6 @@ class UserController extends Controller
             ], 500); 
     }}  
     
-    public function getAllUsers(){
-        try {
-            $users = User::whereIn('role', ['organizer', 'participant'])->count();
-            return $users;
-
-        } catch (\Throwable $th){
-                        Log::error('Error getting users '.$th->getMessage());
-            Log::error($th->getTraceAsString());
-            
-            // In debug mode, return the exception message so you can see it in Postman/Angular
-            if (config('app.debug')) {
-                return response()->json([
-                    'message' => 'Error getting users',
-                    'error'   => $th->getMessage(),
-                    'trace'   => explode("\n", $th->getTraceAsString())
-                ], 500);
-            }
-            return response()->json(['message'=>'Error getting users'], 500);
-        }
-    }
-    public function get_Or_Pr_Users(){
-        try {
-            $organizers = User::where('role', 'organizer')->count();
-            $participants = User::where('role', 'participant')->count();
-            $users = [
-                ['name' => 'organizers', 'value' => $organizers],
-                ['name' => 'participants', 'value' => $participants]
-            ];
-    
-            return  $users;
-
-        }
-        catch (\Throwable $th){
-                        Log::error('Error getting users '.$th->getMessage());
-            Log::error($th->getTraceAsString());
-            
-            // In debug mode, return the exception message so you can see it in Postman/Angular
-            if (config('app.debug')) {
-                return response()->json([
-                    'message' => 'Error getting users',
-                    'error'   => $th->getMessage(),
-                    'trace'   => explode("\n", $th->getTraceAsString())
-                ], 500);
-            }
-            return response()->json(['message'=>'Error getting users'], 500);
-        }
-    }
 
     /**
      * Get user distribution for admin dashboard charts
@@ -277,7 +226,7 @@ class UserController extends Controller
 
             return response()->json($userDistribution);
 
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             Log::error('Error getting user distribution: ' . $th->getMessage());
             return response()->json(['message' => 'Error fetching user distribution'], 500);
         }
@@ -307,37 +256,83 @@ class UserController extends Controller
 
             return response()->json($data);
 
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             Log::error('Error getting user growth: ' . $th->getMessage());
             return response()->json(['message' => 'Error fetching user growth data'], 500);
         }
     }
+    
 
-    /**
-     * Get top organizers by event count
-     */
-    public function getTopOrganizers()
-    {
-        try {
-            $topOrganizers = User::where('role', 'organizer')
-                ->withCount('events')
-                ->orderByDesc('events_count')
-                ->take(10)
-                ->get(['id', 'name', 'email', 'events_count'])
-                ->map(function($organizer) {
-                    return [
-                        'name' => $organizer->name,
-                        'value' => $organizer->events_count,
-                        'email' => $organizer->email
-                    ];
-                });
 
-            return response()->json($topOrganizers);
+    // public function getTopOrganizers()
+    // {
+    //     try {
+    //         $topOrganizers = User::where('role', 'organizer')
+    //             ->withCount('events')
+    //             ->orderByDesc('events_count')
+    //             ->take(10)
+    //             ->get(['id', 'name', 'email', 'events_count'])
+    //             ->map(function($organizer) {
+    //                 return [
+    //                     'name' => $organizer->name,
+    //                     'value' => $organizer->events_count,
+    //                     'email' => $organizer->email
+    //                 ];
+    //             });
+    //         return response()->json($topOrganizers);
+    //     } catch (\Throwable $th) {
+    //         Log::error('Error getting top organizers: ' . $th->getMessage());
+    //         return response()->json(['message' => 'Error fetching top organizers'], 500);
+    //     }
+    // }
 
-        } catch (\Throwable $th) {
-            Log::error('Error getting top organizers: ' . $th->getMessage());
-            return response()->json(['message' => 'Error fetching top organizers'], 500);
-        }
-    }
+        // public function getAllUsers(){
+    //     try {
+    //         $users = User::whereIn('role', ['organizer', 'participant'])->count();
+    //         return $users;
+
+    //     } catch (\Throwable $th){
+    //                     Log::error('Error getting users '.$th->getMessage());
+    //         Log::error($th->getTraceAsString());
+            
+    //         // In debug mode, return the exception message so you can see it in Postman/Angular
+    //         if (config('app.debug')) {
+    //             return response()->json([
+    //                 'message' => 'Error getting users',
+    //                 'error'   => $th->getMessage(),
+    //                 'trace'   => explode("\n", $th->getTraceAsString())
+    //             ], 500);
+    //         }
+    //         return response()->json(['message'=>'Error getting users'], 500);
+    //     }
+    // }
+    // public function get_Or_Pr_Users(){
+    //     try {
+    //         $organizers = User::where('role', 'organizer')->count();
+    //         $participants = User::where('role', 'participant')->count();
+    //         $users = [
+    //             ['name' => 'organizers', 'value' => $organizers],
+    //             ['name' => 'participants', 'value' => $participants]
+    //         ];
+    
+    //         return  $users;
+
+    //     }
+    //     catch (\Throwable $th){
+    //                     Log::error('Error getting users '.$th->getMessage());
+    //         Log::error($th->getTraceAsString());
+            
+    //         // In debug mode, return the exception message so you can see it in Postman/Angular
+    //         if (config('app.debug')) {
+    //             return response()->json([
+    //                 'message' => 'Error getting users',
+    //                 'error'   => $th->getMessage(),
+    //                 'trace'   => explode("\n", $th->getTraceAsString())
+    //             ], 500);
+    //         }
+    //         return response()->json(['message'=>'Error getting users'], 500);
+    //     }
+    // }
+
 
 }

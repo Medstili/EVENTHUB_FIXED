@@ -14,21 +14,21 @@ export class AdminService {
   constructor(private http: HttpClient, private loginService: LoginService) { }
 
 // cards
-  getAllUsersCount(): Observable<number>{
-    return this.http.get<number>(`${this.baseUrl}/admin/total-users`, {withCredentials: true})
-  }
-  getAllEventsCount(): Observable<number>{
-    return this.http.get<number>(`${this.baseUrl}/admin/total-events`, {
-      withCredentials: true
-    });
-  }
-  getAllTicketsCount(): Observable<number> {
-    return this.http.get<number>(`${this.baseUrl}/admin/total-tickets`, {withCredentials: true});
-  }
+  // getAllUsersCount(): Observable<number>{
+  //   return this.http.get<number>(`${this.baseUrl}/admin/total-users`, {withCredentials: true})
+  // }
+  // getAllEventsCount(): Observable<number>{
+  //   return this.http.get<number>(`${this.baseUrl}/admin/total-events`, {
+  //     withCredentials: true
+  //   });
+  // }
+  // getAllTicketsCount(): Observable<number> {
+  //   return this.http.get<number>(`${this.baseUrl}/admin/total-tickets`, {withCredentials: true});
+  // }
   // pie chart
-  get_All_Or_Pr_Users(): Observable<[]>{
-    return this.http.get<[]>(`${this.baseUrl}/admin/Or-Pr-Users`, {withCredentials: true})
-  }
+  // get_All_Or_Pr_Users(): Observable<[]>{
+  //   return this.http.get<[]>(`${this.baseUrl}/admin/Or-Pr-Users`, {withCredentials: true})
+  // }
   // doughchart
   get_All_Pb_Pr_Events(): Observable<any>{
     return this.http.get<any>(`${this.baseUrl}/admin/Pb-Pr-Events`, {withCredentials: true})
@@ -124,11 +124,11 @@ export class AdminService {
     });
   }
 
-  getTicketStats(): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/admin/dashboard/ticket-stats`, {
-      withCredentials: true
-    });
-  }
+  // getTicketStats(): Observable<any> {
+  //   return this.http.get<any>(`${this.baseUrl}/admin/dashboard/ticket-stats`, {
+  //     withCredentials: true
+  //   });
+  // }
 
   getRecentActivity(): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/admin/dashboard/recent-activity`, {
@@ -148,11 +148,11 @@ export class AdminService {
     });
   }
 
-  getTopOrganizers(): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/admin/dashboard/top-organizers`, {
-      withCredentials: true
-    });
-  }
+  // getTopOrganizers(): Observable<any> {
+  //   return this.http.get<any>(`${this.baseUrl}/admin/dashboard/top-organizers`, {
+  //     withCredentials: true
+  //   });
+  // }
 
   getTicketSalesByCategory(): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/admin/dashboard/ticket-sales-by-category`, {
