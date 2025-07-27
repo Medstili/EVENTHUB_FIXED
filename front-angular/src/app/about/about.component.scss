@@ -117,13 +117,13 @@
       grid-template-columns: 1fr;
     }
     
-    &.tablet {
-      grid-template-columns: repeat(2, 1fr);
-    }
+    // &.tablet {
+    //   grid-template-columns: repeat(2, 1fr);
+    // }
     
-    &.desktop {
-      grid-template-columns: repeat(3, 1fr);
-    }
+    // &.desktop {
+    //   grid-template-columns: repeat(3, 1fr);
+    // }
   }
   
   .feature-item {
@@ -194,13 +194,6 @@
     grid-template-columns: 1fr;
   }
   
-  &.tablet-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  &.desktop-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
 }
 
 .stat-card {
@@ -336,30 +329,3 @@
   }
 }
 
-.tablet {
-  .card-title {
-    font-size: var(--text-3xl);
-  }
-  
-  .feature-title {
-    font-size: var(--text-lg);
-  }
-  
-  .stat-number {
-    font-size: var(--text-2xl);
-  }
-}
-
-.desktop {
-  .card-title {
-    font-size: var(--text-4xl);
-  }
-  
-  .feature-title {
-    font-size: var(--text-lg);
-  }
-  
-  .stat-number {
-    font-size: var(--text-3xl);
-  }
-}

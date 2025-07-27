@@ -60,9 +60,8 @@ export class HomeComponent implements OnInit {
   heroImageHoverState: 'normal' | 'hovered' = 'normal';
   
   // Responsive observables
-  isMobile$: Observable<boolean>;
-  isTablet$: Observable<boolean>;
-  isDesktop$: Observable<boolean>;
+  isHandset$: Observable<boolean>;
+
 
   // Hover states for feature cards
   hoveredCardIndex: number | null = null;
@@ -76,9 +75,8 @@ export class HomeComponent implements OnInit {
     private responsiveService: ResponsiveService,
     private router: Router
   ) {
-    this.isMobile$ = this.responsiveService.isMobile$;
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isDesktop$ = this.responsiveService.isDesktop$;
+    this.isHandset$ = this.responsiveService.isHandset$;
+
   }
 
   ngOnInit(): void {

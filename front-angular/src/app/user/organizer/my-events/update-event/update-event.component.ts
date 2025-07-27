@@ -50,8 +50,6 @@ import { ActivatedRoute } from '@angular/router';
 export class UpdateEventComponent implements OnInit {
   eventForm!: FormGroup;
   isHandset$: Observable<boolean>;
-  isTablet$: Observable<boolean>;
-  isDesktop$: Observable<boolean>;
   categories: any[] = [];
   selectedFile?: File;
   imagePreview?: string;
@@ -67,8 +65,6 @@ export class UpdateEventComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.isHandset$ = this.responsiveService.isHandset$;
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isDesktop$ = this.responsiveService.isDesktop$;
   }
 
   ngOnInit(): void {

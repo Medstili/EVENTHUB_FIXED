@@ -132,9 +132,7 @@
           color: var(--text-inverse);
           box-shadow: 0 4px 16px 0 rgba(59, 130, 246, 0.15);
         }
-        &:active {
-          background: var(--primary-800);
-        }
+      
         &:disabled {
           opacity: 0.6;
           cursor: not-allowed;
@@ -262,7 +260,6 @@
               gap: var(--space-2);
 
               mat-icon {
-                font-size: var(--text-lg);
                 color: var(--primary-color);
               }
 
@@ -276,13 +273,6 @@
         /* Table Row Styles */
         .table-row {
           transition: all 0.2s ease;
-          background: var(--surface);
-
-          &:hover {
-            background: var(--surface-hover);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-sm);
-          }
 
           td {
             padding: var(--space-4);
@@ -420,9 +410,7 @@
               color: var(--warning-700);
             }
 
-            mat-icon {
-              font-size: var(--text-sm);
-            }
+
           }
         }
 
@@ -544,8 +532,6 @@
 }
 
 /* ===== RESPONSIVE CLASSES ===== */
-/* These classes will be applied based on responsive service observables */
-
 /* Mobile responsive classes */
 .mobile-layout {
   .events-container {
@@ -603,26 +589,6 @@
   }
 }
 
-/* Tablet responsive classes */
-.tablet-layout {
-  .filters-section .filters-card .filters-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-4);
-  }
-}
-
-/* Small screen responsive classes - only for extra small screens */
-.small-screen-layout {
-  .events-container {
-    padding: var(--space-3);
-  }
-
-  .filters-section .filters-card {
-    .mobile-filters {
-      padding: var(--space-3);
-    }
-  }
-}
 
 
 
@@ -632,6 +598,7 @@
     }
 
     .table-row:hover {
-      background: var(--neutral-700);
+      background: var(--surface-hover);
+
     }
   }

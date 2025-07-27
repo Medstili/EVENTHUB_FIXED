@@ -1,6 +1,6 @@
 import { CommonModule, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { EventService, Event } from '../../../../services/eventService/event.service';
+import { Event } from '../../../../services/eventService/event.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
@@ -12,10 +12,9 @@ import { StripeApiService } from '../../../../services/stripeService/stripe-api.
 import { StripeService } from 'ngx-stripe';
 import { LoginService } from '../../../../services/authService/login.service';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { AdminService } from '../../../../services/adminService/admin.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ResponsiveService, ResponsiveBreakpoints } from '../../../../services/responsive.service';
+import { ResponsiveService } from '../../../../services/responsive.service';
 import { AnimationService } from '../../../../services/animation.service';
 
 @Component({
@@ -40,29 +39,16 @@ import { AnimationService } from '../../../../services/animation.service';
     AnimationService.pageTransition,
     AnimationService.fadeInLeft,
     AnimationService.fadeInRight,
-
   ]
 })
 export class EventDetailsComponent implements OnInit {
   event?: Event;
   
-  // Responsive observables (only used ones)
   isHandset$: Observable<boolean>;
-  isTablet$: Observable<boolean>;
-  isDesktop$: Observable<boolean>;
-  responsiveState$: Observable<ResponsiveBreakpoints>;
-  
-  // Responsive computed values (only used ones)
-  contentLayout$: Observable<string>;
-  heroHeight$: Observable<string>;
-  titleFontSize$: Observable<string>;
-  containerPadding$: Observable<string>;
-  
+
   // Animation states
   isLoading: boolean = false;
-  fadeIn = false;
-  cardHoverState = 'normal';
-  buttonPressState = 'normal';
+
 
   constructor(
     private adminService: AdminService,
@@ -72,29 +58,11 @@ export class EventDetailsComponent implements OnInit {
     private stripeService: StripeService,
     private loginService: LoginService,
     private responsiveService: ResponsiveService,
-    private animationService: AnimationService,
     private location: Location,
     private snackBar: MatSnackBar
   ) {
-    // Initialize responsive observables (only used ones)
     this.isHandset$ = this.responsiveService.isHandset$;
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isDesktop$ = this.responsiveService.isDesktop$;
-    this.responsiveState$ = this.responsiveService.responsiveState$;
-    this.containerPadding$ = this.responsiveService.getContainerPadding();
-    
-    // Compute responsive values (only used ones)
-    this.contentLayout$ = this.responsiveState$.pipe(
-      map(state => state.isHandset ? 'column' : 'row')
-    );
-    
-    this.heroHeight$ = this.responsiveState$.pipe(
-      map(state => state.isHandset ? '280px' : state.isTablet ? '320px' : '400px')
-    );
-    
-    this.titleFontSize$ = this.responsiveState$.pipe(
-      map(state => state.isHandset ? '1.8rem' : state.isTablet ? '2.2rem' : '2.5rem')
-    );
+
   }
 
   ngOnInit() {
@@ -108,7 +76,6 @@ export class EventDetailsComponent implements OnInit {
     this.adminService.getEventById(id).subscribe({
       next: (event) => {
         this.event = event;
-        setTimeout(() => this.fadeIn = true, 100);
       },
       error: (err) => {
         this.openSnackBar('Error loading event details');
@@ -117,19 +84,6 @@ export class EventDetailsComponent implements OnInit {
     });
   }
 
-  // Animation event handlers
-  onCardMouseEnter() {
-    this.cardHoverState = 'hovered';
-  }
-
-  onCardMouseLeave() {
-    this.cardHoverState = 'normal';
-  }
-
-  onButtonPress() {
-    this.buttonPressState = 'pressed';
-    setTimeout(() => this.buttonPressState = 'normal', 100);
-  }
 
   deleteEvent(id: number) {
     if (confirm('Are you sure you want to delete this event?')) {

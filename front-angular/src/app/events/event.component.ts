@@ -36,7 +36,6 @@ import { Observable } from 'rxjs';
 export class EventComponent implements OnInit {
   event?: Event;
   isHandset$: Observable<boolean>;
-  isTablet$: Observable<boolean>;
 
   constructor(
     private eventService: EventService,
@@ -48,7 +47,6 @@ export class EventComponent implements OnInit {
     private responsiveService: ResponsiveService
   ) {
     this.isHandset$ = this.responsiveService.isHandset$;
-    this.isTablet$ = this.responsiveService.isTablet$;
   }
 
   ngOnInit() {

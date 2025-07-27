@@ -1,15 +1,12 @@
 <div class="edit-account-container" 
-     [class.mobile-layout]="isMobile$ | async"
-     [class.tablet-layout]="isTablet$ | async"
-     [class.small-screen-layout]="isSmallScreen$ | async"
-     [style.padding]="containerPadding$ | async"
+     [class.mobile-layout]="isHandset$ | async"
      @pageTransition>
-
+     
   <!-- Header Section -->
   <div class="header-section" @fadeInUp>
     <div class="header-content">
       <div class="title-section">
-        <h1 class="page-title" [style.font-size]="responsiveFontSize$ | async">
+        <h1 class="page-title">
           <mat-icon class="title-icon">edit</mat-icon>
           Edit Profile
         </h1>
@@ -22,11 +19,11 @@
   <div class="form-section">
     <mat-card class="edit-account-card mat-elevation-z4" 
               @slideInRight
-              [style.max-width]="(isMobile$ | async) ? '95%' : '80%'"
-              [style.margin]="(isMobile$ | async) ? '1rem auto' : '2rem auto'">
+              [style.max-width]="(isHandset$ | async) ? '95%' : '80%'"
+              [style.margin]="(isHandset$ | async) ? '1rem auto' : '2rem auto'">
       
       <mat-card-header @fadeInUp>
-        <mat-card-title [style.font-size]="responsiveFontSize$ | async">
+        <mat-card-title >
           <mat-icon class="card-icon">person_edit</mat-icon>
           Profile Information
         </mat-card-title>
@@ -37,8 +34,7 @@
         <form [formGroup]="accountForm" 
               (ngSubmit)="onSubmit()"
               class="account-form"
-              [ngClass]="formLayout$ | async"
-              [style.gap]="responsiveSpacing$ | async"
+          
               @fadeInUp>
 
           <!-- Name Field -->

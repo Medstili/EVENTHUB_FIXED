@@ -1,15 +1,11 @@
 <section class="participant-tickets-container" 
-         [class.mobile-layout]="isMobile$ | async"
-         [class.tablet-layout]="isTablet$ | async"
-         [class.small-screen-layout]="isSmallScreen$ | async"
-         [style.padding]="containerPadding$ | async"
+         [class.mobile-layout]="isHandset$ | async"
          @pageTransition>
-
   <!-- Header Section -->
   <div class="header-section" @fadeInUp>
     <div class="header-content">
       <div class="title-section">
-        <h1 class="page-title" [style.font-size]="responsiveFontSize$ | async">
+        <h1 class="page-title" >
           <mat-icon class="title-icon">confirmation_number</mat-icon>
           My Tickets
         </h1>
@@ -19,11 +15,10 @@
   </div>
 
   <!-- Content Section -->
-  <div class="content-section" [style.gap]="responsiveSpacing$ | async">
+  <div class="content-section">
     <ng-container *ngIf="reservations?.length; else noTickets">
       <div class="tickets-grid" 
            [ngClass]="cardLayout$ | async"
-           [style.grid-template-columns]="gridColumns$ | async"
            @staggerFadeIn>
         
         <mat-card class="ticket-card mat-elevation-z2" 
@@ -40,13 +35,13 @@
                  [alt]="ticket.event.title"
                  class="event-image" />
             <div class="header-text">
-              <h3 class="event-title" [style.font-size]="responsiveFontSize$ | async">
+              <h3 class="event-title" >
                 {{ ticket.event.title }}
               </h3>
             </div>
             <span class="status-badge" 
                   [ngClass]="ticket.status"
-                  [style.font-size]="(isMobile$ | async) ? '0.7rem' : '0.8rem'">
+                  [style.font-size]="(isHandset$ | async) ? '0.7rem' : '0.8rem'">
               {{ ticket.status | titlecase }}
             </span>
           </div>
@@ -93,7 +88,7 @@
       <div class="no-tickets-section" @fadeInUp>
         <div class="no-tickets-content">
           <mat-icon class="no-tickets-icon">event_busy</mat-icon>
-          <h2 class="no-tickets-title" [style.font-size]="responsiveFontSize$ | async">
+          <h2 class="no-tickets-title">
             No Tickets Yet
           </h2>
           <p class="no-tickets-subtitle">

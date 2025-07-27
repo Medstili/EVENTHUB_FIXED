@@ -1,4 +1,4 @@
-<div class="messages-container" [ngClass]="class$ | async">
+<div class="messages-container" [ngClass]="{'mobile' : (isHandset$ | async)}">
   <!-- Header Section -->
   <div class="messages-header" [@fadeInUp]>
     <div class="header-content">

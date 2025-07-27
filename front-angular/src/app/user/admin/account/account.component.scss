@@ -7,7 +7,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
-  transition: var(--transition);
 }
 
 /* ===== HEADER SECTION ===== */
@@ -22,11 +21,9 @@
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow);
     border: 1px solid var(--border);
-    transition: var(--transition);
 
     .title-section {
       flex: 1;
-
       .page-title {
         display: flex;
         align-items: center;
@@ -35,7 +32,6 @@
         font-weight: var(--font-bold);
         color: var(--text-primary);
         margin-bottom: var(--space-2);
-        transition: var(--transition);
 
         .title-icon {
           color: var(--primary-color);
@@ -46,7 +42,6 @@
       .page-subtitle {
         color: var(--text-secondary);
         font-size: var(--text-base);
-        margin: 0;
       }
     }
   }
@@ -60,7 +55,6 @@
     box-shadow: var(--shadow);
     border: 1px solid var(--border);
     overflow: hidden;
-    transition: var(--transition);
 
     /* Profile Header */
     .profile-header {
@@ -70,7 +64,6 @@
       padding: var(--space-8);
       background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
       color: var(--text-inverse);
-      transition: var(--transition);
 
       .avatar-container {
         .avatar {
@@ -82,10 +75,7 @@
           align-items: center;
           justify-content: center;
           border: 3px solid var(--text-secondary);
-          transition: var(--transition);
-
           mat-icon {
-            font-size: 2.5rem;
             color: var(--text-primary);
           }
         }
@@ -116,9 +106,7 @@
             font-size: var(--text-sm);
             opacity: 0.8;
             color: var(--text-secondary);
-            mat-icon {
-              font-size: var(--text-base);
-            }
+
           }
         }
       }
@@ -127,31 +115,17 @@
     /* Profile Details */
     .profile-details {
       padding: var(--space-6);
-      transition: var(--transition);
 
       .details-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: var(--space-6);
-        transition: var(--transition);
-
-        /* Card Layout Classes */
-        &.compact {
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-          gap: var(--space-4);
-        }
-
-        &.comfortable {
-          grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-          gap: var(--space-8);
-        }
 
         .detail-item {
           background: var(--surface-elevated);
           border-radius: var(--radius-lg);
           padding: var(--space-4);
           border: 1px solid var(--border);
-          transition: var(--transition);
 
           &:hover {
             transform: translateY(-2px);
@@ -166,18 +140,17 @@
 
             .detail-icon {
               color: var(--primary-color);
-              font-size: var(--text-xl);
             }
 
             .detail-title {
               font-size: var(--text-lg);
               font-weight: var(--font-semibold);
               color: var(--text-primary);
-              margin: 0;
             }
           }
 
           .detail-content {
+        
             .detail-value {
               font-size: var(--text-base);
               font-weight: var(--font-medium);
@@ -195,33 +168,13 @@
               display: inline-flex;
               align-items: center;
               gap: var(--space-2);
-              padding: var(--space-2) var(--space-3);
+              padding: var(--space-1) var(--space-3);
               border-radius: var(--radius-full);
               font-size: var(--text-sm);
               font-weight: var(--font-medium);
               text-transform: uppercase;
-              letter-spacing: 0.5px;
-              margin-bottom: var(--space-2);
-              transition: var(--transition);
-
-              &.role-admin {
-                background: var(--error-100);
-                color: var(--error-700);
-              }
-
-              &.role-organizer {
-                background: var(--warning-100);
-                color: var(--warning-700);
-              }
-
-              &.role-participant {
-                background: var(--success-100);
-                color: var(--success-700);
-              }
-
-              mat-icon {
-                font-size: var(--text-base);
-              }
+              background: var(--error-100);
+              color: var(--error-700);
             }
           }
         }
@@ -235,7 +188,6 @@
       padding: var(--space-6);
       border-top: 1px solid var(--border);
       background: var(--surface-elevated);
-      transition: var(--transition);
 
       .edit-btn,
       .delete-btn {
@@ -245,7 +197,6 @@
         padding: var(--space-3) var(--space-6);
         font-weight: var(--font-semibold);
         border-radius: var(--radius-lg);
-        transition: var(--transition);
 
         &:hover {
           transform: translateY(-2px);
@@ -286,10 +237,6 @@
       .avatar-container .avatar {
         width: 60px;
         height: 60px;
-
-        mat-icon {
-          font-size: 2rem;
-        }
       }
 
       .profile-info {
@@ -325,31 +272,3 @@
   }
 }
 
-/* Tablet responsive classes */
-.tablet-layout {
-  .profile-section .profile-card .profile-details .details-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-4);
-  }
-}
-
-/* Small screen responsive classes */
-.small-screen-layout {
-  .account-container {
-    padding: var(--space-3);
-  }
-
-  .profile-section .profile-card {
-    .profile-header {
-      padding: var(--space-4);
-    }
-
-    .profile-details {
-      padding: var(--space-3);
-    }
-
-    .profile-actions {
-      padding: var(--space-3);
-    }
-  }
-}

@@ -1,7 +1,7 @@
 <ng-container *ngIf="event; else loading">
   <mat-card class="event-landing-card" 
             [@fadeInUp]
-            [ngClass]="{'handset': (isHandset$ | async), 'tablet': (isTablet$ | async)}">
+            [ngClass]="{'handset': (isHandset$ | async)}">
     <!-- Hero Image -->
     <div class="hero-image" 
          [@scaleIn]

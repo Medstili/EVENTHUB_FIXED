@@ -72,14 +72,8 @@ export class EventsComponent implements OnInit {
   
   // Responsive observables
   isHandset$: Observable<boolean>;
-  isTablet$: Observable<boolean>;
-  isMobile$: Observable<boolean>;
-  isSmallScreen$: Observable<boolean>;
-  filterGridColumns$: Observable<string>;
-  containerPadding$: Observable<string>;
-  tableMinWidth$: Observable<string>;
-  headerLayout$: Observable<'row' | 'column'>;
-  filterActionsVisible$: Observable<boolean>;
+
+
 
   constructor(
     private adminService: AdminService,
@@ -94,14 +88,7 @@ export class EventsComponent implements OnInit {
     
     // Initialize responsive observables
     this.isHandset$ = this.responsiveService.isHandset$;
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isMobile$ = this.responsiveService.isMobile$;
-    this.isSmallScreen$ = this.responsiveService.isSmallScreen$;
-    this.filterGridColumns$ = this.responsiveService.getFilterGridColumns();
-    this.containerPadding$ = this.responsiveService.getContainerPadding();
-    this.tableMinWidth$ = this.responsiveService.getTableMinWidth();
-    this.headerLayout$ = this.responsiveService.getHeaderLayout();
-    this.filterActionsVisible$ = this.responsiveService.getFilterActionsVisible();
+
   }
 
   ngOnInit(): void {    

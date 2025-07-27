@@ -72,19 +72,8 @@ export class ConversationsComponent implements OnInit, OnDestroy {
   hasMore = false;
 
   // Responsive
-  isMobile$ = this.responsive.isMobile$;
-  isTablet$ = this.responsive.isTablet$;
-  isDesktop$ = this.responsive.isDesktop$;
+  isHandset$ = this.responsive.isHandset$;
 
-  // Responsive classes
-  class$ = this.responsive.responsiveState$.pipe(
-    map(state => {
-      if (state.isHandset || state.isMobile) return 'mobile';
-      if (state.isTablet) return 'tablet';
-      if (state.isDesktop) return 'desktop';
-      return '';
-    })
-  );
 
   // Status options
   statusOptions = [

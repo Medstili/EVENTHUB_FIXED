@@ -55,8 +55,7 @@ export class AddEventComponent implements OnInit {
   
   // Responsive observables
   isHandset$: Observable<boolean>;
-  isTablet$: Observable<boolean>;
-  isDesktop$: Observable<boolean>;
+
   
   categories: any[] = [];
   selectedFile?: File;
@@ -74,8 +73,7 @@ export class AddEventComponent implements OnInit {
     private route: Router
   ) {
     this.isHandset$ = this.responsiveService.isHandset$;
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isDesktop$ = this.responsiveService.isDesktop$;
+
   }
 
   ngOnInit(): void {

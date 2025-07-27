@@ -34,8 +34,7 @@ import { AnimationService } from '../../../services/animation.service';
 export class MyAccountComponent implements OnInit {
   user: Signal<(User & { created_at: string }) | null>;
   isHandset$: any;
-  isTablet$: any;
-  isDesktop$: any;
+
 
   constructor(
     private auth: LoginService,
@@ -45,8 +44,7 @@ export class MyAccountComponent implements OnInit {
     public responsiveService: ResponsiveService
   ) {
     this.isHandset$ = this.responsiveService.isHandset$;
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isDesktop$ = this.responsiveService.isDesktop$;
+
     this.user = computed(() => {
       const u = this.auth.user();
       if (u) {

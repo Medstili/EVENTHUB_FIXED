@@ -58,11 +58,6 @@ export class UsersComponent implements OnInit{
 
   // Responsive observables
   isHandset$: Observable<boolean>;
-  isTablet$: Observable<boolean>;
-  isMobile$: Observable<boolean>;
-  isSmallScreen$: Observable<boolean>;
-  headerLayout$: Observable<'row' | 'column'>;
-  filterActionsVisible$: Observable<boolean>;
 
   constructor(
     private responsiveService: ResponsiveService,
@@ -74,11 +69,6 @@ export class UsersComponent implements OnInit{
     
     // Initialize responsive observables
     this.isHandset$ = this.responsiveService.isHandset$;
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isMobile$ = this.responsiveService.isMobile$;
-    this.isSmallScreen$ = this.responsiveService.isSmallScreen$;
-    this.headerLayout$ = this.responsiveService.getHeaderLayout();
-    this.filterActionsVisible$ = this.responsiveService.getFilterActionsVisible();
   }
 
   ngOnInit(): void {

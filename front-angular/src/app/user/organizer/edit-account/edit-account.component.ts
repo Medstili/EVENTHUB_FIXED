@@ -39,8 +39,7 @@ import { OrganizerService } from '../../../services/organizerServer/organizer.se
 export class EditAccountComponent implements OnInit {
   user: Signal<User | null>;
   isHandset$: any;
-  isTablet$: any;
-  isDesktop$: any;
+
   loading = false;
 
   constructor(
@@ -53,8 +52,6 @@ export class EditAccountComponent implements OnInit {
     public responsiveService: ResponsiveService
   ) {
     this.isHandset$ = this.responsiveService.isHandset$;
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isDesktop$ = this.responsiveService.isDesktop$;
     this.user = computed(() => this.auth.user());
     
     this.accountForm = this.fb.group({

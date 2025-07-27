@@ -2,11 +2,10 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, OnInit, inject } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TicketService, Ticket } from '../../../services/ticketService/tickets.service';
 import { MatButtonModule } from '@angular/material/button';
-import { Location } from '@angular/common';
 import { Observable } from 'rxjs';
 import { ResponsiveService } from '../../../services/responsive.service';
 import { AnimationService } from '../../../services/animation.service';
@@ -32,34 +31,20 @@ import { AnimationService } from '../../../services/animation.service';
 })
 export class ParticipantReservationsComponent implements OnInit {
   private svc = inject(TicketService);
-  private router = inject(Router);
   private snackBar = inject(MatSnackBar);
-  private location = inject(Location);
   private responsiveService = inject(ResponsiveService);
 
   reservations: Ticket[] = [];
   loading = false;
 
   // Responsive observables
-  isMobile$: Observable<boolean>;
-  isTablet$: Observable<boolean>;
-  isSmallScreen$: Observable<boolean>;
-  containerPadding$: Observable<string>;
-  responsiveSpacing$: Observable<string>;
-  responsiveFontSize$: Observable<string>;
+  isHandset$: Observable<boolean>;
   cardLayout$: Observable<'compact' | 'comfortable'>;
-  gridColumns$: Observable<string>;
 
   constructor() {
     // Initialize responsive observables
-    this.isMobile$ = this.responsiveService.isMobile$;
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isSmallScreen$ = this.responsiveService.isSmallScreen$;
-    this.containerPadding$ = this.responsiveService.getContainerPadding();
-    this.responsiveSpacing$ = this.responsiveService.getResponsiveSpacing();
-    this.responsiveFontSize$ = this.responsiveService.getResponsiveFontSize();
+    this.isHandset$ = this.responsiveService.isHandset$;
     this.cardLayout$ = this.responsiveService.getCardLayout();
-    this.gridColumns$ = this.responsiveService.getFilterGridColumns();
   }
 
   ngOnInit(): void {

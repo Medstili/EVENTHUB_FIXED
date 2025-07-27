@@ -3,7 +3,7 @@
 .dashboard-container {
   background: var(--background);
   min-height: 100vh;
-  /* Padding is now controlled by ResponsiveService */
+  padding: var(--space-4) ;
 }
 
 /* ===== DASHBOARD HEADER ===== */
@@ -207,9 +207,6 @@
 }
 
 /* ===== RECENT EVENTS ===== */
-.recent-events {
-  /* Grid positioning removed for responsive layout */
-}
 
 .events-list {
   display: flex;
@@ -295,10 +292,6 @@
 }
 
 /* ===== REVENUE CHART ===== */
-.revenue-chart {
-  /* Grid positioning removed for responsive layout */
-}
-
 .chart-controls {
   display: flex;
   gap: var(--space-2);
@@ -315,13 +308,6 @@
 }
 
 /* ===== TOP CATEGORIES ===== */
-.top-categories {
-  /* Grid positioning removed for responsive layout */
-}
-
-.ticket-sales-category {
-  /* Grid positioning removed for responsive layout */
-}
 
 .categories-list {
   display: flex;
@@ -380,9 +366,6 @@
 }
 
 /* ===== RECENT ACTIVITY ===== */
-.recent-activity {
-  /* Grid positioning removed for responsive layout */
-}
 
 .activity-list {
   display: flex;
@@ -450,12 +433,20 @@
   margin-top: var(--space-8);
 }
 
+
 .charts-grid {
   display: grid;
   gap: var(--space-4);
   margin-top: var(--space-6);
-  /* Default to single column, responsive classes will override */
   grid-template-columns: 1fr;
+}
+
+/* Responsive chart layouts */
+.responsive-chart-small {
+  grid-template-columns: 1fr !important;
+}
+.responsive-chart-large {
+  grid-template-columns: repeat(2, 1fr) !important;
 }
 
 .chart-container {
@@ -635,21 +626,6 @@
   margin-top: var(--space-2);
 }
 
-/* ===== ACCESSIBILITY ===== */
-@media (prefers-reduced-motion: reduce) {
-  .dashboard-header,
-  .stat-card,
-  .dashboard-card,
-  .action-card {
-    animation: none;
-  }
-  
-  .stat-card:hover,
-  .dashboard-card:hover,
-  .action-card:hover {
-    transform: none;
-  }
-}
 
 /* Focus styles */
 .action-card:focus {
@@ -692,16 +668,17 @@
 
 /* Responsive chart layouts */
 .responsive-chart-small {
-  grid-template-columns: 1fr !important;
-}
-
-.responsive-chart-medium {
+  // grid-template-columns: 1fr !important;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)) !important;
 }
 
-.responsive-chart-large {
-  grid-template-columns: repeat(auto-fit, minmax(550px, 1fr)) !important;
-}
+// .responsive-chart-medium {
+//   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)) !important;
+// }
+
+// .responsive-chart-large {
+//   grid-template-columns: repeat(auto-fit, minmax(550px, 1fr)) !important;
+// }
 
 /* Responsive header layouts */
 .responsive-header-stack {

@@ -39,8 +39,7 @@ import { AdminService } from '../../../../services/adminService/admin.service';
 export class TicketDetailsComponent implements OnInit {
   ticket!: Ticket;
   isHandset$: Observable<boolean>;
-  isTablet$: Observable<boolean>;
-  isDesktop$: Observable<boolean>;
+
   isloading = false;
   isCancelling = false;
 
@@ -53,8 +52,7 @@ export class TicketDetailsComponent implements OnInit {
     public responsiveService: ResponsiveService
   ) {
     this.isHandset$ = this.responsiveService.isHandset$;
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isDesktop$ = this.responsiveService.isDesktop$;
+
   }
 
   ngOnInit(): void {

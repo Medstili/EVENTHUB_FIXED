@@ -1,14 +1,15 @@
 <!-- Modern Admin Dashboard -->
-<div class="dashboard-container" [style.padding]="dashboardPadding$ | async" @pageTransition>
+ <!-- [style.padding]="dashboardPadding$ | async" -->
+<div class="dashboard-container"  @pageTransition>
   <!-- Dashboard Header -->
   <div class="dashboard-header" @fadeInUp>
     <div class="header-content" 
-         [class.responsive-header-stack]="isMobile$ | async"
-         [class.responsive-header-flex]="!(isMobile$ | async)">
+         [class.responsive-header-stack]="isHandset$ | async"
+         [class.responsive-header-flex]="!(isHandset$ | async)">
       <div class="header-text">
         <h1 class="dashboard-title" 
-            [class.responsive-text-large]="!(isMobile$ | async)" 
-            [class.responsive-text-medium]="isMobile$ | async">Admin Dashboard</h1>
+            [class.responsive-text-large]="!(isHandset$ | async)" 
+            [class.responsive-text-medium]="isHandset$ | async">Admin Dashboard</h1>
         <p class="dashboard-subtitle">Welcome back! Here's what's happening with your events.</p>
       </div>
       <div class="header-actions">
@@ -22,13 +23,13 @@
 
   <!-- Quick Stats -->
   <div class="stats-grid" 
-       [class.responsive-grid-auto-fit-small]="isMobile$ | async"
-       [class.responsive-grid-auto-fit-medium]="!(isMobile$ | async)"
-       [style.gap]="responsiveSpacing$ | async"
+       [class.responsive-grid-auto-fit-small]="isHandset$ | async"
+       [class.responsive-grid-auto-fit-medium]="!(isHandset$ | async)"
+     
        @staggerFadeIn>
     <div class="stat-card" 
-         [class.responsive-card-stack]="isMobile$ | async"
-         [class.responsive-card-flex]="!(isMobile$ | async)"
+         [class.responsive-card-stack]="isHandset$ | async"
+         [class.responsive-card-flex]="!(isHandset$ | async)"
          @cardHover>
       <div class="stat-icon total-events">
         <mat-icon>event</mat-icon>
@@ -45,8 +46,8 @@
     </div>
 
     <div class="stat-card" 
-         [class.responsive-card-stack]="isMobile$ | async"
-         [class.responsive-card-flex]="!(isMobile$ | async)"
+         [class.responsive-card-stack]="isHandset$ | async"
+         [class.responsive-card-flex]="!(isHandset$ | async)"
          @cardHover>
       <div class="stat-icon active-events">
         <mat-icon>event_available</mat-icon>
@@ -63,8 +64,8 @@
     </div>
 
     <div class="stat-card" 
-         [class.responsive-card-stack]="isMobile$ | async"
-         [class.responsive-card-flex]="!(isMobile$ | async)"
+         [class.responsive-card-stack]="isHandset$ | async"
+         [class.responsive-card-flex]="!(isHandset$ | async)"
          @cardHover>
       <div class="stat-icon total-participants">
         <mat-icon>people</mat-icon>
@@ -81,8 +82,8 @@
     </div>
 
     <div class="stat-card" 
-         [class.responsive-card-stack]="isMobile$ | async"
-         [class.responsive-card-flex]="!(isMobile$ | async)"
+         [class.responsive-card-stack]="isHandset$ | async"
+         [class.responsive-card-flex]="!(isHandset$ | async)"
          @cardHover>
       <div class="stat-icon total-revenue">
         <mat-icon>attach_money</mat-icon>
@@ -101,9 +102,9 @@
 
   <!-- Main Content Grid -->
   <div class="dashboard-grid" 
-       [class.responsive-grid-1]="isMobile$ | async"
-       [class.responsive-grid-2]="!(isMobile$ | async)"
-       [style.gap]="responsiveSpacing$ | async">
+       [class.responsive-grid-1]="isHandset$ | async"
+       [class.responsive-grid-2]="!(isHandset$ | async)"
+       >
     <!-- Recent Events -->
     <div class="dashboard-card recent-events" @scaleIn>
       <div class="card-header">
@@ -120,8 +121,8 @@
         </div>
         <div class="events-list" *ngIf="!isLoadingRecentEvents && recentEvents.length > 0" @staggerFadeIn>
           <div class="event-item" 
-               [class.responsive-card-stack]="isMobile$ | async"
-               [class.responsive-card-flex]="!(isMobile$ | async)"
+               [class.responsive-card-stack]="isHandset$ | async"
+               [class.responsive-card-flex]="!(isHandset$ | async)"
                *ngFor="let event of recentEvents" @listItemEnter>
             <div class="event-image">
               <img [src]="event.imageUrl || 'assets/disco-1081484_1920.jpg'" [alt]="event.title" />
@@ -239,10 +240,9 @@
   <div class="charts-section" @fadeInUp>
     <h2 class="section-title">Analytics & Insights</h2>
     <div class="charts-grid" 
-         [class.responsive-chart-small]="isMobile$ | async"
-         [class.responsive-chart-medium]="isTablet$ | async"
-         [class.responsive-chart-large]="isDesktop$ | async"
-         [style.gap]="responsiveSpacing$ | async">
+         [class.responsive-chart-small]="isHandset$ | async"
+         [class.responsive-chart-large]="!(isHandset$ | async)"
+         >
 
       <div class="dashboard-card revenue-chart" @scaleIn>
         <div class="card-header">
@@ -386,12 +386,11 @@
   <div class="quick-actions" @fadeInUp>
     <h2 class="section-title">Quick Actions</h2>
     <div class="actions-grid" 
-         [class.responsive-grid-1]="isMobile$ | async"
-         [class.responsive-grid-auto-fit-medium]="!(isMobile$ | async)"
-         [style.gap]="responsiveSpacing$ | async">
+         [class.responsive-grid-1]="isHandset$ | async"
+         [class.responsive-grid-auto-fit-medium]="!(isHandset$ | async)">
       <button class="action-card" 
-              [class.responsive-card-stack]="isMobile$ | async"
-              [class.responsive-card-flex]="!(isMobile$ | async)"
+              [class.responsive-card-stack]="isHandset$ | async"
+              [class.responsive-card-flex]="!(isHandset$ | async)"
               routerLink="../admin-events/admin-add-event" @cardHover>
         <div class="action-icon">
           <mat-icon>add_circle</mat-icon>
@@ -403,8 +402,8 @@
       </button>
 
       <button class="action-card" 
-              [class.responsive-card-stack]="isMobile$ | async"
-              [class.responsive-card-flex]="!(isMobile$ | async)"
+              [class.responsive-card-stack]="isHandset$ | async"
+              [class.responsive-card-flex]="!(isHandset$ | async)"
               routerLink="../admin-users" @cardHover>
         <div class="action-icon">
           <mat-icon>people</mat-icon>
@@ -416,8 +415,8 @@
       </button>
 
       <button class="action-card" 
-              [class.responsive-card-stack]="isMobile$ | async"
-              [class.responsive-card-flex]="!(isMobile$ | async)"
+              [class.responsive-card-stack]="isHandset$ | async"
+              [class.responsive-card-flex]="!(isHandset$ | async)"
               routerLink="../admin-tickets" @cardHover>
         <div class="action-icon">
           <mat-icon>confirmation_number</mat-icon>

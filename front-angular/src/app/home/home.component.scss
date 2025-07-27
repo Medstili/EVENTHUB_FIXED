@@ -508,18 +508,6 @@
     grid-template-columns: 1fr;
   }
 }
-
-/* Tablet Styles */
-.tablet {
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .event-grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  }
-}
-
 /* ===== ACCESSIBILITY ===== */
 .event-preview:focus,
 .feature-card:focus,

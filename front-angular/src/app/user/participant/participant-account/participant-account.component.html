@@ -1,15 +1,12 @@
 <div class="participant-account-container" 
-     [class.mobile-layout]="isMobile$ | async"
-     [class.tablet-layout]="isTablet$ | async"
-     [class.small-screen-layout]="isSmallScreen$ | async"
-     [style.padding]="containerPadding$ | async"
+     [class.mobile-layout]="isHandset$ | async"
      @pageTransition>
 
   <!-- Header Section -->
   <div class="header-section" @fadeInUp>
     <div class="header-content">
       <div class="title-section">
-        <h1 class="page-title" [style.font-size]="responsiveFontSize$ | async">
+        <h1 class="page-title" >
           <mat-icon class="title-icon">account_circle</mat-icon>
           My Account
         </h1>
@@ -23,17 +20,15 @@
     <mat-card class="account-card mat-elevation-z4" 
               @fadeInUp
               [@cardHover]="'normal'"
-              (mouseenter)="onCardHover($event, 'hovered')"
-              (mouseleave)="onCardHover($event, 'normal')"
-              [style.max-width]="(isMobile$ | async) ? '95%' : '80%'"
-              [style.margin]="(isMobile$ | async) ? '1rem auto' : '2rem auto'">
+              [style.max-width]="(isHandset$ | async) ? '95%' : '80%'"
+              [style.margin]="(isHandset$ | async) ? '1rem auto' : '2rem auto'">
       
       <!-- Profile Header -->
       <mat-card-header @fadeInUp>
         <div mat-card-avatar class="avatar">
           <mat-icon>person</mat-icon>
         </div>
-        <mat-card-title [style.font-size]="responsiveFontSize$ | async">
+        <mat-card-title >
           {{ user()?.name || 'Loading...' }}
         </mat-card-title>
         <mat-card-subtitle>Your Profile Details</mat-card-subtitle>
@@ -41,7 +36,7 @@
 
       <!-- Profile Content -->
       <mat-card-content>
-        <mat-list [style.gap]="responsiveSpacing$ | async">
+        <mat-list >
           
           <!-- Email Section -->
           <mat-list-item @fadeInUp>

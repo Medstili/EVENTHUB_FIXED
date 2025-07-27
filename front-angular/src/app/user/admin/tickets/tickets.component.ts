@@ -85,11 +85,7 @@ export class TicketsComponent implements OnInit {
   
   // Responsive observables
   isHandset$: Observable<boolean>;
-  isTablet$: Observable<boolean>;
-  isMobile$: Observable<boolean>;
-  isSmallScreen$: Observable<boolean>;
 
-  filterActionsVisible$: Observable<boolean>;
 
 
   constructor(
@@ -103,10 +99,6 @@ export class TicketsComponent implements OnInit {
   
     // Initialize responsive observables
     this.isHandset$ = this.responsiveService.isHandset$;
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isMobile$ = this.responsiveService.isMobile$;
-    this.isSmallScreen$ = this.responsiveService.isSmallScreen$;
-    this.filterActionsVisible$ = this.responsiveService.getFilterActionsVisible();
   }
 
   ngOnInit(): void {

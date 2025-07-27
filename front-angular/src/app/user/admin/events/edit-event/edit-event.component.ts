@@ -52,8 +52,6 @@ export class EditEventComponent implements OnInit {
   
   // Responsive observables
   isHandset$: Observable<boolean>;
-  isTablet$: Observable<boolean>;
-  isDesktop$: Observable<boolean>;
 
   categories: any[] = [];
   selectedFile?: File;
@@ -69,8 +67,6 @@ export class EditEventComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
     this.isHandset$ = this.responsiveService.isHandset$;
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isDesktop$ = this.responsiveService.isDesktop$;
   }
 
   ngOnInit() {

@@ -1,15 +1,12 @@
 <div class="account-container" 
-     [class.mobile-layout]="isMobile$ | async"
-     [class.tablet-layout]="isTablet$ | async"
-     [class.small-screen-layout]="isSmallScreen$ | async"
-     [style.padding]="containerPadding$ | async"
+     [class.mobile-layout]="isHandset$ | async"
      @pageTransition>
 
   <!-- Header Section -->
   <div class="header-section" @fadeInUp>
-    <div class="header-content" [style.flex-direction]="headerLayout$ | async">
+    <div class="header-content" >
       <div class="title-section">
-        <h1 class="page-title" [style.font-size]="responsiveFontSize$ | async">
+        <h1 class="page-title" >
           <mat-icon class="title-icon">account_circle</mat-icon>
           My Account
         </h1>
@@ -22,10 +19,7 @@
   <div class="profile-section">
     <div class="profile-card mat-elevation-z4" 
          @fadeInUp
-         [@cardHover]="'normal'"
-         (mouseenter)="onCardHover($event, 'hovered')"
-         (mouseleave)="onCardHover($event, 'normal')"
-         [style.gap]="responsiveSpacing$ | async">
+        >
       
       <!-- Profile Header -->
       <div class="profile-header">
@@ -48,7 +42,8 @@
 
       <!-- Profile Details -->
       <div class="profile-details">
-        <div class="details-grid" [ngClass]="cardLayout$ | async">
+        <!--  [ngClass]="cardLayout$ | async" -->
+        <div class="details-grid">
           
           <!-- Email Section -->
           <div class="detail-item" @fadeInUp>
@@ -69,11 +64,11 @@
               <h3 class="detail-title">Account Role</h3>
             </div>
             <div class="detail-content">
-              <div class="role-badge" [class.role-admin]="user.role === 'admin'" [class.role-organizer]="user.role === 'organizer'" [class.role-participant]="user.role === 'participant'">
-                <mat-icon>{{ user.role === 'admin' ? 'admin_panel_settings' : user.role === 'organizer' ? 'event' : 'person' }}</mat-icon>
+              <div class="role-badge">
+                <mat-icon>admin_panel_settings</mat-icon>
                 <span>{{ (user.role | titlecase) || 'Loading...' }}</span>
               </div>
-              <span class="detail-label">Your account permissions</span>
+              <p class="detail-label">Your account permissions</p>
             </div>
           </div>
 

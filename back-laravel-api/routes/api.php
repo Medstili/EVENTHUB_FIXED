@@ -23,7 +23,7 @@ route::get('organizer/total', [UserController::class, 'getOrganizersCount']);
 route::get('organizer/total', [UserController::class, 'getOrganizersCount']);
 route::get('tickets/tickets-sold-each-month', [TicketController::class, 'tickets_sold_each_month']);
 Route::post('contact', [ConversationController::class, 'store'])
-     ->middleware('throttle:5,1');  // 10 requests per minute
+     ->middleware('throttle:5,1');  // 5 requests per minute
 
 
 /**

@@ -13,15 +13,7 @@
     gap: var(--space-4);
   }
 
-  &.tablet {
-    padding: var(--space-6);
-    gap: var(--space-6);
-  }
 
-  &.desktop {
-    padding: var(--space-8);
-    gap: var(--space-8);
-  }
 }
 
 // Header Section
@@ -145,10 +137,6 @@
     gap: var(--space-4);
   }
 
-  .tablet & {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: var(--space-5);
-  }
 }
 
 // Ticket Card

@@ -38,8 +38,6 @@ import { QRCodeComponent } from 'angularx-qrcode';
 export class TicketDetailsComponent implements OnInit {
   ticket!: Ticket;
   isHandset$: Observable<boolean>;
-  isTablet$: Observable<boolean>;
-  isDesktop$: Observable<boolean>;
   isLoading = false;
 
   constructor(
@@ -50,8 +48,6 @@ export class TicketDetailsComponent implements OnInit {
     public responsiveService: ResponsiveService
   ) {
     this.isHandset$ = this.responsiveService.isHandset$;
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isDesktop$ = this.responsiveService.isDesktop$;
   }
 
   ngOnInit(): void {

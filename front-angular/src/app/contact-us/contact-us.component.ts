@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { ResponsiveService } from '../services/responsive.service';
 import { AnimationService } from '../services/animation.service';
 import { CommonModule } from '@angular/common';
-import { map } from 'rxjs/operators';
 import { MatIconModule } from '@angular/material/icon';
 import { ContactPayload, ContactUsServiceService } from '../services/contactUsService/contact-us-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -31,19 +30,8 @@ export class ContactUsComponent implements OnInit {
   success = false;
   error = '';
 
-  isMobile$ = this.responsive.isMobile$;
-  isTablet$ = this.responsive.isTablet$;
-  isDesktop$ = this.responsive.isDesktop$;
+  isHandset$ = this.responsive.isHandset$;
 
-  // Add a class$ observable for ngClass
-  class$ = this.responsive.responsiveState$.pipe(
-    map(state => {
-      if (state.isHandset || state.isMobile) return 'mobile';
-      if (state.isTablet) return 'tablet';
-      if (state.isDesktop) return 'desktop';
-      return '';
-    })
-  );
   contactService = inject(ContactUsServiceService);
   
 

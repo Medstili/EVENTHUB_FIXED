@@ -1,8 +1,7 @@
 <!-- Modern Professional Layout -->
 <div class="layout-container" 
-     [class.mobile]="isMobile$ | async"
-     [class.tablet]="isTablet$ | async"
-     [class.desktop]="isDesktop$ | async">
+     [class.mobile]="isHandset$ | async"
+>
   <!-- Header -->
   <header class="header">
     <div class="container">
@@ -18,7 +17,7 @@
         </div>
 
         <!-- Desktop Navigation -->
-        <nav class="nav desktop-nav" *ngIf="isDesktop$ | async">
+        <nav class="nav desktop-nav" *ngIf="!(isHandset$ | async)">
           <ul class="nav-list" [@fadeInUp]>
             <li class="nav-item">
               <a routerLink="/home" routerLinkActive="active" class="nav-link">
@@ -119,7 +118,7 @@
             class="mobile-menu-toggle"
             (click)="toggleMobileMenu()"
             [attr.aria-label]="isMobileMenuOpen ? 'Close Menu' : 'Open Menu'"
-            *ngIf="(isMobile$ | async) || (isTablet$ | async)">
+            *ngIf="(isHandset$ | async)">
             <mat-icon>{{ isMobileMenuOpen ? 'close' : 'menu' }}</mat-icon>
           </button>
         </div>
@@ -131,14 +130,14 @@
   <div class="mobile-nav-overlay" 
        [class.open]="isMobileMenuOpen" 
        (click)="closeMobileMenu()"
-       *ngIf="isMobile$ | async">
+       *ngIf="isHandset$ | async">
   </div>
 
   <!-- Mobile Navigation Menu -->
   <nav class="mobile-nav" 
        [class.open]="isMobileMenuOpen" 
        [@sidebarSlide]="navState"
-       *ngIf="isMobile$ | async">
+       *ngIf="isHandset$ | async">
     <div class="mobile-nav-header">
       <div class="mobile-nav-logo">
         <div class="logo-icon">
@@ -228,87 +227,6 @@
           <span>Profile</span>
         </a>
         <button class="mobile-user-action logout" (click)="logout(); closeMobileMenu()">
-          <mat-icon>logout</mat-icon>
-          <span>Logout</span>
-        </button>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Tablet Sidebar Navigation -->
-  <nav class="tablet-nav" 
-       [class.open]="isMobileMenuOpen" 
-       [@sidebarSlide]="navState"
-       *ngIf="isTablet$ | async">
-    <div class="tablet-nav-header">
-      <div class="tablet-nav-logo">
-        <div class="logo-icon">
-          <mat-icon>event</mat-icon>
-        </div>
-        <span class="logo-text">EventHub</span>
-      </div>
-    </div>
-    
-    <ul class="tablet-nav-list" [@staggerFadeIn]="3">
-      <li class="tablet-nav-item">
-        <a routerLink="/home" routerLinkActive="active" class="tablet-nav-link" (click)="closeMobileMenu()">
-          <mat-icon>home</mat-icon>
-          <span>Home</span>
-        </a>
-      </li>
-      <li class="tablet-nav-item">
-        <a routerLink="/about" routerLinkActive="active" class="tablet-nav-link" (click)="closeMobileMenu()">
-          <mat-icon>info</mat-icon>
-          <span>About</span>
-        </a>
-      </li>
-      <li class="tablet-nav-item">
-        <a routerLink="/contact-us" routerLinkActive="active" class="tablet-nav-link" (click)="closeMobileMenu()">
-          <mat-icon>contact_support</mat-icon>
-          <span>Contact</span>
-        </a>
-      </li>
-    </ul>
-
-    <!-- Tablet Auth Section -->
-    <div class="tablet-auth-section" *ngIf="!isLoggedIn" [@fadeInUp]>
-      <div class="tablet-auth-buttons">
-        <a routerLink="/login" class="btn btn-outline btn-full" (click)="closeMobileMenu()">
-          <mat-icon>login</mat-icon>
-          <span>Login</span>
-        </a>
-        <a routerLink="/register" class="btn btn-primary btn-full" (click)="closeMobileMenu()">
-          <mat-icon>person_add</mat-icon>
-          <span>Sign Up</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- Tablet User Section -->
-    <div class="tablet-user-section" *ngIf="isLoggedIn" [@fadeInUp]>
-      <div class="tablet-user-info">
-        <div class="tablet-user-avatar">
-          <mat-icon>account_circle</mat-icon>
-        </div>
-        <div class="tablet-user-details">
-          <div class="tablet-user-name">{{ user?.name || 'User' }}</div>
-          <div class="tablet-user-email">{{ user?.email || 'user@example.com' }}</div>
-        </div>
-      </div>
-      <div class="tablet-user-actions">
-        <a routerLink="/admin-profile/admin-dashboard" class="tablet-user-action" *ngIf="user?.role === 'admin'" (click)="closeMobileMenu()">
-          <mat-icon>dashboard</mat-icon>
-          <span>Admin Dashboard</span>
-        </a>
-        <a routerLink="/organizer-profile/dashboard" class="tablet-user-action" *ngIf="user?.role === 'organizer'" (click)="closeMobileMenu()">
-          <mat-icon>dashboard</mat-icon>
-          <span>Organizer Dashboard</span>
-        </a>
-        <a routerLink="/participant-profile/participant-dashboard" class="tablet-user-action" *ngIf="user?.role === 'participant'" (click)="closeMobileMenu()">
-          <mat-icon>dashboard</mat-icon>
-          <span>Participant Dashboard</span>
-        </a>
-        <button class="tablet-user-action logout" (click)="logout(); closeMobileMenu()">
           <mat-icon>logout</mat-icon>
           <span>Logout</span>
         </button>

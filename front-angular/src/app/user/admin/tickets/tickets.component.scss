@@ -301,7 +301,6 @@
               gap: var(--space-2);
 
               mat-icon {
-                font-size: var(--text-lg);
                 color: var(--primary-color);
               }
 
@@ -319,8 +318,6 @@
 
           &:hover {
             background: var(--surface-hover);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-sm);
           }
 
           td {
@@ -399,6 +396,7 @@
           .status-badge {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: var(--space-1);
             padding: var(--space-1) var(--space-2);
             border-radius: var(--radius-full);
@@ -427,9 +425,7 @@
               color: var(--text-secondary);
             }
 
-            mat-icon {
-              font-size: var(--text-sm);
-            }
+       
           }
         }
 
@@ -620,26 +616,6 @@
   }
 }
 
-/* Tablet responsive classes */
-.tablet-layout {
-  .filters-section .filters-card .filters-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-4);
-  }
-}
-
-/* Small screen responsive classes - only for extra small screens */
-.small-screen-layout {
-  .tickets-container {
-    padding: var(--space-3);
-  }
-
-  .filters-section .filters-card {
-    .mobile-filters {
-      padding: var(--space-3);
-    }
-  }
-}
 
 /* Button press animation */
 button {

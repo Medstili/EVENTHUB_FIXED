@@ -4,7 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AdminService } from '../../../services/adminService/admin.service';
 import { RouterModule } from '@angular/router';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { RevenueChartComponentComponent } from '../../../charts/revenue-chart-component/revenue-chart-component.component';
@@ -76,31 +76,19 @@ export class DashboardComponent implements OnInit {
   isLoadingTopEvents = true;
   isLoadingLineData = true;
 
-  // Responsive properties
-  isMobile$: Observable<boolean>;
-  isTablet$: Observable<boolean>;
-  isDesktop$: Observable<boolean>;
+  // Responsive property
+  isHandset$: Observable<boolean>;
   
   // Chart properties
   chartWidth = 600;
   chartHeight = 400;
 
-  // Responsive layout properties
-  dashboardPadding$: Observable<string>;
-  responsiveSpacing$: Observable<string>;
 
   constructor(
     private srv: AdminService, 
     private responsiveService: ResponsiveService
   ){
-    // Initialize responsive observables
-    this.isMobile$ = this.responsiveService.isMobile$;
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isDesktop$ = this.responsiveService.isDesktop$;
-    
-    // Initialize responsive layout properties
-    this.dashboardPadding$ = this.responsiveService.getResponsivePadding();
-    this.responsiveSpacing$ = this.responsiveService.getResponsiveSpacing();
+    this.isHandset$ = this.responsiveService.isHandset$;
   }
 
   ngOnInit(): void {
@@ -109,17 +97,10 @@ export class DashboardComponent implements OnInit {
   }
 
   private setupResponsiveChartProperties(): void {
-    combineLatest([
-      this.isMobile$,
-      this.isTablet$,
-      this.isDesktop$
-    ]).subscribe(([isMobile, isTablet, isDesktop]) => {
+    this.isHandset$.subscribe((isMobile) => {
       if (isMobile) {
         this.chartWidth = 300;
         this.chartHeight = 300;
-      } else if (isTablet) {
-        this.chartWidth = 450;
-        this.chartHeight = 350;
       } else {
         this.chartWidth = 550;
         this.chartHeight = 400;

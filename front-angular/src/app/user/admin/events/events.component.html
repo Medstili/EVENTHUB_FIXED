@@ -1,11 +1,11 @@
 <div class="events-container" 
-     [class.mobile-layout]="isMobile$ | async"
-     [class.tablet-layout]="isTablet$ | async"
-     [class.small-screen-layout]="isSmallScreen$ | async"
-     [style.padding]="containerPadding$ | async">
+[class.mobile-layout]="isHandset$ | async"
+>
+
   <!-- Header Section -->
   <div class="header-section">
-    <div class="header-content" [style.flex-direction]="headerLayout$ | async">
+    <div class="header-content" >
+
       <div class="title-section">
         <h1 class="page-title">
           <mat-icon class="title-icon">event</mat-icon>
@@ -25,7 +25,7 @@
     <div class="filters-card">
       <!-- Desktop Filters -->
       <ng-container *ngIf="!(isHandset$ | async); else mobileFilters">
-        <div class="filters-grid" [style.grid-template-columns]="filterGridColumns$ | async">
+        <div class="filters-grid">
           <div class="filter-group">
             <mat-form-field appearance="outline" class="search-field">
               <mat-label>Search Events</mat-label>
@@ -74,7 +74,8 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="filter-actions-center" *ngIf="filterActionsVisible$ | async">
+        <!--  *ngIf="filterActionsVisible$ | async" -->
+        <div class="filter-actions-center">
           <button mat-raised-button color="primary" [disabled]="isFilterLoading" (click)="applyFilter()" class="apply-btn">
             <mat-spinner *ngIf="isFilterLoading" diameter="20"></mat-spinner>
             <mat-icon *ngIf="!isFilterLoading">filter_list</mat-icon>
@@ -166,8 +167,9 @@
       </div>
 
       <div class="table-container mat-elevation-z2">
+        <!-- [style.min-width]="tableMinWidth$ | async" -->
         <table mat-table matSort [dataSource]="dataSource" (matSortChange)="announceSortChange($event)" 
-               class="events-table" [style.min-width]="tableMinWidth$ | async">
+               class="events-table" >
           <!-- ID Column -->
           <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef mat-sort-header class="id-column">

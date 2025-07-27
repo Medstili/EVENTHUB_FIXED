@@ -210,25 +210,6 @@
       }
     }
   }
-
-  &.tablet {
-    .hero-image {
-      height: 300px;
-    }
-    .title-block {
-      width: 85%;
-      padding: 1.25rem 1.5rem;
-      
-      .event-title {
-        font-size: 2rem;
-      }
-    }
-    .content-wrapper {
-      width: 85%;
-      padding: 1.5rem;
-      gap: 1.5rem;
-    }
-  }
 }
 
 .loading-indicator-container {

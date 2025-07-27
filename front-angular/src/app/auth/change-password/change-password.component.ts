@@ -42,9 +42,8 @@ export class ChangePasswordComponent implements OnInit {
   buttonState: 'normal' | 'pressed' = 'normal';
 
   // Responsive observables
-  isMobile$: Observable<boolean>;
-  isTablet$: Observable<boolean>;
-  isDesktop$: Observable<boolean>;
+  isHandset$: Observable<boolean>;
+
 
   constructor(
     private fb: FormBuilder,
@@ -55,9 +54,8 @@ export class ChangePasswordComponent implements OnInit {
     private responsiveService: ResponsiveService
   ) {
     // Initialize responsive observables
-    this.isMobile$ = this.responsiveService.isMobile$;
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isDesktop$ = this.responsiveService.isDesktop$;
+    this.isHandset$ = this.responsiveService.isHandset$;
+
   }
 
   ngOnInit() {

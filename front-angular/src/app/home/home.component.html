@@ -1,8 +1,6 @@
 <!-- Modern Home Page -->
 <div class="home-container" 
-     [class.mobile]="isMobile$ | async"
-     [class.tablet]="isTablet$ | async"
-     [class.desktop]="isDesktop$ | async">
+     [class.mobile]="isHandset$ | async">
   <!-- Hero Section -->
   <section class="hero-section" [@fadeInUp] >
       <div class="hero-content">
@@ -239,7 +237,7 @@
         <h2 class="filters-title">Filter Events</h2>
         <div class="filters-controls">
           <!-- Desktop Filters -->
-          <ng-container *ngIf="!(isMobile$ | async)">
+          <ng-container *ngIf="!(isHandset$ | async)">
         <div class="filter-category">
           <app-category *ngFor="let c of categories"
             [category]="c"
@@ -256,7 +254,7 @@
       </ng-container>
           
           <!-- Mobile Filters -->
-          <ng-container *ngIf="isMobile$ | async">
+          <ng-container *ngIf="isHandset$ | async">
             <button mat-raised-button color="primary" [matMenuTriggerFor]="filterMenu">
               <mat-icon>filter_list</mat-icon>
           Filters

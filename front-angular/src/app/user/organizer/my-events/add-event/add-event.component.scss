@@ -13,15 +13,7 @@
     gap: var(--space-4);
   }
 
-  &.tablet {
-    padding: var(--space-6);
-    gap: var(--space-6);
-  }
 
-  &.desktop {
-    padding: var(--space-8);
-    gap: var(--space-8);
-  }
 }
 
 // Header Section
@@ -143,12 +135,6 @@
     }
   }
 
-  .tablet & {
-    .form-card {
-      padding: var(--space-8);
-      max-width: 700px;
-    }
-  }
 }
 
 // Form Section Groups

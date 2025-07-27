@@ -6,8 +6,7 @@ import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { OrganizerService } from '../../../services/organizerServer/organizer.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ResponsiveService } from '../../../services/responsive.service';
@@ -37,23 +36,16 @@ import { AnimationService } from '../../../services/animation.service';
 export class MyEventsComponent implements OnInit {
   events: Event[] = [];
   isHandset$: Observable<boolean>;
-  isTablet$: Observable<boolean>;
-  isMobile$: Observable<boolean>;
-  isDesktop$: Observable<boolean>;
+
   isLoading = false;
   today = new Date();
 
   constructor(
     private organizerService: OrganizerService,
-    private bp: BreakpointObserver,
     private snackBar: MatSnackBar,
     public responsiveService: ResponsiveService
   ) {
-    this.isHandset$ = this.bp.observe([Breakpoints.Handset, Breakpoints.Tablet])
-      .pipe(map(r => r.matches));
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isMobile$ = this.responsiveService.isMobile$;
-    this.isDesktop$ = this.responsiveService.isDesktop$;
+    this.isHandset$ = this.responsiveService.isHandset$;
   }
 
   ngOnInit(): void {
@@ -69,6 +61,8 @@ export class MyEventsComponent implements OnInit {
       },
       error: (err: any) => {
         this.isLoading = false;
+        console.log('error',err);
+        
         this.openSnackBar('Error loading events');
       }
     });

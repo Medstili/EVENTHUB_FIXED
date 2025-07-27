@@ -24,14 +24,12 @@ export class ChatComponent implements OnInit {
   userAvatar = 'https://ui-avatars.com/api/?name=User&background=F4B400&color=fff';
   messages: Array<{ sender: string; text: string; time: string; avatar: string }>= [];
   newMessage = '';
-  responsiveFontSize = '15px';
-  responsiveBubbleWidth = '70vw';
   conversationId: number = 0;
   isSending = false;
   errorMessage = '';
   guest_name: string ='';
   guest_email: string ='';
-  isMobile = false; // Add this property
+  isHandset;
 
   constructor(
     public responsive: ResponsiveService,
@@ -40,15 +38,14 @@ export class ChatComponent implements OnInit {
     private conversationService: ConversationService,
     private snackBar: MatSnackBar
   ) {
-    this.responsive.getResponsiveFontSize().subscribe(size => this.responsiveFontSize = size);
-    this.responsive.isMobile$.subscribe(isMobile => {
-      this.responsiveBubbleWidth = isMobile ? '90vw' : '70vw';
-      this.isMobile = isMobile;
-    });
+    this.isHandset= this.responsive.isHandset$;
+
+
     
   }
 
   ngOnInit() {
+        
     this.route.paramMap.subscribe((params: any) => {
       const id = params.get('id');
       if (id) {

@@ -37,12 +37,7 @@ export class ParticipantAccountComponent implements OnInit {
   user: Signal<(User & { created_at: string }) | null>;
 
   // Responsive observables
-  isMobile$: Observable<boolean>;
-  isTablet$: Observable<boolean>;
-  isSmallScreen$: Observable<boolean>;
-  containerPadding$: Observable<string>;
-  responsiveSpacing$: Observable<string>;
-  responsiveFontSize$: Observable<string>;
+  isHandset$: Observable<boolean>;
 
   constructor(
     private auth: LoginService,
@@ -52,12 +47,7 @@ export class ParticipantAccountComponent implements OnInit {
     private responsiveService: ResponsiveService
   ) {
     // Initialize responsive observables
-    this.isMobile$ = this.responsiveService.isMobile$;
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isSmallScreen$ = this.responsiveService.isSmallScreen$;
-    this.containerPadding$ = this.responsiveService.getContainerPadding();
-    this.responsiveSpacing$ = this.responsiveService.getResponsiveSpacing();
-    this.responsiveFontSize$ = this.responsiveService.getResponsiveFontSize();
+    this.isHandset$ = this.responsiveService.isHandset$;
 
     this.user = computed(() => {
       const u = this.auth.user();
@@ -107,9 +97,6 @@ export class ParticipantAccountComponent implements OnInit {
     }
   }
 
-  onCardHover(event: any, state: 'normal' | 'hovered') {
-    // Card hover animation handled by @cardHover trigger
-  }
 
   openSnackBar(msg: string = '') {
     this.snackBar.open(msg, 'Close', {

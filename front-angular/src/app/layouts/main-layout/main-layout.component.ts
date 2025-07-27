@@ -44,9 +44,7 @@ export class MainLayoutComponent implements OnInit {
   user: User | null = null;
 
   // Responsive observables
-  isMobile$: Observable<boolean>;
-  isTablet$: Observable<boolean>;
-  isDesktop$: Observable<boolean>;
+  isHandset$: Observable<boolean>;
 
   // Navigation state
   navState: 'closed' | 'open' = 'closed';
@@ -62,9 +60,7 @@ export class MainLayoutComponent implements OnInit {
     this.isDarkMode = this.themeService.isDarkMode();
     
     // Initialize responsive observables
-    this.isMobile$ = this.responsiveService.isMobile$;
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isDesktop$ = this.responsiveService.isDesktop$;
+    this.isHandset$ = this.responsiveService.isHandset$;
     
     // Subscribe to theme changes
     this.themeService.currentTheme$.subscribe(theme => {

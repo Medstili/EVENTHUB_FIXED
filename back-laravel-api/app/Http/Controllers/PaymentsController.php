@@ -92,34 +92,7 @@ class PaymentsController extends Controller
     {
         //
     }
-    // public function checkout(Request $request)
-    // {
-    //     $event = Event::findOrFail($request->event_id);
-
-    //     Stripe::setApiKey(config('services.stripe.secret'));
-
-    //     $session = CheckoutSession::create([
-    //         'payment_method_types' => ['card'],
-    //         'mode'                 => 'payment',
-    //         'customer_email'       => $request->user()->email,
-    //         'line_items'           => [[
-    //             'price_data' => [
-    //                 'currency'     => 'usd',
-    //                 'unit_amount'  => $event->ticket_price * 100,
-    //                 'product_data' => ['name' => $event->title],
-    //             ],
-    //             'quantity'   => 1,
-    //         ]],
-    //         'metadata' => [
-    //             'event_id'       => $event->id,
-    //             'participant_id' => $request->user()->id,
-    //         ],
-    //         'success_url' => config('app.frontend_url').'/payment/success?session_id={CHECKOUT_SESSION_ID}',
-    //         'cancel_url'  => config('app.frontend_url').'/payment/cancel',
-    //     ]);
-
-    //     return response()->json(['url' => $session->url]);
-    // }
+   
 
     public function createCheckoutSession($eventId)
     {
@@ -169,7 +142,7 @@ class PaymentsController extends Controller
         }
 
         $session = $event->data->object;
-        Log::info('webhook session',[$session]);
+        // Log::info('webhook session',[$session]);
         if ($event->type === 'checkout.session.completed') {
             DB::beginTransaction();
             try {
@@ -197,8 +170,8 @@ class PaymentsController extends Controller
                         'participant_id' => $session->metadata->participant_id,
                         'qr_code' => (string) Str::uuid(),
                         'price' => $session->amount_total / 100,
-                        'payment_id' => $payment->id,
-                        'status'=>'paid',
+                        'payment_id' => $payment->id,   
+                        'status'=>'valide',
                          
                     ]);
                     // ->load('event', 'user');

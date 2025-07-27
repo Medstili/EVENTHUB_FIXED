@@ -8,17 +8,6 @@
   box-sizing: border-box;
   transition: all 0.3s ease;
 
-  &.mobile {
-    padding: var(--space-4);
-  }
-
-  &.tablet {
-    padding: var(--space-5);
-  }
-
-  &.desktop {
-    padding: var(--space-8);
-  }
 }
 
 /* Header Section */
@@ -363,6 +352,7 @@
 
 /* Responsive Design using ResponsiveService classes */
 .messages-container.mobile {
+  padding: var(--space-4);
   .messages-header {
     .header-content {
       flex-direction: column;

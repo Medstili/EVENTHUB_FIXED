@@ -7,7 +7,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
-  transition: var(--transition);
 }
 
 /* ===== HEADER SECTION ===== */
@@ -22,7 +21,6 @@
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow);
     border: 1px solid var(--border);
-    transition: var(--transition);
 
     .title-section {
       flex: 1;
@@ -35,7 +33,6 @@
         font-weight: var(--font-bold);
         color: var(--text-primary);
         margin-bottom: var(--space-2);
-        transition: var(--transition);
 
         .title-icon {
           color: var(--primary-color);
@@ -60,7 +57,6 @@
     box-shadow: var(--shadow);
     border: 1px solid var(--border);
     overflow: hidden;
-    transition: var(--transition);
 
     &:hover {
       box-shadow: var(--shadow-hover);
@@ -71,7 +67,7 @@
       padding: var(--space-6);
       background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
       color: var(--text-primary);
-      transition: var(--transition);
+      
 
       .avatar {
         width: 60px;
@@ -82,7 +78,7 @@
         align-items: center;
         justify-content: center;
         border: 3px solid var(--text-secondary);
-        transition: var(--transition);
+        
 
         mat-icon {
           font-size: 2rem;
@@ -91,7 +87,7 @@
       }
 
       mat-card-title {
-        font-size: var(--text-2xl);
+        font-size: var(--text-lg);
         font-weight: var(--font-bold);
         color: var(--text-primary);
         margin-bottom: var(--space-2);
@@ -107,7 +103,7 @@
     /* Profile Content */
     mat-card-content {
       padding: var(--space-6);
-      transition: var(--transition);
+      
 
       mat-list {
         .detail-item {
@@ -154,7 +150,7 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-left: var(--space-8);
-            transition: var(--transition);
+            
 
             &.role-participant {
               background: var(--success-100);
@@ -170,7 +166,7 @@
         mat-list-item {
           height: auto;
           padding: var(--space-3) 0;
-          transition: var(--transition);
+          
 
           &:hover {
             background: var(--surface-elevated);
@@ -191,7 +187,7 @@
       padding: var(--space-6);
       border-top: 1px solid var(--border);
       background: var(--surface-elevated);
-      transition: var(--transition);
+      
 
       .edit-btn,
       .delete-btn {
@@ -201,7 +197,7 @@
         padding: var(--space-3) var(--space-6);
         font-weight: var(--font-semibold);
         border-radius: var(--radius-lg);
-        transition: var(--transition);
+        
 
         &:hover {
           transform: translateY(-2px);
@@ -265,7 +261,7 @@
       }
 
       mat-card-title {
-        font-size: var(--text-xl);
+        font-size: var(--text-base);
       }
     }
 
@@ -300,32 +296,3 @@
   }
 }
 
-/* Tablet responsive classes */
-.tablet-layout {
-  .profile-section .account-card mat-card-content mat-list .detail-item {
-    .detail-header h4 {
-      font-size: var(--text-lg);
-    }
-  }
-}
-
-/* Small screen responsive classes */
-.small-screen-layout {
-  .participant-account-container {
-    padding: var(--space-3);
-  }
-
-  .profile-section .account-card {
-    mat-card-header {
-      padding: var(--space-3);
-    }
-
-    mat-card-content {
-      padding: var(--space-3);
-    }
-
-    mat-card-actions {
-      padding: var(--space-3);
-    }
-  }
-}

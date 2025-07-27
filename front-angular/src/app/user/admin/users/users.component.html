@@ -1,11 +1,9 @@
 <div class="users-container" 
-     [class.mobile-layout]="isMobile$ | async"
-     [class.tablet-layout]="isTablet$ | async"
-     [class.small-screen-layout]="isSmallScreen$ | async"
+     [class.mobile-layout]="isHandset$ | async"
     >
   <!-- Header Section -->
   <div class="header-section">
-    <div class="header-content" [style.flex-direction]="headerLayout$ | async">
+    <div class="header-content" >
       <div class="title-section">
         <h1 class="page-title">
           <mat-icon class="title-icon">people</mat-icon>
@@ -51,8 +49,8 @@
             </mat-form-field>
           </div>
         </div>
-        
-        <div class="filter-actions-center" *ngIf="filterActionsVisible$ | async">
+        <!--  *ngIf="filterActionsVisible$ | async" -->
+        <div class="filter-actions-center">
           <button mat-raised-button color="primary" [disabled]="isFilterLoading" (click)="applyFilter()" class="apply-btn">
             <mat-spinner *ngIf="isFilterLoading" diameter="20"></mat-spinner>
             <mat-icon *ngIf="!isFilterLoading">filter_list</mat-icon>

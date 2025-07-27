@@ -52,23 +52,13 @@ export class ParticipantEditAccountComponent implements OnInit {
   loading = false;
 
   // Responsive observables
-  isMobile$: Observable<boolean>;
-  isTablet$: Observable<boolean>;
-  isSmallScreen$: Observable<boolean>;
-  containerPadding$: Observable<string>;
-  responsiveSpacing$: Observable<string>;
-  responsiveFontSize$: Observable<string>;
-  formLayout$: Observable<'single' | 'multi'>;
+  isHandset$: Observable<boolean>;
+
 
   constructor() {
     // Initialize responsive observables
-    this.isMobile$ = this.responsiveService.isMobile$;
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isSmallScreen$ = this.responsiveService.isSmallScreen$;
-    this.containerPadding$ = this.responsiveService.getContainerPadding();
-    this.responsiveSpacing$ = this.responsiveService.getResponsiveSpacing();
-    this.responsiveFontSize$ = this.responsiveService.getResponsiveFontSize();
-    this.formLayout$ = this.responsiveService.getFormLayout();
+    this.isHandset$ = this.responsiveService.isHandset$;
+
   }
 
   passwordsMatchValidator = (group: AbstractControl): { [key: string]: boolean } | null => {

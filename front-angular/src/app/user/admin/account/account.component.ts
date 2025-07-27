@@ -20,7 +20,6 @@ import { AnimationService } from '../../../services/animation.service';
   animations: [
     AnimationService.pageTransition,
     AnimationService.fadeInUp,
-    AnimationService.cardHover,
     AnimationService.buttonPress
   ],
   templateUrl: './account.component.html',
@@ -31,14 +30,9 @@ export class AccountComponent implements OnInit {
   user!: User & { created_at: string };
   
   // Responsive observables
-  isMobile$: Observable<boolean>;
-  isTablet$: Observable<boolean>;
-  isSmallScreen$: Observable<boolean>;
-  containerPadding$: Observable<string>;
-  headerLayout$: Observable<'row' | 'column'>;
-  responsiveSpacing$: Observable<string>;
-  responsiveFontSize$: Observable<string>;
-  cardLayout$: Observable<'compact' | 'comfortable'>;
+  isHandset$: Observable<boolean>;
+
+  
 
   constructor(
     private auth: LoginService,
@@ -47,14 +41,9 @@ export class AccountComponent implements OnInit {
     private router: Router
   ) {
     // Initialize responsive observables
-    this.isMobile$ = this.responsiveService.isMobile$;
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isSmallScreen$ = this.responsiveService.isSmallScreen$;
-    this.containerPadding$ = this.responsiveService.getContainerPadding();
-    this.headerLayout$ = this.responsiveService.getHeaderLayout();
-    this.responsiveSpacing$ = this.responsiveService.getResponsiveSpacing();
-    this.responsiveFontSize$ = this.responsiveService.getResponsiveFontSize();
-    this.cardLayout$ = this.responsiveService.getCardLayout();
+    this.isHandset$ = this.responsiveService.isHandset$;
+  
+  
   }
 
   ngOnInit() {
@@ -93,7 +82,5 @@ export class AccountComponent implements OnInit {
     }
   }
 
-  onCardHover(event: any, state: 'normal' | 'hovered') {
-    // Card hover animation handled by @cardHover trigger
-  }
+
 }

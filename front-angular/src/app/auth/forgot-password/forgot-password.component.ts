@@ -35,8 +35,6 @@ export class ForgotPasswordComponent implements OnInit {
 
   // Responsive properties
   isHandset$: Observable<boolean>;
-  isMobile$: Observable<boolean>;
-  // isDesktop$: Observable<boolean>;
 
   constructor(
     private auth: LoginService,
@@ -47,8 +45,6 @@ export class ForgotPasswordComponent implements OnInit {
   ) {
     // Initialize responsive observables
     this.isHandset$ = this.responsiveService.isHandset$;
-    this.isMobile$ = this.responsiveService.isMobile$;
-    // this.isDesktop$ = this.responsiveService.isDesktop$;
   }
 
   ngOnInit(): void {

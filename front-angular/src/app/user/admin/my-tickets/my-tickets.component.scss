@@ -15,11 +15,6 @@
     padding: var(--space-4);
     gap: var(--space-4);
   }
-
-  &.tablet {
-    padding: var(--space-6);
-    gap: var(--space-6);
-  }
 }
 
 // Header Section
@@ -99,6 +94,11 @@
         font-size: var(--text-base);
       }
     }
+    .tickets-grid{
+        gap: var(--space-4);
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+
+    }
   }
 }
 
@@ -135,21 +135,9 @@
 // Tickets Grid
 .tickets-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: var(--space-6);
   width: 100%;
-  max-width: 1200px;
-
-  // Responsive grid
-  .handset & {
-    grid-template-columns: 1fr;
-    gap: var(--space-4);
-  }
-
-  .tablet & {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: var(--space-5);
-  }
 }
 
 // Ticket Card

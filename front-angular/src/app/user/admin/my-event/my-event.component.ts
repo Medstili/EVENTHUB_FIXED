@@ -36,9 +36,6 @@ import { AnimationService } from '../../../services/animation.service';
 export class MyEventComponent implements OnInit {
   events: Event[] = [];
   isHandset$: Observable<boolean>;
-  isTablet$: Observable<boolean>;
-  isMobile$: Observable<boolean>;
-  isDesktop$: Observable<boolean>;
   isLoading = false;
   today = new Date();
 
@@ -48,9 +45,7 @@ export class MyEventComponent implements OnInit {
     public responsiveService: ResponsiveService
   ) {
     this.isHandset$ = this.responsiveService.isHandset$;
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isMobile$ = this.responsiveService.isMobile$;
-    this.isDesktop$ = this.responsiveService.isDesktop$;
+
   }
 
   ngOnInit(): void {

@@ -49,8 +49,7 @@ import { AnimationService } from '../../../../services/animation.service';
 export class AddEventComponent implements OnInit {
   eventForm!: FormGroup;
   isHandset$: Observable<boolean>;
-  isTablet$: Observable<boolean>;
-  isDesktop$: Observable<boolean>;
+
   categories: any[] = [];
   selectedFile?: File;
   imagePreview?: string;
@@ -64,8 +63,7 @@ export class AddEventComponent implements OnInit {
     public responsiveService: ResponsiveService
   ) {
     this.isHandset$ = this.responsiveService.isHandset$;
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isDesktop$ = this.responsiveService.isDesktop$;
+
   }
 
   ngOnInit(): void {

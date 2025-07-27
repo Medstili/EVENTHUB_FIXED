@@ -1,7 +1,5 @@
 <div class="tickets-container" 
-     [class.mobile-layout]="isMobile$ | async"
-     [class.tablet-layout]="isTablet$ | async"
-     [class.small-screen-layout]="isSmallScreen$ | async"
+     [class.mobile-layout]="isHandset$ | async"
      [@pageTransition]>
   <!-- Header Section -->
   <div class="header-section" [@fadeInUp]>
@@ -57,7 +55,8 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="filter-actions-center" *ngIf="filterActionsVisible$ | async" [@fadeInUp]>
+        <!--  *ngIf="filterActionsVisible$ | async"  -->
+        <div class="filter-actions-center"[@fadeInUp]>
           <button mat-raised-button color="primary" [disabled]="isFilterLoading" (click)="applyFilter()" class="apply-btn">
             <mat-spinner *ngIf="isFilterLoading" diameter="20"></mat-spinner>
             <mat-icon *ngIf="!isFilterLoading">filter_list</mat-icon>

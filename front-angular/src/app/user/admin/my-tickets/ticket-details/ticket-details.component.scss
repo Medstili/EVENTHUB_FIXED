@@ -17,9 +17,9 @@
     box-shadow: var(--shadow-hover);
   }
 
-  mat-icon {
-    font-size: var(--text-lg);
-  }
+  // mat-icon {
+  //   font-size: var(--text-lg);
+  // }
 }
 
 // Modern Ticket Details Component Styles
@@ -37,10 +37,7 @@
     gap: var(--space-4);
   }
 
-  &.tablet {
-    padding: var(--space-6);
-    gap: var(--space-6);
-  }
+
 }
 
 // Header Section
@@ -97,9 +94,9 @@
           box-shadow: var(--shadow-hover);
         }
 
-        mat-icon {
-          font-size: var(--text-lg);
-        }
+        // mat-icon {
+        //   font-size: var(--text-lg);
+        // }
       }
     }
   }
@@ -184,10 +181,9 @@
             color: var(--secondary-color);
             transform: translateX(4px);
           }
-
-          mat-icon {
-            font-size: var(--text-lg);
-          }
+          // mat-icon {
+          //   font-size: var(--text-lg);
+          // }
         }
       }
     }
@@ -241,7 +237,7 @@
             font-size: var(--text-sm);
 
             mat-icon {
-              font-size: var(--text-base);
+              // font-size: var(--text-base);
               opacity: 0.7;
             }
           }
@@ -283,9 +279,9 @@
         cursor: not-allowed;
       }
 
-      mat-icon {
-        font-size: var(--text-lg);
-      }
+      // mat-icon {
+      //   font-size: var(--text-lg);
+      // }
 
       mat-spinner {
         margin-right: var(--space-2);
@@ -337,13 +333,6 @@
     }
   }
 
-  .tablet & {
-    max-width: 700px;
-
-    .card-content {
-      gap: var(--space-6);
-    }
-  }
 }
 
 .qr-section-fixed {

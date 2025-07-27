@@ -273,7 +273,6 @@
   width: 100vw;
   min-width: 0;
   border-radius: 0;
-  height: 100vh;
 }
 
 .chat-header.mobile-header {
@@ -300,7 +299,7 @@
 
 .bubble.mobile-bubble {
   padding: var(--space-2) var(--space-3);
-  font-size: var(--text-sm);
+  font-size: var(--text-base);
   min-width: 40px;
   max-width: 90vw;
 }

@@ -28,16 +28,8 @@ export class AboutComponent implements OnInit {
   totalOrganizers = 0;
 
   // Responsive observables
-  isMobile$;
-  isTablet$;
-  isDesktop$;
-  responsiveState$;
-  
-  // Responsive values
-  containerPadding$;
-  responsiveSpacing$;
-  responsiveFontSize$;
-  cardLayout$;
+  isHandset$;
+
 
   constructor(
     private eventService: EventService, 
@@ -46,16 +38,8 @@ export class AboutComponent implements OnInit {
     private responsiveService: ResponsiveService
   ) {
     // Initialize responsive observables after constructor
-    this.isMobile$ = this.responsiveService.isMobile$;
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isDesktop$ = this.responsiveService.isDesktop$;
-    this.responsiveState$ = this.responsiveService.responsiveState$;
-    
-    // Initialize responsive values
-    this.containerPadding$ = this.responsiveService.getContainerPadding();
-    this.responsiveSpacing$ = this.responsiveService.getResponsiveSpacing();
-    this.responsiveFontSize$ = this.responsiveService.getResponsiveFontSize();
-    this.cardLayout$ = this.responsiveService.getCardLayout();
+    this.isHandset$ = this.responsiveService.isHandset$;
+
   }
 
   ngOnInit() {

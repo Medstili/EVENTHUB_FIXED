@@ -37,8 +37,6 @@ export class MyTicketsComponent implements OnInit {
   reservations: Ticket[] = [];
   loading = false;
   isHandset$: Observable<boolean>;
-  isTablet$: Observable<boolean>;
-  isDesktop$: Observable<boolean>;
   hoveredCardId: number | null = null;
 
   constructor(
@@ -48,8 +46,7 @@ export class MyTicketsComponent implements OnInit {
     public responsiveService: ResponsiveService
   ) {
     this.isHandset$ = this.responsiveService.isHandset$;
-    this.isTablet$ = this.responsiveService.isTablet$;
-    this.isDesktop$ = this.responsiveService.isDesktop$;
+
   }
 
   ngOnInit(): void {
