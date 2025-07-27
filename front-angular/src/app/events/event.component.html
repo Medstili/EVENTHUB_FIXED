@@ -5,7 +5,11 @@
     <!-- Hero Image -->
     <div class="hero-image" 
          [@scaleIn]
-         [style.backgroundImage]="'url(' + event.image_url + ')'"></div>
+         [style.backgroundImage]="'url(' + event.image_url + ')'">
+      <div *ngIf="!canRegister" class="dark-overlay"></div>
+      <div class="soldout-overlay" *ngIf="isSoldOut"></div>
+      <div class="outdated-overlay" *ngIf="isOutdated"></div>
+    </div>
 
     <!-- Title & Meta -->
     <div class="title-block" [@slideInUp]>
@@ -49,7 +53,7 @@
               <p class="price">{{ event.price | currency:'MAD':'symbol' }}</p>
             </div>
           </mat-card-content>
-          <mat-card-actions align="end">
+          <mat-card-actions  *ngIf="canRegister">
             <button mat-raised-button color="warn" (click)="getTicket()">Register</button>
           </mat-card-actions>
         </mat-card>

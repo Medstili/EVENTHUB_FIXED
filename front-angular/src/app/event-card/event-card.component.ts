@@ -65,7 +65,7 @@ export class EventCardComponent {
     const timeDiff = eventDate.getTime() - now.getTime();
     
     if (eventDate < now) {
-      return 'past';
+      return 'outDated';
     } else if (timeDiff < 24 * 60 * 60 * 1000) {
       return 'upcoming';
     } else {
@@ -73,20 +73,29 @@ export class EventCardComponent {
     }
   }
 
-  getEventStatusColor(): string {
+  // getEventStatusColor(): string {
+  //   const status = this.getEventStatus();
+  //   switch (status) {
+  //     case 'outDated': return 'var(--primary-50)';
+  //     case 'upcoming': return 'var(--warning-color)';
+  //     case 'future': return 'var(--success-color)';
+  //     default: return 'var(--text-secondary)';
+  //   }
+  // }
+  getEventStatusBgColor(): string {
     const status = this.getEventStatus();
     switch (status) {
-      case 'past': return 'var(--text-secondary)';
-      case 'upcoming': return 'var(--warning-color)';
-      case 'future': return 'var(--success-color)';
-      default: return 'var(--text-secondary)';
+      case 'outDated': return 'var(--warning-500)';
+      case 'upcoming': return 'var(--primary-600)';
+      case 'future': return 'var(--success-600)';
+      default: return 'var(--neutral-500)';
     }
   }
 
   getEventStatusText(): string {
     const status = this.getEventStatus();
     switch (status) {
-      case 'past': return 'Past Event';
+      case 'outDated': return 'outDated';
       case 'upcoming': return 'Upcoming';
       case 'future': return 'Future Event';
       default: return 'Unknown';
@@ -123,7 +132,7 @@ export class EventCardComponent {
 
   getAvailabilityPercentage(): number {
     if (this.event.capacity === 0) return 0;
-    const sold = this.event.totalTicketsSold || 0;
+    const sold = this.event.current_registrations || 0;
     return Math.round((sold / this.event.capacity) * 100);
   }
 
@@ -132,5 +141,20 @@ export class EventCardComponent {
     if (percentage >= 90) return 'var(--error-color)';
     if (percentage >= 70) return 'var(--warning-color)';
     return 'var(--success-color)';
+  }
+
+  get isSoldOut(): boolean {
+    const sold = this.event.current_registrations ?? 0;
+    return this.event.capacity > 0 && sold >= this.event.capacity;
+  }
+
+  get isOutdated(): boolean {
+    if (!this.event) return false;
+    const eventDate = new Date(this.event.date);
+    const todayDate = new Date();
+    const outdated = eventDate > todayDate;
+    //  return outdated;
+    return true;
+
   }
 }

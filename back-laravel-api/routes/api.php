@@ -13,7 +13,7 @@ use App\Http\Controllers\ConversationController;
 /**
  * guess routes 
  */  
-route::get('guess/home/events', [EventController::class, 'index']);
+route::get('guess/home/events', [EventController::class, 'guessHomeIndex']);
 route::get('guess/event/{id}', [EventController::class, 'show']);
 route::get('guess/home/categories', [CategoryController::class, 'index']);
 route::get('guess/latest-event', [EventController::class, 'getLatestEvent']);

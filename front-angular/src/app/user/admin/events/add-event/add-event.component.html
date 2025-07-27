@@ -149,13 +149,17 @@
               <label class="privacy-label">Event Type</label>
               <mat-radio-group formControlName="isPublic" class="privacy-options">
                 <mat-radio-button [value]="true" class="privacy-option">
-                  <mat-icon>public</mat-icon>
-                  <span>Public Event</span>
+                  <div class="label">
+                    <mat-icon>public</mat-icon>
+                    <span>Public Event</span>
+                  </div>
                 </mat-radio-button>
                 <mat-radio-button [value]="false" class="privacy-option">
-                  <mat-icon>lock</mat-icon>
-                  <span>Private Event</span>
-                </mat-radio-button>
+                  <div class="label">
+                    <mat-icon>lock</mat-icon>
+                    <span>Private Event</span>
+                  </div>
+                  </mat-radio-button>
               </mat-radio-group>
             </div>
           </div>

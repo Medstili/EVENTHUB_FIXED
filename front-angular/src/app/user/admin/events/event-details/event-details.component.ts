@@ -43,7 +43,6 @@ import { AnimationService } from '../../../../services/animation.service';
 })
 export class EventDetailsComponent implements OnInit {
   event?: Event;
-  
   isHandset$: Observable<boolean>;
 
   // Animation states
@@ -119,6 +118,7 @@ export class EventDetailsComponent implements OnInit {
         },
         error: (err) => {
           this.isLoading = false;
+          console.log("error", err);
           this.openSnackBar('Error creating checkout session');
         }
       });
@@ -128,6 +128,24 @@ export class EventDetailsComponent implements OnInit {
     this.location.back();
   }
 
+  get canRegister(): boolean {
+      return !this.isOutdated && !this.isSoldOut
+  }
+  get isSoldOut(): boolean {
+    const sold = this.event?.current_registrations ?? 0;
+    const capacity = this.event?.capacity ?? 0;
+    const soldout = capacity > 0 && sold >= capacity;
+    return soldout ;
+  }
+  get isOutdated(): boolean {
+    if (!this.event) return false;
+    const eventDate = new Date(this.event.date);
+    const todayDate = new Date();
+    const outdated = eventDate < todayDate;
+    console.log(outdated);
+    
+     return outdated;
+  }
   openSnackBar(message: string) {
     this.snackBar.open(message, 'Close', {
       duration: 3000,

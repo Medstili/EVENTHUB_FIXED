@@ -73,7 +73,7 @@ export class AddEventComponent implements OnInit {
   }
 
   private loadCategories(): void {
-    this.categoryService.getAll({}).subscribe({
+    this.categoryService.getAll().subscribe({
       next: (categories) => {
         this.categories = categories;
       },

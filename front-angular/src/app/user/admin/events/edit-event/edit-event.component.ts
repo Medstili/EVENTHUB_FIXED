@@ -70,7 +70,7 @@ export class EditEventComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.categoryService.getAll({})
+    this.categoryService.getAll()
       .subscribe((category) => {
         this.categories = category;
       });

@@ -11,10 +11,23 @@
   <div class="event-image-container">
     <img [src]="getImageUrl()" [alt]="event.title" class="event-image" />
     
+    <!-- Sold Out Icon Overlay -->
+    <div *ngIf="isSoldOut" class="soldout-overlay">
+      <mat-icon>block</mat-icon>
+      <span>Sold Out</span>
+    </div>
     <!-- Event Status Badge -->
     <div class="event-status-badge" 
-         [style.color]="getEventStatusColor()">
-      {{ getEventStatusText() }}
+         [style.background-color]="getEventStatusBgColor()">
+         <mat-icon>
+           {{
+             getEventStatusText() === 'Future Event' ? 'event_available' :
+             getEventStatusText() === 'Upcoming' ? 'schedule' :
+             'history'
+           }}
+         </mat-icon>
+         <span>{{ getEventStatusText() }}</span>
+      
     </div>
     
     <!-- Availability Indicator -->
@@ -32,7 +45,7 @@
     <div class="event-header">
       <h3 class="event-title">{{ event.title }}</h3>
       <div class="event-category">
-        Category {{ event.category_id }}
+         {{ event.category.name }}
       </div>
     </div>
 

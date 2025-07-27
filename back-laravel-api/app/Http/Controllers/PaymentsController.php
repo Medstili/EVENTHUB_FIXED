@@ -98,6 +98,11 @@ class PaymentsController extends Controller
     {
         $user = Auth::user();
         $event = Event::findOrFail($eventId);
+
+        // Check if event is full before creating checkout session
+        if ($event->current_registrations >= $event->capacity) {
+            return response()->json(['error' => 'Event is already full'], 400);
+        }
         
         Stripe::setApiKey(config(key: 'services.stripe.secret'));
         
@@ -116,8 +121,10 @@ class PaymentsController extends Controller
             'mode' => 'payment',
             'customer_email' => $user->email,
             'metadata' => [
-              'participant_id' => $user->id,
-              'event_id'       => $event->id,
+                'participant_id' => $user->id,
+                'event_id'       => $event->id,
+                'event_capacity' => $event->capacity,
+                'event_current_registrations' => $event->current_registrations
             ],
             'success_url' => config('app.client_url')."/checkout/success?session_id={CHECKOUT_SESSION_ID}",
             'cancel_url'  => config('app.client_url')."/events/{$event->id}"
@@ -153,6 +160,14 @@ class PaymentsController extends Controller
                     return response()->json(['received' => true]);
                 }
 
+                $event = Event::findOrFail($session->metadata->event_id);
+
+                if ($event->current_registrations >= $event->capacity) {
+                    DB::rollBack();
+                    Log::warning('Event full at webhook, skipping ticket/payment creation.');
+                    return response()->json(['error' => 'Event is already full'], 400);
+                }
+
                 $payment = Payment::create([
                     'participant_id' => $session->metadata->participant_id,
                     'event_id' => $session->metadata->event_id,
@@ -165,6 +180,7 @@ class PaymentsController extends Controller
                 ]);
 
                 if ($session->payment_status === 'paid') {
+
                     $ticket = Ticket::create([
                         'event_id' => $session->metadata->event_id,
                         'participant_id' => $session->metadata->participant_id,
@@ -174,7 +190,11 @@ class PaymentsController extends Controller
                         'status'=>'valide',
                          
                     ]);
-                    // ->load('event', 'user');
+                        // ->load('event', 'user'
+
+                    $event->current_registrations += 1;
+                    $event->save();
+
                     DB::commit();
 
                     // Generate PDF and send email (ideally queue this)

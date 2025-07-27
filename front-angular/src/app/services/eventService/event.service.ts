@@ -4,6 +4,7 @@ import { HttpClient, HttpParams }     from '@angular/common/http';
 import { Observable }     from 'rxjs';
 import {  Router } from '@angular/router';
 import { User } from '../authService/login.service';
+import { Category } from '../categoryService/category.service';
 
 
 export interface Event {
@@ -18,13 +19,15 @@ export interface Event {
     city: string;
     image: string;
     capacity: number;
+    current_registrations: number;
     is_public: number;
     price: string;
     created_at: string;
     updated_at: string;
     image_url: string; 
     totalTicketsSold: number; 
-    user: User
+    user: User;
+    category: Category
 }
 
 export interface Paginated<T> {

@@ -125,7 +125,7 @@
                [class.responsive-card-flex]="!(isHandset$ | async)"
                *ngFor="let event of recentEvents" @listItemEnter>
             <div class="event-image">
-              <img [src]="event.imageUrl || 'assets/disco-1081484_1920.jpg'" [alt]="event.title" />
+              <img [src]="event.imageUrl || 'assets/images/disco-1081484_1920.jpg'" [alt]="event.title" />
             </div>
             <div class="event-info">
               <h3 class="event-title">{{ event.title }}</h3>

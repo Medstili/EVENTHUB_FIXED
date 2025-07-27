@@ -36,6 +36,7 @@ class EventController extends Controller
                 $query->whereRaw('LOWER(title) LIKE ?', ['%'.strtolower($request->input('title')).'%']);
         }
 
+        $query->orderBy('date', 'desc');
         $pagination = $query->paginate(35);
 
         // log::info('pagination', [$pagination]);
@@ -43,6 +44,34 @@ class EventController extends Controller
         return $pagination;
     }
 
+    public function guessHomeIndex(Request $request){
+
+        
+        $query = Event::with('category');
+
+        if ($request->has('category')) {
+            $query->where('category_id', $request->input('category'));
+        }
+     
+        if ($request->has('is_public')) {
+            $query->where('is_public', $request->input('is_public'));
+        }
+        if ($request->has('date')) {
+            $query->where('date', $request->input('date'));
+        }
+        if ($request->has('title')) {
+                $query->whereRaw('LOWER(title) LIKE ?', ['%'.strtolower($request->input('title')).'%']);
+        }
+
+        $query->where('date', '>=', Carbon::now()->subDays(3)->toDateString());
+        $query->orderBy('date', 'asc');
+        $pagination = $query->paginate(15);
+        // Log::info('guess home pagination ',[$pagination]);
+
+
+        return $pagination;
+
+    }
     /**
      * Store a newly created resource in storage.
      */
@@ -76,6 +105,7 @@ class EventController extends Controller
             $event->organizer_id = $request->user()->id;
             $event->price        = $data['price'] ?? null;
             $event->city         = $data['city'];
+            $event->current_registrations = 0;
 
             if ($request->hasFile('image')) {
                 $path = $request->file('image')->store('events', 'public');

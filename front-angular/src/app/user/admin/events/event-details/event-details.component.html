@@ -6,7 +6,10 @@
   <div class="hero-image" 
        [style.backgroundImage]="event?.image_url ? 'url(' + event?.image_url + ')' : 'none'"
        [@fadeInUp]>
-    
+       <div *ngIf="!canRegister" class="dark-overlay"></div>
+       <div class="soldout-overlay" *ngIf="isSoldOut" ></div>
+       <div class="outdated-overlay" *ngIf="isOutdated"></div>
+
     <button type="button" 
             mat-icon-button 
             class="back-btn" 
@@ -58,9 +61,10 @@
           
           <mat-card-actions>
             <button mat-raised-button 
-                    color="primary" 
-                    [disabled]="isLoading" 
-                    (click)="getTicket()">
+                  color="primary" 
+                  [disabled]="isLoading" 
+                  (click)="getTicket()"
+                  *ngIf="canRegister">
               <ng-container *ngIf="!isLoading">Register</ng-container>
               <ng-container *ngIf="isLoading">
                 <mat-spinner diameter="24" color="accent"></mat-spinner>
