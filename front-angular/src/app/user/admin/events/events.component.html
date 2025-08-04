@@ -146,21 +146,6 @@
           <h3 class="table-title">Events List</h3>
           <p class="table-subtitle">{{ dataSource.data.length }} events found</p>
         </div>
-        <div class="table-actions">
-          <button mat-icon-button [matMenuTriggerFor]="viewMenu" class="view-toggle-btn">
-            <mat-icon>view_list</mat-icon>
-          </button>
-          <mat-menu #viewMenu="matMenu">
-            <button mat-menu-item>
-              <mat-icon>view_list</mat-icon>
-              <span>List View</span>
-            </button>
-            <button mat-menu-item>
-              <mat-icon>grid_view</mat-icon>
-              <span>Grid View</span>
-            </button>
-          </mat-menu>
-        </div>
       </div>
 
       <div class="table-container mat-elevation-z2">
