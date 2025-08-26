@@ -33,7 +33,8 @@ import { AdminService } from '../../../../services/adminService/admin.service';
     AnimationService.fadeInUp,
     AnimationService.slideInLeft,
     AnimationService.scaleIn,
-    AnimationService.cardHover
+    AnimationService.cardHover,
+    AnimationService.staggerFadeIn
   ]
 })
 export class TicketDetailsComponent implements OnInit {
