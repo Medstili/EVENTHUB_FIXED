@@ -180,6 +180,12 @@
             <input #fileInput type="file" (change)="onFileSelected($event)" 
                    accept="image/*" hidden />
           </div>
+          <!-- Error message for file validation -->
+          <div *ngIf="imageError" class="file-error" [@fadeInUp]>
+            <mat-icon>error</mat-icon>
+            <mat-error>{{ imageError }}</mat-error>
+          </div>
+
           <div class="file-hint">
             <mat-icon>info</mat-icon>
             <span>Maximum file size: 2MB. Supported formats: JPG, PNG, JPEG</span>

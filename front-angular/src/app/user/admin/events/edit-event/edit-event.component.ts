@@ -56,6 +56,8 @@ export class EditEventComponent implements OnInit {
   categories: any[] = [];
   selectedFile?: File;
   isSubmitting = false;
+  imageError: string = ''; 
+
 
   constructor(
     private fb: FormBuilder,
@@ -123,8 +125,34 @@ export class EditEventComponent implements OnInit {
 
   onFileSelected(evt: Event) {
     const input = evt.target as HTMLInputElement;
-    if (input.files && input.files.length) {
-      this.selectedFile = input.files[0];
+ if (input.files && input.files.length) {
+      const file = input.files[0];
+      const maxSizeInMB = 2;
+      const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
+
+      // Reset previous error
+      this.imageError = '';
+
+      // Check file size
+      if (file.size > maxSizeInBytes) {
+        this.imageError = `File size (${(file.size / (1024 * 1024)).toFixed(2)}MB) exceeds the maximum allowed size of ${maxSizeInMB}MB`;
+        this.selectedFile = undefined;
+        this.imagePreview = '';
+        input.value = ''; // Clear the input
+        return;
+      }
+
+      // Check file type
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+      if (!allowedTypes.includes(file.type)) {
+        this.imageError = 'Only JPG, JPEG, and PNG files are allowed';
+        this.selectedFile = undefined;
+        this.imagePreview = '';
+        input.value = '';
+        return;
+      }
+
+      this.selectedFile = file;
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreview = reader.result as string;

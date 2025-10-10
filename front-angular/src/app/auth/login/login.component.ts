@@ -108,8 +108,10 @@ export class LoginComponent implements OnInit {
     const { email, password } = this.loginForm.value;
 
     try {
-      await firstValueFrom(this.auth.login(email, password).pipe(
-        tap(() => console.log('Login API call successful in login component'))
+      await firstValueFrom(
+        this.auth.login(email, password)
+        .pipe(
+          tap(() => console.log('Login API call successful in login component'))
         )
       )
       console.log('Attempting to fetch current user to confirm session...');
