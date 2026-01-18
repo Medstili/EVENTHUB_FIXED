@@ -130,7 +130,10 @@ class PaymentsController extends Controller
             'cancel_url'  => config('app.client_url')."/events/{$event->id}"
         ]);
         log::info('session creates successfully');
-        return response()->json(['id' => $session->id]);
+        return response()->json(
+        ['id' => $session->id,
+            'url' => $session->url   ],
+        200);
     }
 
 

@@ -11,7 +11,7 @@ export class StripeApiService {
   private apiUrl = 'http://localhost:8000/api';
 
   createCheckoutSession(eventId: number) {
-    return this.http.post<{id:string}>(
+    return this.http.post<{id:string, url:string}>(
       `${this.apiUrl}/stripe/checkout/${eventId}`,
       {}, 
       { withCredentials: true }

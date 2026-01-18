@@ -67,14 +67,21 @@ export class EventComponent implements OnInit {
     } else {
       this.stripeApiService.createCheckoutSession(this.event!.id)
         .subscribe({
-          next: ({ id: sessionId }) => {
-            this.stripeService.redirectToCheckout({ sessionId })
-              .subscribe(result => {
-                if (result.error) {
-                  console.error('stripe failed', result.error.message);
-                  this.openSnackBar("stripe failed, try again later");
-                }
-              });
+          // next: ({ id: sessionId }) => {
+          //   this.stripeService.redirectToCheckout({ sessionId })
+          //     .subscribe(result => {
+          //       if (result.error) {
+          //         console.error('stripe failed', result.error.message);
+          //         this.openSnackBar("stripe failed, try again later");
+          //       }
+          //     });
+          // },
+          next: ({ url }) => {
+            if (!url) {
+              this.openSnackBar("Stripe session URL not found.");
+              return;
+            } 
+            window.location.href = url; // Redirect to Stripe Checkout
           },
           error: err => {
             console.log(err);

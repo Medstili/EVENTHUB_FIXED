@@ -46,7 +46,7 @@ class EventController extends Controller
 
     public function guessHomeIndex(Request $request){
 
-        
+        Log::info('EventController@guessHomeIndex called with filters: ', $request->all());
         $query = Event::with('category');
 
         if ($request->has('category')) {
@@ -63,7 +63,8 @@ class EventController extends Controller
                 $query->whereRaw('LOWER(title) LIKE ?', ['%'.strtolower($request->input('title')).'%']);
         }
 
-        $query->where('date', '>=', Carbon::now()->subDays(3)->toDateString());
+        // $query->where('date', '>=', Carbon::now()->subDays(3)->toDateString());
+        
         $query->orderBy('date', 'asc');
         $pagination = $query->paginate(15);
         // Log::info('guess home pagination ',[$pagination]);

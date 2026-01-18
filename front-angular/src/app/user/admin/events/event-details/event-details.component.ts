@@ -107,14 +107,22 @@ export class EventDetailsComponent implements OnInit {
     this.isLoading = true;
     this.stripeApiService.createCheckoutSession(this.event!.id)
       .subscribe({
-        next: ({ id: sessionId }) => {
-          this.stripeService.redirectToCheckout({ sessionId })
-            .subscribe(result => {
-              this.isLoading = false;
-              if (result.error) {
-                console.error('Stripe checkout failed:', result.error.message);
-              }
-            });
+        // next: ({ id: sessionId }) => {
+        //   this.stripeService.redirectToCheckout({ sessionId })
+        //     .subscribe(result => {
+        //       this.isLoading = false;
+        //       if (result.error) {
+        //         console.error('Stripe checkout failed:', result.error.message);
+        //       }
+        //     });
+        // },
+        next: ({ url }) => {
+          this.isLoading = false;
+          if (!url) {
+            this.openSnackBar('Stripe session URL not found');
+            return;
+          }
+          window.location.href = url;
         },
         error: (err) => {
           this.isLoading = false;
