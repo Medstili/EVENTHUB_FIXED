@@ -110,7 +110,7 @@ export class EventComponent implements OnInit {
     const eventDate = new Date(this.event.date);
     const todayDate = new Date();
     const outdated = eventDate < todayDate;
-    console.log(outdated);
+    // console.log(outdated);
     
      return outdated;
   }

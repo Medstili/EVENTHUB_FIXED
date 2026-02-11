@@ -63,7 +63,7 @@ class EventController extends Controller
                 $query->whereRaw('LOWER(title) LIKE ?', ['%'.strtolower($request->input('title')).'%']);
         }
 
-        // $query->where('date', '>=', Carbon::now()->subDays(3)->toDateString());
+        $query->where('date', '>=', Carbon::now()->subDays(3)->toDateString());
         
         $query->orderBy('date', 'asc');
         $pagination = $query->paginate(15);
