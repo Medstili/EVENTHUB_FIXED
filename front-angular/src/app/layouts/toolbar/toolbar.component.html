@@ -1,50 +1,56 @@
-    <mat-toolbar color="primary" class="app-toolbar">
-      <button mat-icon-button (click)="toggleSidenav.emit()">
+<mat-toolbar color="primary" class="app-toolbar">
+      <button mat-icon-button (click)="toggleSidenav.emit()" class="mobile-menu-btn">
         <mat-icon>menu</mat-icon>
       </button>
-      <span class="title">My Event Manager</span>
+      
+      <span class="title">EVENTORA</span>
+
+      <div class="nav-links" *ngIf="!(isHandset$ | async)">
+        <a routerLink="/home" class="nav-link" routerLinkActive="active">Home</a>
+        <a routerLink="/events" class="nav-link" routerLinkActive="active">Events</a>
+        <a routerLink="/about" class="nav-link" routerLinkActive="active">About</a>
+        <a routerLink="/contact-us" class="nav-link" routerLinkActive="active">Contact</a>
+      </div>
+
       <span class="spacer"></span>
 
-      <!-- Theme Toggle Button -->
-      <button 
-        mat-icon-button 
-        class="theme-toggle-btn"
-        (click)="toggleTheme()"
-        [matTooltip]="isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
-        matTooltipPosition="below">
-        <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
-      </button>
+      <div class="action-buttons">
+        <!-- Theme Toggle Button -->
+        <button 
+          mat-icon-button 
+          class="theme-toggle-btn"
+          (click)="toggleTheme()"
+          [matTooltip]="isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+          matTooltipPosition="below">
+          <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+        </button>
 
-      <button mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon>account_circle</mat-icon>
-      </button>
-      <mat-menu #menu="matMenu">
+        <button mat-icon-button [matMenuTriggerFor]="menu" class="account-btn">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+      </div>
+
+      <mat-menu #menu="matMenu" class="modern-menu">
          <ng-container *ngIf="isLoggedin; else notLogged">
-
           <button mat-menu-item [routerLink]="profileLink()">
             <mat-icon>person</mat-icon>
             <span>Account</span>
           </button>
-
           <button mat-menu-item (click)="logout()">
             <mat-icon>logout</mat-icon>
             <span>Logout</span>
           </button>
-          
         </ng-container>
 
         <ng-template #notLogged>
           <button mat-menu-item routerLink="/login">
-            <mat-icon>alternate_email</mat-icon>
+            <mat-icon>login</mat-icon>
             <span>Login</span>
           </button>
           <button mat-menu-item routerLink="/register">
-            <mat-icon>edit</mat-icon>
+            <mat-icon>person_add</mat-icon>
             <span>Register</span>
           </button>
         </ng-template>
-
-  
       </mat-menu>
-
     </mat-toolbar>

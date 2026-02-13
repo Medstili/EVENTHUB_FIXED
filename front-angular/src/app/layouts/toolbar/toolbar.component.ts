@@ -8,6 +8,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LoginService } from '../../services/authService/login.service';
 import { UserService } from '../../services/guestService/user.service';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Observable } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
 import { ThemeService } from '../../services/theme.service';
 
 @Component({
@@ -29,12 +32,22 @@ export class ToolbarComponent {
   /** Emits when menu button is clicked */
   @Output() toggleSidenav = new EventEmitter<void>();
 
+  user: any;
+  isHandset$: Observable<boolean>;
+
   constructor(
     private auth: LoginService, 
     private userService: UserService, 
     private router: Router,
-    public themeService: ThemeService
-  ){}
+    public themeService: ThemeService,
+    private breakpointObserver: BreakpointObserver
+  ){
+    this.isHandset$ = this.breakpointObserver.observe(Breakpoints.Handset)
+      .pipe(
+        map(result => result.matches),
+        shareReplay()
+      );
+  }
 
   get isLoggedin() {
     return this.auth.isLoggedIn();
