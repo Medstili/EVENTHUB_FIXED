@@ -159,7 +159,7 @@
   <div class="ticket-outer">
     <div class="ticket-card">
       <div class="ticket-header">
-        <img src="{{ public_path('logo/EVENTHUB.png') }}" alt="EventHub Logo">
+        <img src="{{ public_path('logo/EVENTORA.png') }}" alt="EVENTORA Logo">
         <div class="ticket-title">Event Ticket</div>
         <div class="event-title">{{ $ticket->event->title }}</div>
       </div>
@@ -179,7 +179,7 @@
       </div>
       <div class="footer">
         Present this ticket and QR code at the event entrance.<br>
-        &copy; {{ date('Y') }} EventHub. All rights reserved.
+        &copy; {{ date('Y') }} EVENTORA. All rights reserved.
       </div>
     </div>
   </div>

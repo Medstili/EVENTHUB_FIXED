@@ -1,0 +1,80 @@
+<div class="all-events-container container">
+  <header class="page-header centered-content" [@fadeInUp]>
+    <h1 class="page-title">Explore Events</h1>
+    <p class="page-description">Find the perfect experience for your next adventure.</p>
+  </header>
+
+  <!-- Modern Filter Bar -->
+  <section class="filter-section" [@fadeInUp]>
+    <div class="filter-bar">
+      <div class="search-box">
+        <mat-icon class="search-icon-left">search</mat-icon>
+        <input 
+          type="text" 
+          placeholder="Search events..." 
+          [(ngModel)]="searchQuery" 
+          (keyup.enter)="applyFilters()">
+        <button class="search-btn-right" (click)="applyFilters()">
+          <mat-icon>search</mat-icon>
+        </button>
+      </div>
+
+      <div class="filters-row">
+        <select [(ngModel)]="selectedCategory" (change)="applyFilters()" class="modern-select">
+          <option [ngValue]="null">All Categories</option>
+          <option *ngFor="let cat of categories" [ngValue]="cat.id">{{ cat.name }}</option>
+        </select>
+
+        <input 
+          type="date" 
+          [(ngModel)]="selectedDate" 
+          (change)="applyFilters()" 
+          class="modern-date-input">
+
+        <input 
+          type="number" 
+          placeholder="Max Price" 
+          [(ngModel)]="maxPrice" 
+          (change)="applyFilters()" 
+          class="modern-price-input">
+
+        <button class="btn-reset" (click)="resetFilters()">
+          <mat-icon>refresh</mat-icon>
+          <span>Reset</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Events Grid -->
+  <section class="events-grid-section">
+    <div *ngIf="loading" class="loading-state">
+      <mat-spinner diameter="50"></mat-spinner>
+    </div>
+
+    <div *ngIf="!loading && events.length === 0" class="empty-state" [@fadeInUp]>
+      <mat-icon>event_busy</mat-icon>
+      <h3>No events found</h3>
+      <p>Try adjusting your search or filters to find what you're looking for.</p>
+      <button class="btn btn-outline" (click)="resetFilters()">Clear all filters</button>
+    </div>
+
+    <div *ngIf="!loading && events.length > 0" class="event-grid" [@staggerFadeIn]="events.length">
+      <app-event-card *ngFor="let event of events" [event]="event"></app-event-card>
+    </div>
+
+    <!-- Load More Section -->
+    <div *ngIf="!loading && page < lastPage" class="load-more-container" [@fadeInUp]>
+      <button class="btn btn-primary" (click)="loadMore()" [disabled]="loadingMore">
+        <ng-container *ngIf="!loadingMore">
+          <mat-icon>expand_more</mat-icon>
+          <span>Load More Events</span>
+        </ng-container>
+        <ng-container *ngIf="loadingMore">
+          <mat-spinner diameter="24" color="accent"></mat-spinner>
+          <span>Loading...</span>
+        </ng-container>
+      </button>
+    </div>
+  </section>
+</div>

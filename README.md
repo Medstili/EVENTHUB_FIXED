@@ -1,6 +1,6 @@
-# EventHub - Event Management Platform
+# EVENTORA - Event Management Platform
 
-EventHub is a comprehensive event management platform built with Angular (frontend) and Laravel (backend). The platform allows users to create, manage, and participate in events with features like ticket management, payment processing, and real-time communication.
+EVENTORA is a comprehensive event management platform built with Angular (frontend) and Laravel (backend). The platform allows users to create, manage, and participate in events with features like ticket management, payment processing, and real-time communication.
 
 ## 🚀 Features
 
@@ -54,7 +54,7 @@ EventHub is a comprehensive event management platform built with Angular (fronte
 ## 📁 Project Structure
 
 ```
-EVENTHUB_FIXED/
+EVENTORA_FIXED/
 ├── front-angular/          # Angular frontend application
 │   ├── src/
 │   │   ├── app/
@@ -176,4 +176,4 @@ The application uses the following main models:
 - Secure payment processing with Stripe
 - Password hashing and recovery
 
-**EventHub** - Making event management simple and efficient! 🎉 
+**EVENTORA** - Making event management simple and efficient! 🎉 

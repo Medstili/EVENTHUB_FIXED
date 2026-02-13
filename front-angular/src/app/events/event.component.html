@@ -15,50 +15,46 @@
     <div class="title-block" [@slideInUp]>
       <h1 class="event-title">{{ event.title }}</h1>
       <div class="meta">
-        <span><mat-icon>event</mat-icon> {{ event.date }} at {{ event.time }}h</span>
-        <span><mat-icon>place</mat-icon> {{ event.city }}, {{ event.location }}</span>
-        <span *ngIf="event.price && event.is_public">
-          <mat-icon>attach_money</mat-icon> {{ event.price | currency:'MAD':'symbol' }}
-        </span>
-        <span><mat-icon>people</mat-icon> {{ event.capacity }} seats</span>
-        <div mat-button [style.color]="'white'">
-          {{ event.is_public ? 'Public' : 'Private' }}
-        </div>
+        <span class="category-tag">{{ event.category?.name }}</span>
+        <span><mat-icon>calendar_today</mat-icon>{{ event.date | date:'longDate' }}</span>
+        <span><mat-icon>location_on</mat-icon>{{ event.location }}, {{ event.city }}</span>
       </div>
     </div>
 
     <!-- Main Content -->
-    <div class="content-wrapper" [@fadeInUp]>
+    <div class="content-wrapper">
       <!-- Left: Description -->
-      <div class="description">
-        <h2>Description</h2>
-        <p>{{ event.description }}</p>
+      <div class="description" [@fadeInUp]>
+        <h2>About this event</h2>
+        <p class="event-description">{{ event.description }}</p>
       </div>
 
       <!-- Right: Sidebar / CTA -->
-      <div class="sidebar">
-        <mat-card class="info-card" [@scaleIn]>
-          <mat-card-content class="info-content">
-            <div class="info">
-              <strong>Date & Time</strong><br />
-              <p>{{ event.date }} at {{ event.time }}h</p>
+      <aside class="sidebar" [@fadeInUp]>
+        <div class="info-card">
+          <span class="price">
+            {{ event.price === '0' ? 'Free' : (event.price | currency) }}
+            <small *ngIf="event.price !== '0'">/ ticket</small>
+          </span>
+          
+          <div class="info-item">
+            <strong>Time</strong>
+            <p>{{ event.time }}</p>
+          </div>
 
-              <strong>Location</strong>
-              <p>{{ event.city }}, {{ event.location }}</p>
+          <div class="info-item">
+            <strong>Availability</strong>
+            <p>{{ event.capacity - event.current_registrations }} spots remaining</p>
+          </div>
 
-              <strong>Capacity</strong><br />
-              <p>{{ event.capacity }} seats</p>
-            </div>
-            <div>
-              <p class="price">{{ event.price | currency:'MAD':'symbol' }}</p>
-            </div>
-          </mat-card-content>
-          <mat-card-actions  *ngIf="canRegister">
-            <button mat-raised-button color="warn" (click)="getTicket()">Register</button>
-          </mat-card-actions>
-        </mat-card>
-      </div>
-      
+          <button class="btn btn-register" 
+                  [disabled]="isSoldOut || isOutdated"
+                  (click)="getTicket()">
+            <mat-icon>{{ isSoldOut ? 'event_busy' : (isOutdated ? 'history' : 'payments') }}</mat-icon>
+            <span>{{ isSoldOut ? 'Sold Out' : (isOutdated ? 'Event Ended' : 'Get Tickets') }}</span>
+          </button>
+        </div>
+      </aside>
     </div>
   </mat-card>
 </ng-container>
