@@ -7,11 +7,12 @@ import { provideNgxStripe } from 'ngx-stripe';
 import { routes } from './app.routes';
 import { xsrfInterceptor } from './interceptor/http-interceptor.service';
 import {provideNativeDateAdapter} from '@angular/material/core';
+import { environment } from '../environments/environment.development';
 
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideNgxStripe('pk_test_51RLlQpPs2SHkVzVrns5s7yEcKrQ3cnTDjUAwanju53MP5PO8siSq1DWOWB2VKTKXXoyHBOeCbA3wENbp1rmuu06f00w5eKykk7'),
+    provideNgxStripe(environment.stripePublicKey),
     provideAnimations(),
     provideNativeDateAdapter(),
     provideHttpClient(

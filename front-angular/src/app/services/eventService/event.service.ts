@@ -5,6 +5,7 @@ import { Observable }     from 'rxjs';
 import {  Router } from '@angular/router';
 import { User } from '../authService/login.service';
 import { Category } from '../categoryService/category.service';
+import { environment } from '../../../environments/environment.development';
 
 
 export interface Event {
@@ -45,10 +46,10 @@ export interface MonthRevenue {
 
 @Injectable({ providedIn: 'root' })
 export class EventService {
-  private baseUrl = 'http://localhost:8000/api/';
-  private apiEventsUrl = `${this.baseUrl}guess/home/events/`;
-  private apiEventByIdsUrl = `${this.baseUrl}events`;
-  private guessApiEventByIdsUrl = `${this.baseUrl}guess/event/`;
+  private baseUrl = environment.apiUrl;
+  private apiEventsUrl = `${this.baseUrl}/guess/home/events/`;
+  private apiEventByIdsUrl = `${this.baseUrl}/events`;
+  private guessApiEventByIdsUrl = `${this.baseUrl}/guess/event/`;
  
 
 
@@ -72,7 +73,7 @@ export class EventService {
   }
 
   getTotalEvents(): Observable<number>{
-    return this.http.get<number>(`${this.baseUrl}events/total`, {
+    return this.http.get<number>(`${this.baseUrl}/events/total`, {
       withCredentials: true
     });
   }
@@ -114,14 +115,14 @@ export class EventService {
 
   /** Fetch events for current organizer */
   getUserEvents(): Observable<Event[]> {
-    return this.http.get<Event[]>(`${this.baseUrl}admin/events`, {
+    return this.http.get<Event[]>(`${this.baseUrl}/admin/events`, {
       withCredentials: true
     });
   }
 
   /** Get the latest event for hero section */
   getLatestEvent(): Observable<Event> {
-    return this.http.get<Event>(`${this.baseUrl}guess/latest-event`, {
+    return this.http.get<Event>(`${this.baseUrl}/guess/latest-event`, {
       withCredentials: true
     });
   }

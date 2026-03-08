@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable  } from '@angular/core';
 import { LoginService, User } from '../authService/login.service';
 import { throwError } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ParticipantService{
-  baseUrl = 'http://localhost:8000/api/participant';
+  baseUrl = `${environment.apiUrl}/participant`;
   // user!: User|null;
 
   constructor(private http: HttpClient, private loginService: LoginService ) { 

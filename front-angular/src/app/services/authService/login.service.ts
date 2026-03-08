@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { firstValueFrom,Observable, of, throwError } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { environment } from '../../../environments/environment.development';
 
 
 export interface User {
@@ -19,8 +20,8 @@ export interface User {
 
 @Injectable({ providedIn: 'root' })
 export class LoginService {
-  private apiUrl = 'http://localhost:8000/api';
-  private csrfTokenUrl= 'http://localhost:8000/sanctum/csrf-cookie'
+  private apiUrl = environment.apiUrl;
+  private csrfTokenUrl= environment.csrfCookieUrl;
   user = signal<User | null>(null);
   constructor(private http: HttpClient, private router: Router, private snackBar: MatSnackBar) {}
   getCsrfCookie(): Observable<any> {

@@ -28,6 +28,7 @@ import { ThemeService } from '../../services/theme.service';
 export class ToolbarComponent {
   /** Emits when menu button is clicked */
   @Output() toggleSidenav = new EventEmitter<void>();
+  user: any = null;
 
   constructor(
     private auth: LoginService, 

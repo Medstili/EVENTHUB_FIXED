@@ -3,6 +3,7 @@ import { LoginService, User } from '../authService/login.service';
 import { Observable, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http'
 import { Event } from '../eventService/event.service';
+import { environment } from '../../../environments/environment.development';
 
 export interface EventsCount {
   total: number;
@@ -19,7 +20,7 @@ export interface MonthRevenue {
   providedIn: 'root'
 })
 export class OrganizerService {
-  baseUrl = 'http://localhost:8000/api/organizer';
+baseUrl = `${environment.apiUrl}/organizer`;
 
   // user!: User|null;
 

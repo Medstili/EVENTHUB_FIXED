@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 
 export interface ContactPayload {
   name: string;
@@ -15,7 +16,7 @@ export interface ContactPayload {
 })
 
 export class ContactUsServiceService {
-  private apiUrl: string ='http://localhost:8000/api/' ;
+  private apiUrl: string =environment.apiUrl ;
   constructor(private http: HttpClient) { }
   
 
@@ -24,7 +25,7 @@ export class ContactUsServiceService {
   // Send a message as a guest (contact form)
   sendMessage(payload: ContactPayload) {
     return this.http.post<{ message: string; conversation_id: number }>(
-      `${this.apiUrl}contact`,
+      `${this.apiUrl}/contact`,
       payload
     ).pipe(
       catchError(this.handleError)

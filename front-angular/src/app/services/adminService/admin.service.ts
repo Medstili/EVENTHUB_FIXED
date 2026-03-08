@@ -5,12 +5,13 @@ import { Paginated } from '../eventService/event.service';
 import { LoginService, User } from '../authService/login.service';
 import { Event as MyEvent } from '../eventService/event.service';
 import { Ticket } from '../ticketService/tickets.service';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
-  baseUrl = 'http://localhost:8000/api';
+  baseUrl = environment.apiUrl; 
   constructor(private http: HttpClient, private loginService: LoginService) { }
 
 // cards

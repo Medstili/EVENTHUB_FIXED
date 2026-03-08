@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LoginService, User } from '../authService/login.service';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 
 export interface EventsCount {
   total: number;
@@ -14,7 +15,7 @@ export interface EventsCount {
 })
 
 export class UserService {
-  baseUrl = 'http://localhost:8000/api';
+  baseUrl = environment.apiUrl;
   user!: User|null;
 
   constructor(private  http: HttpClient, private loginService: LoginService ) { 

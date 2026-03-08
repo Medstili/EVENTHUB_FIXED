@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 
 export interface Message {
   id: number;
@@ -36,13 +37,13 @@ export interface Conversation {
 })
 export class ConversationService {
 
-  private apiUrl: string ='http://localhost:8000/api/' ;
+  private apiUrl: string =environment.apiUrl ;
   constructor(private http: HttpClient) { }
 
 
   getConversationMessages(id: number){
     return this.http.get<Conversation>(
-      `${this.apiUrl}admin/dashboard/conversations/${id}`,
+      `${this.apiUrl}/admin/dashboard/conversations/${id}`,
       { withCredentials: true }
     ).pipe(
       catchError(this.handleError)
@@ -69,7 +70,7 @@ export class ConversationService {
       params += `&per_page=${filters.pageSize}`;
     }
     return this.http.get<{ data: Conversation[], total: number, current_page: number, last_page: number }>(
-      `${this.apiUrl}admin/dashboard/conversations${params}`,
+      `${this.apiUrl}/admin/dashboard/conversations${params}`,
       { withCredentials: true }
     ).pipe(
       catchError(this.handleError)
@@ -77,14 +78,14 @@ export class ConversationService {
   }
   // Fetch conversation stats for admin
   getConversationStats(): Observable<MessageStats> {
-    return this.http.get<MessageStats>(`${this.apiUrl}admin/dashboard/conversations/stats`, { withCredentials: true })
+    return this.http.get<MessageStats>(`${this.apiUrl}/admin/dashboard/conversations/stats`, { withCredentials: true })
       .pipe(
         catchError(this.handleError)
       );
   }
   sendMessage(id: number, message: string) {
     return this.http.post<{ message: string }>(
-      `${this.apiUrl}admin/dashboard/conversations/${id}/reply`,
+      `${this.apiUrl}/admin/dashboard/conversations/${id}/reply`,
       { message },
       { withCredentials: true }
     ).pipe(
@@ -93,7 +94,7 @@ export class ConversationService {
   }
   updateStatus(id: number, status: string): Observable<any> {
     return this.http.patch(
-      `${this.apiUrl}admin/dashboard/conversations/${id}/status`,
+      `${this.apiUrl}/admin/dashboard/conversations/${id}/status`,
       { status },
       { withCredentials: true }
     ).pipe(
