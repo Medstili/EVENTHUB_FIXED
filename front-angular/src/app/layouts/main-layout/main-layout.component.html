@@ -1,4 +1,5 @@
 <!-- Modern Professional Layout -->
+ 
 <div class="layout-container" 
      [class.mobile]="isHandset$ | async"
 >
@@ -9,10 +10,9 @@
         <!-- Logo -->
         <div class="logo">
           <a routerLink="/home" class="logo-link">
-            <div class="logo-icon">
-              <mat-icon>event</mat-icon>
-            </div>
-            <span class="logo-text">EventHub</span>
+            <img [src]="isDarkMode ? '/assets/logo-dark.png' : '/assets/logo-light.png'" 
+                 alt="Eventora Logo" 
+                 class="logo-img">
           </a>
         </div>
 
@@ -23,6 +23,12 @@
               <a routerLink="/home" routerLinkActive="active" class="nav-link">
                 <mat-icon>home</mat-icon>
                 <span>Home</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/events" routerLinkActive="active" class="nav-link">
+                <mat-icon>event</mat-icon>
+                <span>Events</span>
               </a>
             </li>
             <li class="nav-item">
@@ -143,7 +149,7 @@
         <div class="logo-icon">
           <mat-icon>event</mat-icon>
         </div>
-        <span class="logo-text">EventHub</span>
+        <span class="logo-text">EVENTORA</span>
       </div>
       <button class="mobile-nav-close" (click)="closeMobileMenu()">
         <mat-icon>close</mat-icon>
@@ -155,6 +161,12 @@
         <a routerLink="/home" routerLinkActive="active" class="mobile-nav-link" (click)="closeMobileMenu()">
           <mat-icon>home</mat-icon>
           <span>Home</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a routerLink="/events" routerLinkActive="active" class="mobile-nav-link" (click)="closeMobileMenu()">
+          <mat-icon>event</mat-icon>
+          <span>Events</span>
         </a>
       </li>
       <li class="mobile-nav-item">
@@ -248,7 +260,7 @@
             <div class="logo-icon">
               <mat-icon>event</mat-icon>
             </div>
-            <span class="logo-text">EventHub</span>
+            <span class="logo-text">EVENTORA</span>
           </div>
           <p class="footer-description">
             Discover and create amazing events. Connect with people who share your interests.
@@ -265,27 +277,15 @@
           </ul>
         </div>
 
-        <div class="footer-section">
-          <h3 class="footer-title">Support</h3>
-          <ul class="footer-links">
-            <li><a href="#">Help Center</a></li>
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Terms of Service</a></li>
-            <li><a href="#">Cookie Policy</a></li>
-          </ul>
-        </div>
+        
       </div>
 
       <div class="footer-bottom">
         <div class="footer-bottom-content">
           <p class="copyright">
-            © 2024 EventHub. All rights reserved.
+            © 2026 EVENTORA. All rights reserved.
           </p>
-          <div class="footer-bottom-links">
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
-            <a href="#">Cookies</a>
-          </div>
+          
         </div>
       </div>
     </div>

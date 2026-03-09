@@ -112,6 +112,7 @@ export const routes: Routes = [
       { path: 'register',            component: RegisterComponent },
       { path: 'forgot-password',     component: ForgotPasswordComponent },
       { path: 'change-password',     component: ChangePasswordComponent },
+      { path: 'events',              loadComponent: () => import('./events/all-events/all-events.component').then(m => m.AllEventsComponent) },
       { path: 'events/:id',          component: EventComponent },
       { path: 'contact-us', component: ContactUsComponent },
     ]

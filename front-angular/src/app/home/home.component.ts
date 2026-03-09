@@ -39,7 +39,8 @@ import { Observable } from 'rxjs';
     AnimationService.slideInLeft,
     AnimationService.slideInRight,
     AnimationService.imageHover,
-    AnimationService.buttonPress
+    AnimationService.buttonPress,
+    AnimationService.scaleIn
   ]
 })
 export class HomeComponent implements OnInit {
@@ -126,9 +127,13 @@ export class HomeComponent implements OnInit {
 
     this.eventService.getAll(filters, this.page).subscribe({
       next: pag => {
-        this.featuredEvents = reset
+        const events = reset
           ? pag.data
           : this.featuredEvents.concat(pag.data);
+        
+        // Limit to 3 featured events on home page
+        this.featuredEvents = events.slice(0, 3);
+        
         this.lastPage = pag.last_page;
         this.loading = false;
         this.loadingMore = false;

@@ -239,7 +239,7 @@
         <div class="footer">
             <p><strong>Need Help?</strong></p>
             <p>If you have any questions about your ticket, please contact our support team.</p>
-            <p>© {{ date('Y') }} EventHub. All rights reserved.</p>
+            <p>© {{ date('Y') }} EVENTORA. All rights reserved.</p>
         </div>
     </div>
 </body>

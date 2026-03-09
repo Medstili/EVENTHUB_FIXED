@@ -32,8 +32,9 @@ class EventController extends Controller
         if ($request->has('date')) {
             $query->where('date', $request->input('date'));
         }
-        if ($request->has('title')) {
-                $query->whereRaw('LOWER(title) LIKE ?', ['%'.strtolower($request->input('title')).'%']);
+        if ($request->has('title') || $request->has('search')) {
+            $searchTerm = $request->input('title') ?? $request->input('search');
+            $query->whereRaw('LOWER(title) LIKE ?', ['%'.strtolower($searchTerm).'%']);
         }
 
         $query->orderBy('date', 'desc');
@@ -59,16 +60,18 @@ class EventController extends Controller
         if ($request->has('date')) {
             $query->where('date', $request->input('date'));
         }
-        if ($request->has('title')) {
-                $query->whereRaw('LOWER(title) LIKE ?', ['%'.strtolower($request->input('title')).'%']);
+        if ($request->has('title') || $request->has('search')) {
+            $searchTerm = $request->input('title') ?? $request->input('search');
+            $query->whereRaw('LOWER(title) LIKE ?', ['%'.strtolower($searchTerm).'%']);
         }
 
-        $query->where('date', '>=', Carbon::now()->subDays(3)->toDateString());
+        if (!$request->has('show_all') || !$request->input('show_all')) {
+            $query->where('date', '>=', Carbon::now()->subDays(3)->toDateString());
+        }
         
         $query->orderBy('date', 'asc');
         $pagination = $query->paginate(15);
         // Log::info('guess home pagination ',[$pagination]);
-
 
         return $pagination;
 
@@ -140,7 +143,7 @@ class EventController extends Controller
     public function show(string $id)
     {
         try {
-            $event = Event::findOrFail($id);
+            $event = Event::with(['category', 'organizer'])->findOrFail($id);
             return $event;
         } catch (\Throwable $th) {
             return response()->json(['message'=>'Event not found'], 404);
